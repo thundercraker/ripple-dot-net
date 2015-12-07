@@ -1,16 +1,16 @@
 ﻿using System;
+using System.IO;
+using Org.BouncyCastle.Math;
 
-namespace Ripple.Crypto
+namespace Ripple.SigningKeys.K256
 {
 
     using Asn1InputStream = Org.BouncyCastle.Asn1.Asn1InputStream;
     using DerInteger = Org.BouncyCastle.Asn1.DerInteger;
     using DerSequenceGenerator = Org.BouncyCastle.Asn1.DerSequenceGenerator;
     using DerSequence = Org.BouncyCastle.Asn1.DerSequence;
-    using Org.BouncyCastle.Math;
-    using System.IO;
 
-    public class ECDSASignature
+    public class EcdsaSignature
 	{
 		/// <summary>
 		/// The two components of the signature. </summary>
@@ -18,7 +18,7 @@ namespace Ripple.Crypto
 
 		/// <summary>
 		/// Constructs a signature with the given components. </summary>
-		public ECDSASignature(BigInteger r, BigInteger s)
+		public EcdsaSignature(BigInteger r, BigInteger s)
 		{
 			this.r = r;
 			this.s = s;
@@ -111,7 +111,7 @@ namespace Ripple.Crypto
 
 			BigInteger r = new BigInteger(1, rBytes), s = new BigInteger(1, bytes);
 
-			BigInteger order = Secp256k1.Order();
+			BigInteger order = Secp256K1.Order();
 
 			if (r.CompareTo(order) != -1 || s.CompareTo(order) != -1)
 			{
@@ -139,7 +139,7 @@ namespace Ripple.Crypto
             return DERByteStream().ToArray();
 		}
 
-		public static ECDSASignature DecodeFromDER(byte[] bytes)
+		public static EcdsaSignature DecodeFromDER(byte[] bytes)
 		{
             Asn1InputStream decoder = new Asn1InputStream(bytes);
             DerInteger r, s;
@@ -159,7 +159,7 @@ namespace Ripple.Crypto
 			}
 			// OpenSSL deviates from the DER spec by interpreting these values as unsigned, though they should not be
 			// Thus, we always use the positive versions. See: http://r6.ca/blog/20111119T211504Z.html
-			return new ECDSASignature(r.PositiveValue, s.PositiveValue);
+			return new EcdsaSignature(r.PositiveValue, s.PositiveValue);
 		}
 
 		protected internal MemoryStream DERByteStream()

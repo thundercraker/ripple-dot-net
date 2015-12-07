@@ -1,0 +1,46 @@
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Signers;
+using Org.BouncyCastle.Math.EC;
+using Ripple.SigningKeys.Utils;
+
+namespace Ripple.SigningKeys.K256
+{
+    public class K256VerifyingKey
+    {
+        protected ECPoint PubKey;
+        protected ECDsaSigner Verifier;
+        protected byte[] PubKeyBytes;
+
+        public K256VerifyingKey(ECPoint pub)
+        {
+            PubKey = pub;
+            PubKeyBytes = pub.GetEncoded(true);
+            SetVerifier(pub);
+        }
+
+        public byte[] CanonicalPubBytes()
+        {
+            return PubKeyBytes;
+        }
+
+        public bool Verify(byte[] message, byte[] signature)
+        {
+            byte[] hash = HashUtils.HalfSha512(message);
+            return VerifyHash(hash, signature);
+        }
+
+        private bool VerifyHash(byte[] data, byte[] signature)
+        {
+            var sig = EcdsaSignature.DecodeFromDER(signature);
+            return sig != null && Verifier.VerifySignature(data, sig.r, sig.s);
+        }
+
+        protected void SetVerifier(ECPoint pub)
+        {
+            Verifier = new ECDsaSigner();
+            ECPublicKeyParameters parameters = new ECPublicKeyParameters(
+                pub, Secp256K1.Parameters());
+            Verifier.Init(false, parameters);
+        }
+    }
+}

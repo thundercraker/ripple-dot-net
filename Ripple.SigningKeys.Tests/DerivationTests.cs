@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ripple.Crypto;
+using Ripple.SigningKeys;
 
-namespace Ripple.Crypto.Tests
+namespace Ripple.SigningKeys.Tests
 {
     using static Ripple.Address;
-    using Ripple.Utils;
-    using Seed = Ripple.Crypto.Seed;
+    using Seed = Seed;
     using System.IO;
 
     [TestClass()]

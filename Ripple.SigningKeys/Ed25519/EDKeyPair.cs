@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using Org.BouncyCastle.Math;
 using Sodium;
 
-namespace Ripple.Crypto
+namespace Ripple.SigningKeys
 {
-    using Sodium;
-
     public class EDKeyPair : IKeyPair
     {
         private KeyPair PairImpl;
@@ -33,7 +29,7 @@ namespace Ripple.Crypto
 
         public byte[] PubKeyHash()
         {
-            return Utils.HashUtils.PublicKeyHash(CanonicalPubBytes());
+            return SigningKeys.Utils.HashUtils.PublicKeyHash(CanonicalPubBytes());
         }
 
         public byte[] Sign(byte[] message)
@@ -48,7 +44,7 @@ namespace Ripple.Crypto
 
         internal static IKeyPair From128Seed(byte[] seed)
         {
-            var edSecret = new Ripple.Utils.Sha512(seed).Finish256();
+            var edSecret = new SigningKeys.Utils.Sha512(seed).Finish256();
             var pair = PublicKeyAuth.GenerateKeyPair(edSecret);
             return new EDKeyPair(pair);
         }

@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.SigningKeys", "Ripple.SigningKeys\Ripple.SigningKeys.csproj", "{3E5D4819-0E18-4376-B9A8-D62D79724B7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.SigningKeysTests", "Ripple.SigningKeysTests\Ripple.SigningKeysTests.csproj", "{76702C72-6807-4556-9C35-9060865F28EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.SigningKeys.Tests", "Ripple.SigningKeys.Tests\Ripple.SigningKeys.Tests.csproj", "{76702C72-6807-4556-9C35-9060865F28EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

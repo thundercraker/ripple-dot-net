@@ -1,4 +1,4 @@
-﻿namespace Ripple.Crypto
+﻿namespace Ripple.SigningKeys
 {
 	public interface IKeyPair
 	{

@@ -53,14 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils.cs" />
-    <Compile Include="ECDSASignature.cs" />
-    <Compile Include="EDKeyPair.cs" />
+    <Compile Include="K256\EcdsaSignature.cs" />
+    <Compile Include="Ed25519\EDKeyPair.cs" />
     <Compile Include="IKeyPair.cs" />
-    <Compile Include="K256KeyPair.cs" />
+    <Compile Include="K256\K256KeyGenerator.cs" />
+    <Compile Include="K256\K256KeyPair.cs" />
+    <Compile Include="K256\K256VerifyingKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Secp256k1.cs" />
+    <Compile Include="K256\Secp256k1.cs" />
     <Compile Include="Seed.cs" />
+    <Compile Include="Utils\HashUtils.cs" />
+    <Compile Include="Utils\Sha512.cs" />
+    <Compile Include="Utils\Misc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

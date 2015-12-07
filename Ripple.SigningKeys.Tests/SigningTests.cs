@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ripple.Crypto;
+using Ripple.SigningKeys;
 
 namespace Ripple.Crypto.Tests
 {
     using static Ripple.Address;
-    using Ripple.Utils;
-    using Seed = Ripple.Crypto.Seed;
+    using Seed = Seed;
     using System.IO;
     using System;
     using Org.BouncyCastle.Utilities.Encoders;
@@ -13,21 +13,21 @@ namespace Ripple.Crypto.Tests
     [TestClass()]
     public class SigningTests
     {
-        byte[] message = new byte[] { 0xb, 0xe, 0xe, 0xf };
+        readonly byte[] _message = new byte[] { 0xb, 0xe, 0xe, 0xf };
 
         [TestMethod()]
         public void SanityTestK256()
         {
             var keypair = Seed.FromPassPhrase("niq").KeyPair();
-            var sig = keypair.Sign(message);
-            Assert.IsTrue(keypair.Verify(message, sig));
+            var sig = keypair.Sign(_message);
+            Assert.IsTrue(keypair.Verify(_message, sig));
         }
         [TestMethod()]
         public void SanityTestEd25519()
         {
             var keypair = Seed.FromPassPhrase("niq").SetEd25519().KeyPair();
-            var sig = keypair.Sign(message);
-            Assert.IsTrue(keypair.Verify(message, sig));
+            var sig = keypair.Sign(_message);
+            Assert.IsTrue(keypair.Verify(_message, sig));
         }
 
         public string ToHex(byte[] val)
@@ -58,8 +58,8 @@ namespace Ripple.Crypto.Tests
 
             for (int i = 0; i < fixtures.Length; i++)
             {
-                byte[] message = new byte[] { (byte)i };
-                Assert.AreEqual(fixtures[i], ToHex(keypair.Sign(message)));
+                byte[] messageBytes = new byte[] { (byte)i };
+                Assert.AreEqual(fixtures[i], ToHex(keypair.Sign(messageBytes)));
             }
         }
         [TestMethod()]

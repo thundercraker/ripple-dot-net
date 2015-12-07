@@ -1,13 +1,10 @@
 ﻿using System;
+using System.Security.Cryptography;
+using Ripple.SigningKeys.K256;
+using Ripple.SigningKeys.Utils;
 
-namespace Ripple.Crypto
+namespace Ripple.SigningKeys
 {
-
-    using Org.BouncyCastle.Math;
-    using Ripple.Utils;
-    using static Ripple.Address;
-    using System.Security.Cryptography;
-
     public class Seed
     {
         private readonly byte[] SeedBytes;
@@ -25,7 +22,7 @@ namespace Ripple.Crypto
 
         public override string ToString()
         {
-            return EncodeSeed(SeedBytes, KeyType);
+            return Address.EncodeSeed(SeedBytes, KeyType);
         }
 
         public byte[] Bytes()
@@ -78,7 +75,7 @@ namespace Ripple.Crypto
 
         public static Seed FromBase58(string b58)
         {
-            var seed = DecodeSeed(b58);
+            var seed = Address.DecodeSeed(b58);
             return new Seed(seed.Type, seed.Bytes);
         }
 
