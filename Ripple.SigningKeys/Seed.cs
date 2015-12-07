@@ -67,7 +67,7 @@ namespace Ripple.Crypto
             else
             {
                 pairIndex = IsNodeKey ? -1 : 0;
-                var pair = K256KeyPair.From128Seed(SeedBytes, pairIndex);
+                var pair = K256KeyGenerator.From128Seed(SeedBytes, pairIndex);
                 if (IsNodeKey)
                 {
                     pair.SetNodeKey();
