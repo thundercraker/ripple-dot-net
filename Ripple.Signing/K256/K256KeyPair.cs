@@ -80,9 +80,9 @@ namespace Ripple.Signing.K256
         {
             if (_isNodeKey)
             {
-                return Address.Codec.EncodeNodePublic(CanonicalPubBytes());
+                return Address.AddressCodec.EncodeNodePublic(CanonicalPubBytes());
             }
-            return Address.Codec.EncodeAddress(PubKeyHash());
+            return Address.AddressCodec.EncodeAddress(PubKeyHash());
         }
     }
 

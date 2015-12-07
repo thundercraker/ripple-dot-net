@@ -1,6 +1,6 @@
 ﻿namespace Ripple.Address
 {
-    public class Codec
+    public class AddressCodec
     {
         public static int VerAccountId = 0;
         public static int VerFamilySeed = 33;
@@ -17,7 +17,7 @@
         public static readonly string Alphabet = "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz";
 
         private static readonly B58 B58;
-        static Codec()
+        static AddressCodec()
         {
             B58 = new B58(Alphabet);
         }

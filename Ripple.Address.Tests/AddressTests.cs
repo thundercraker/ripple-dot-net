@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ripple.Address.Tests
 {
-    using static Ripple.Address.Codec;
+    using static Ripple.Address.AddressCodec;
 
     [TestClass()]
     public class AddressTests
@@ -54,7 +54,7 @@ namespace Ripple.Address.Tests
 
         public void AssertEncodes(string type, string hex, string base58)
         {
-            Type kls = typeof(Ripple.Address.Codec);
+            Type kls = typeof(Ripple.Address.AddressCodec);
             var encode = kls.GetMethod("Encode" + type);
             var decode = kls.GetMethod("Decode" + type);
             var encoded = Helpers.Invoke<string>(encode, Helpers.DecodeHex(hex));

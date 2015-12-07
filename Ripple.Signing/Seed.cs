@@ -8,7 +8,7 @@ using Ripple.Signing.Utils;
 
 namespace Ripple.Signing
 {
-    using static Codec;
+    using static AddressCodec;
 
     public class Seed
     {

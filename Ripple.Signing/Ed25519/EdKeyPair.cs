@@ -52,7 +52,7 @@ namespace Ripple.Signing.Ed25519
 
         public string ID()
         {
-            return Address.Codec.EncodeAddress(PubKeyHash());
+            return Address.AddressCodec.EncodeAddress(PubKeyHash());
         }
     }
 }
