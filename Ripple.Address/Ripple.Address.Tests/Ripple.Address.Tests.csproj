@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ripple.Address\Ripple.Address.csproj">
+    <ProjectReference Include="..\Ripple.Address.csproj">
       <Project>{8996F1CB-7E68-4294-9831-9C20EA7FB112}</Project>
       <Name>Ripple.Address</Name>
     </ProjectReference>

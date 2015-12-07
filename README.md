@@ -1,2 +1,2 @@
-# Ripple.SigningKeys
-C# module for signing messages (eg. transactions)
+# Ripple.NET
+C# code for working with ripple :)
