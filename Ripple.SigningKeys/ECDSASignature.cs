@@ -111,7 +111,7 @@ namespace Ripple.Crypto
 
 			BigInteger r = new BigInteger(1, rBytes), s = new BigInteger(1, bytes);
 
-			BigInteger order = SECP256K1.Order();
+			BigInteger order = Secp256k1.Order();
 
 			if (r.CompareTo(order) != -1 || s.CompareTo(order) != -1)
 			{
@@ -141,11 +141,11 @@ namespace Ripple.Crypto
 
 		public static ECDSASignature DecodeFromDER(byte[] bytes)
 		{
-			Asn1InputStream decoder = new Asn1InputStream(bytes);
-            DerSequence seq = (DerSequence)decoder.ReadObject();
+            Asn1InputStream decoder = new Asn1InputStream(bytes);
             DerInteger r, s;
 			try
 			{
+                DerSequence seq = (DerSequence)decoder.ReadObject();
 				r = (DerInteger) seq[0];
 				s = (DerInteger) seq[1];
 			}

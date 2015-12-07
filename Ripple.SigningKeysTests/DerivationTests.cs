@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ripple.Crypto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ripple.Crypto.Tests
 {
@@ -34,10 +29,24 @@ namespace Ripple.Crypto.Tests
             string passphrase = "niq";
             string encodedSeed = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
             string accountID = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN";
+
+            var idFromSeed = Seed.FromBase58(encodedSeed).KeyPair().ID();
             Seed seed = Seed.FromPassPhrase(passphrase).SetEd25519();
             var pair = seed.KeyPair();
+
             Assert.AreEqual(accountID, pair.ID());
             Assert.AreEqual(encodedSeed, seed.ToString());
+            Assert.AreEqual(accountID, idFromSeed);
+        }
+
+        [TestMethod()]
+        public void GenerateNodeKey()
+        {
+            var zeroBytes = new byte[16];
+            var pair = new Seed(zeroBytes).SetNodeKey().KeyPair();
+            Assert.AreEqual("n9LPxYzbDpWBZ1bC3J3Fdkgqoa3FEhVKCnS8yKp7RFQFwuvd8Q2c", 
+                            pair.ID());
         }
     }
 }
+

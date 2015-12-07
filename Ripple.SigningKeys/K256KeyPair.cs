@@ -1,82 +1,131 @@
 ﻿namespace Ripple.Crypto
 {
-    using ECPrivateKeyParameters = Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters;
-    using ECPublicKeyParameters = Org.BouncyCastle.Crypto.Parameters.ECPublicKeyParameters;
-    using ECDSASigner = Org.BouncyCastle.Crypto.Signers.ECDsaSigner;
-    using ECPoint = Org.BouncyCastle.Math.EC.ECPoint;
-    using Org.BouncyCastle.Math;
-    using Ripple.Utils;
-    using System;
+	using ECPrivateKeyParameters = Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters;
+	using ECPublicKeyParameters = Org.BouncyCastle.Crypto.Parameters.ECPublicKeyParameters;
+	using ECDSASigner = Org.BouncyCastle.Crypto.Signers.ECDsaSigner;
+	using ECPoint = Org.BouncyCastle.Math.EC.ECPoint;
+	using Org.BouncyCastle.Math;
+	using Ripple.Utils;
+	using HMacDsaKCalculator = Org.BouncyCastle.Crypto.Signers.HMacDsaKCalculator;
+	using Sha256Digest = Org.BouncyCastle.Crypto.Digests.Sha256Digest;
 
-    public class K256KeyPair : IKeyPair
+	public class K256KeyPair : K256VerifyingKey, IKeyPair
 	{
-		internal BigInteger _Priv, _Pub;
-		internal byte[] PubBytes;
+		private BigInteger _privKey;
+		private ECPoint _pubKey;
+		private ECDSASigner _signer, _verifier;
+		private byte[] _pubKeyBytes;
+		private bool _isNodeKey = false;
 
-		// See https://wiki.ripple.com/Account_Family
-		/// 
-		/// <param name="secretKey"> secret point on the curve as BigInteger </param>
-		/// <returns> corresponding public point </returns>
-		public static byte[] GetPublic(BigInteger secretKey)
+        internal K256KeyPair(BigInteger priv, ECPoint pub)
 		{
-			return SECP256K1.BasePointMultipliedBy(secretKey);
+			_privKey = priv;
+			_pubKey = pub;
+			_pubKeyBytes = pub.GetEncoded(true);
+
+			_signer = new ECDSASigner(new HMacDsaKCalculator(new Sha256Digest()));
+			ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(priv, Secp256k1.Parameters());
+			_signer.Init(true, privKey);
+
+            // TODO: make an IVerifyingKey interface
+            // extract K256VerifyingKey
+            _verifier = new ECDSASigner();
+			ECPublicKeyParameters parameters = new ECPublicKeyParameters(
+													pub, Secp256k1.Parameters());
+			_verifier.Init(false, parameters);
 		}
 
-		/// 
-		/// <param name="privateGen"> secret point on the curve as BigInteger </param>
+        public K256KeyPair(BigInteger priv) : this(priv, ComputePublicKey(priv))
+        {
+        }
+
+        // See https://wiki.ripple.com/Account_Family
+        ///
+        /// <param name="secretKey"> secret point on the curve as BigInteger </param>
+        /// <returns> corresponding public point </returns>
+        internal static ECPoint ComputePublicKey(BigInteger secretKey)
+		{
+			return Secp256k1.BasePoint().Multiply(secretKey);
+		}
+
+		internal K256KeyPair SetNodeKey()
+		{
+			_isNodeKey = true;
+			return this;
+		}
+
+		///
+		/// <param name="privateGen"> secret scalar</param>
 		/// <returns> the corresponding public key is the public generator
 		///         (aka public root key, master public key).
-		///         return as byte[] for convenience. </returns>
-		public static byte[] ComputePublicGenerator(BigInteger privateGen)
+		/// </returns>
+		internal static ECPoint ComputePublicGenerator(BigInteger privateGen)
 		{
-			return GetPublic(privateGen);
+			return ComputePublicKey(privateGen);
 		}
 
-		public static BigInteger ComputePublicKey(BigInteger secret)
+		public static K256KeyPair From128Seed(byte[] seedBytes, int keyIndex)
 		{
-			return new BigInteger(1, GetPublic(secret));
+			BigInteger secret, privateGen;
+			// The private generator (aka root private key, master private key)
+			privateGen = ComputePrivateGen(seedBytes);
+
+			if (keyIndex == -1)
+			{
+				// The root keyPair
+				return new K256KeyPair(privateGen);
+			}
+			else
+			{
+				secret = ComputeSecretKey(privateGen, (uint) keyIndex);
+				return new K256KeyPair(secret);
+			}
+
 		}
 
-		public static BigInteger ComputePrivateGen(byte[] seedBytes)
+		internal static BigInteger ComputePrivateGen(byte[] seedBytes)
 		{
-			return GenerateKey(seedBytes, null);
+			return ComputeScalar(seedBytes, null);
 		}
 
-		public static byte[] ComputePublicKey(byte[] publicGenBytes, int accountNumber)
+		internal static byte[] ComputePublicKey(byte[] publicGenBytes, uint accountNumber)
 		{
-			ECPoint rootPubPoint = SECP256K1.Curve().DecodePoint(publicGenBytes);
-			BigInteger scalar = GenerateKey(publicGenBytes, accountNumber);
-			ECPoint point = SECP256K1.BasePoint().Multiply(scalar);
+			ECPoint rootPubPoint = Secp256k1.Curve().DecodePoint(publicGenBytes);
+			BigInteger scalar = ComputeScalar(publicGenBytes, accountNumber);
+			ECPoint point = Secp256k1.BasePoint().Multiply(scalar);
 			ECPoint offset = rootPubPoint.Add(point);
 			return offset.GetEncoded(true);
 		}
 
-		public static BigInteger ComputeSecretKey(
-            BigInteger privateGen, 
-            byte[] publicGenBytes, 
-            int accountNumber)
+		internal static BigInteger ComputeSecretKey(
+			BigInteger privateGen,
+			uint accountNumber)
 		{
-			return GenerateKey(publicGenBytes, accountNumber).Add(privateGen).Mod(SECP256K1.Order());
+            ECPoint publicGen = ComputePublicGenerator(privateGen);
+            return ComputeScalar(publicGen.GetEncoded(true), accountNumber)
+					.Add(privateGen)
+					.Mod(Secp256k1.Order());
 		}
 
 		/// <param name="seedBytes"> - a bytes sequence of arbitrary length which will be hashed </param>
 		/// <param name="discriminator"> - nullable optional uint32 to hash </param>
 		/// <returns> a number between [1, order -1] suitable as a private key
 		///  </returns>
-		public static BigInteger GenerateKey(byte[] seedBytes, int? discriminator)
+		internal static BigInteger ComputeScalar(byte[] seedBytes, uint? discriminator)
 		{
 			BigInteger key = null;
-			for (long i = 0; i <= 0xFFFFFFFFL; i++)
+			for (uint i = 0; i <= 0xFFFFFFFFL; i++)
 			{
-				Sha512 sha512 = (new Sha512()).Add(seedBytes);
+				Sha512 sha512 = new Sha512(seedBytes);
 				if (discriminator != null)
 				{
 					sha512.AddU32(discriminator.Value);
 				}
-				sha512.AddU32((int) i);
+				sha512.AddU32(i);
 				byte[] keyBytes = sha512.Finish256();
 				key = Utils.UBigInt(keyBytes);
-				if (key.CompareTo(BigInteger.Zero) == 1 && key.CompareTo(SECP256K1.Order()) == -1)
+				if (key.CompareTo(BigInteger.Zero) == 1 && 
+                    key.CompareTo(Secp256k1.Order()) == -1)
 				{
 					break;
 				}
@@ -84,99 +133,66 @@
 			return key;
 		}
 
-		public BigInteger Pub()
-		{
-			return _Pub;
-		}
-
 		public byte[] CanonicalPubBytes()
 		{
-			return PubBytes;
-		}
-
-		public K256KeyPair(BigInteger priv, BigInteger pub)
-		{
-			this._Priv = priv;
-			this._Pub = pub;
-			this.PubBytes = pub.ToByteArrayUnsigned();
+			return _pubKeyBytes;
 		}
 
 		public BigInteger Priv()
 		{
-			return _Priv;
+			return _privKey;
 		}
 
-		public bool VerifyHash(byte[] hash, byte[] sigBytes)
-		{
-			return Verify(hash, sigBytes, _Pub);
-		}
-
-		public byte[] SignHash(byte[] bytes)
-		{
-			return SignHash(bytes, _Priv);
-		}
-
-		public bool VerifySignature(byte[] message, byte[] sigBytes)
+        public bool Verify(byte[] message, byte[] signature)
 		{
 			byte[] hash = HashUtils.HalfSha512(message);
-			return VerifyHash(hash, sigBytes);
+			return VerifyHash(hash, signature);
 		}
 
-		public byte[] SignMessage(byte[] message)
+		public byte[] Sign(byte[] message)
 		{
 			byte[] hash = HashUtils.HalfSha512(message);
 			return SignHash(hash);
 		}
 
-		public byte[] Pub160Hash()
+		public byte[] PubKeyHash()
 		{
-			return HashUtils.PublicKeyHash(PubBytes);
+			return HashUtils.PublicKeyHash(_pubKeyBytes);
 		}
 
 		public string CanonicalPubHex()
 		{
-			return Utils.BigHex(_Pub);
+            return Utils.ToHex(CanonicalPubBytes());
 		}
 
 		public string PrivHex()
 		{
-			return Utils.BigHex(_Priv);
+			return Utils.BigHex(_privKey);
 		}
 
-		public static bool Verify(byte[] data, byte[] sigBytes, BigInteger pub)
+		private bool VerifyHash(byte[] data, byte[] signature)
 		{
-			ECDSASignature signature = ECDSASignature.DecodeFromDER(sigBytes);
-			if (signature == null)
+			ECDSASignature sig = ECDSASignature.DecodeFromDER(signature);
+			if (sig == null)
 			{
 				return false;
 			}
-			ECDSASigner signer = new ECDSASigner();
-			ECPoint pubPoint = SECP256K1.Curve().DecodePoint(pub.ToByteArrayUnsigned());
-			ECPublicKeyParameters @params = new ECPublicKeyParameters(pubPoint, SECP256K1.Parameters());
-			signer.Init(false, @params);
-			return signer.VerifySignature(data, signature.r, signature.s);
+			return _verifier.VerifySignature(data, sig.r, sig.s);
 		}
 
-		public static byte[] SignHash(byte[] bytes, BigInteger secret)
+		private byte[] SignHash(byte[] bytes)
 		{
-			ECDSASignature sig = CreateECDSASignature(bytes, secret);
-			byte[] der = sig.EncodeToDER();
-			if (!ECDSASignature.IsStrictlyCanonical(der))
-			{
-				throw new System.InvalidOperationException("Signature is not strictly canonical");
-			}
-			return der;
+			ECDSASignature sig = CreateECDSASignature(bytes);
+			return sig.EncodeToDER();
 		}
 
-		private static ECDSASignature CreateECDSASignature(byte[] hash, BigInteger secret)
+		private ECDSASignature CreateECDSASignature(byte[] hash)
 		{
-			ECDSASigner signer = new ECDSASigner();
-			ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(secret, SECP256K1.Parameters());
-			signer.Init(true, privKey);
-			BigInteger[] sigs = signer.GenerateSignature(hash);
+
+			BigInteger[] sigs = _signer.GenerateSignature(hash);
 			BigInteger r = sigs[0], s = sigs[1];
 
-			BigInteger otherS = SECP256K1.Order().Subtract(s);
+			BigInteger otherS = Secp256k1.Order().Subtract(s);
 			if (s.CompareTo(otherS) == 1)
 			{
 				s = otherS;
@@ -185,10 +201,18 @@
 			return new ECDSASignature(r, s);
 		}
 
-        public string ID()
-        {
-            return Ripple.Address.EncodeAddress(Pub160Hash());
-        }
-    }
+		public string ID()
+		{
+			if (_isNodeKey)
+			{
+				return Address.EncodeNodePublic(CanonicalPubBytes());
+			}
+			return Address.EncodeAddress(PubKeyHash());
+		}
+	}
 
+    public class K256VerifyingKey
+    {
+
+    }
 }

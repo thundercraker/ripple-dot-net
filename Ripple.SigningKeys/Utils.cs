@@ -6,10 +6,9 @@ using Org.BouncyCastle.Crypto.Digests;
 
 namespace Ripple.Utils
 {
-
-    public class Sha512
+    internal class Sha512
     {
-        internal Sha512Digest MessageDigest;
+        private Sha512Digest MessageDigest;
 
         public Sha512()
         {
@@ -27,12 +26,12 @@ namespace Ripple.Utils
             return this;
         }
 
-        public Sha512 AddU32(int i)
+        public Sha512 AddU32(uint i)
         {
-            MessageDigest.Update(unchecked((byte)(((int)((uint)i >> 24)) & 0xFF)));
-            MessageDigest.Update(unchecked((byte)(((int)((uint)i >> 16)) & 0xFF)));
-            MessageDigest.Update(unchecked((byte)(((int)((uint)i >> 8)) & 0xFF)));
-            MessageDigest.Update(unchecked((byte)((i) & 0xFF)));
+            MessageDigest.Update((byte)(i >> 24 & 0xFFu));
+            MessageDigest.Update((byte)(i >> 16 & 0xFFu));
+            MessageDigest.Update((byte)(i >> 8 & 0xFFu));
+            MessageDigest.Update((byte)(i & 0xFFu));
             return this;
         }
 
@@ -45,7 +44,7 @@ namespace Ripple.Utils
             return hash;
         }
 
-        private byte[] Finish()
+        public byte[] Finish()
         {
             byte[] finished = new byte[64];
             MessageDigest.DoFinal(finished, 0);
@@ -63,26 +62,31 @@ namespace Ripple.Utils
         }
     }
 
-    public class Utils
+    internal class Utils
     {
-        internal static BigInteger UBigInt(byte[] bytes)
+        public static BigInteger UBigInt(byte[] bytes)
         {
             return new BigInteger(1, bytes);
         }
 
-        internal static string BigHex(BigInteger _Pub)
+        public static string BigHex(BigInteger pub)
         {
-            return ToHexString(_Pub.ToByteArrayUnsigned());
+            return ToHexString(pub.ToByteArrayUnsigned()).ToUpper();
+        }
+
+        public static string ToHex(byte[] bytes)
+        {
+            return ToHexString(bytes).ToUpper();
         }
     }
 
-    public class HashUtils
+    internal class HashUtils
     {
-        internal static byte[] HalfSha512(byte[] message)
+        public static byte[] HalfSha512(byte[] message)
         {
             return new Sha512(message).Finish256();
         }
-        internal static byte[] PublicKeyHash(byte[] bytes)
+        public static byte[] PublicKeyHash(byte[] bytes)
         {
             var hash = SHA256Managed.Create();
             var riper = RIPEMD160Managed.Create();

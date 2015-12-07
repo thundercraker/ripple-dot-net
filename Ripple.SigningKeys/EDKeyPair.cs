@@ -9,74 +9,53 @@ namespace Ripple.Crypto
 
     public class EDKeyPair : IKeyPair
     {
-        private KeyPair pair;
-        private byte[] _canonicalPubBytes;
+        private KeyPair PairImpl;
+        private byte[] CanonicalisedPubBytes;
 
         private EDKeyPair(KeyPair pair)
         {
-            this.pair = pair;
+            this.PairImpl = pair;
             computeCanonicalPub();
         }
 
         public byte[] CanonicalPubBytes()
         {
-            return _canonicalPubBytes;
+            return CanonicalisedPubBytes;
         }
 
         private void computeCanonicalPub()
         {
-            _canonicalPubBytes = new byte[33];
-            _canonicalPubBytes[0] = (byte) 0xed;
-            Array.Copy(pair.PublicKey, 0, _canonicalPubBytes, 
-                       1, pair.PublicKey.Length);
+            CanonicalisedPubBytes = new byte[33];
+            CanonicalisedPubBytes[0] = (byte)0xed;
+            Array.Copy(PairImpl.PublicKey, 0, CanonicalisedPubBytes,
+                       1, PairImpl.PublicKey.Length);
         }
 
-        public string CanonicalPubHex()
-        {
-            throw new NotImplementedException();
-        }
-
-        public BigInteger Priv()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string PrivHex()
-        {
-            throw new NotImplementedException();
-        }
-
-        public BigInteger Pub()
-        {
-            return Utils.Utils.UBigInt(pair.PublicKey);
-        }
-
-        public byte[] Pub160Hash()
+        public byte[] PubKeyHash()
         {
             return Utils.HashUtils.PublicKeyHash(CanonicalPubBytes());
         }
 
-        public byte[] SignMessage(byte[] message)
+        public byte[] Sign(byte[] message)
         {
-            return PublicKeyAuth.SignDetached(message, pair.PrivateKey);
+            return PublicKeyAuth.SignDetached(message, PairImpl.PrivateKey);
         }
 
-        public bool VerifySignature(byte[] message, byte[] sigBytes)
+        public bool Verify(byte[] message, byte[] signature)
         {
-            return PublicKeyAuth.VerifyDetached(sigBytes, message, pair.PublicKey);
+            return PublicKeyAuth.VerifyDetached(signature, message, PairImpl.PublicKey);
         }
 
-        internal static IKeyPair From128Seed(byte[] _SeedBytes)
+        internal static IKeyPair From128Seed(byte[] seed)
         {
-            var edSecret = new Ripple.Utils.Sha512(_SeedBytes).Finish256();
+            var edSecret = new Ripple.Utils.Sha512(seed).Finish256();
             var pair = PublicKeyAuth.GenerateKeyPair(edSecret);
             return new EDKeyPair(pair);
         }
 
         public string ID()
         {
-            return Ripple.Address.EncodeAddress(Pub160Hash());
+            return Ripple.Address.EncodeAddress(PubKeyHash());
         }
     }
-
 }
