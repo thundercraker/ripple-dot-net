@@ -1,7 +1,7 @@
 using System;
 using Org.BouncyCastle.Crypto.Digests;
 
-namespace Ripple.SigningKeys.Utils
+namespace Ripple.Signing.Utils
 {
     internal class Sha512
     {

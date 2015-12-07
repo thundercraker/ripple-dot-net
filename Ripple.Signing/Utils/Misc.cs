@@ -1,7 +1,7 @@
 ﻿using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities.Encoders;
 
-namespace Ripple.SigningKeys.Utils
+namespace Ripple.Signing.Utils
 {
     internal class Misc
     {

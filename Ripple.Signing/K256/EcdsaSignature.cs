@@ -2,7 +2,7 @@
 using System.IO;
 using Org.BouncyCastle.Math;
 
-namespace Ripple.SigningKeys.K256
+namespace Ripple.Signing.K256
 {
 
     using Asn1InputStream = Org.BouncyCastle.Asn1.Asn1InputStream;

@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace Ripple.SigningKeys.Utils
+namespace Ripple.Signing.Utils
 {
     internal class HashUtils
     {

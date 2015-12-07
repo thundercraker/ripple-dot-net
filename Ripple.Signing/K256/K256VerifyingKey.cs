@@ -1,9 +1,9 @@
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Math.EC;
-using Ripple.SigningKeys.Utils;
+using Ripple.Signing.Utils;
 
-namespace Ripple.SigningKeys.K256
+namespace Ripple.Signing.K256
 {
     public class K256VerifyingKey
     {

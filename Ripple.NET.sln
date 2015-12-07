@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Signing", "Ripple.Signing\Ripple.Signing.csproj", "{3E5D4819-0E18-4376-B9A8-D62D79724B7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Signing.Tests", "Ripple.Signing.Tests\Ripple.Signing.Tests.csproj", "{76702C72-6807-4556-9C35-9060865F28EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Address", "Ripple.Address\Ripple.Address.csproj", "{8996F1CB-7E68-4294-9831-9C20EA7FB112}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Address.Tests", "Ripple.Address.Tests\Ripple.Address.Tests.csproj", "{3FA8E575-3C5E-4756-8E57-2B309868FF85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E5D4819-0E18-4376-B9A8-D62D79724B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5D4819-0E18-4376-B9A8-D62D79724B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5D4819-0E18-4376-B9A8-D62D79724B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5D4819-0E18-4376-B9A8-D62D79724B7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76702C72-6807-4556-9C35-9060865F28EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76702C72-6807-4556-9C35-9060865F28EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76702C72-6807-4556-9C35-9060865F28EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76702C72-6807-4556-9C35-9060865F28EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8996F1CB-7E68-4294-9831-9C20EA7FB112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8996F1CB-7E68-4294-9831-9C20EA7FB112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8996F1CB-7E68-4294-9831-9C20EA7FB112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8996F1CB-7E68-4294-9831-9C20EA7FB112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

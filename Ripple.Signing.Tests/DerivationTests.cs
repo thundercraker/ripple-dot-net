@@ -1,12 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ripple.Crypto;
-using Ripple.SigningKeys;
 
-namespace Ripple.SigningKeys.Tests
+namespace Ripple.Signing.Tests
 {
-    using static Ripple.Address;
     using Seed = Seed;
-    using System.IO;
 
     [TestClass()]
     public class DerivationTests

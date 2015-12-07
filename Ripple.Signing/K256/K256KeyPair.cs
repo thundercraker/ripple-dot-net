@@ -1,7 +1,7 @@
 ﻿using Org.BouncyCastle.Math;
-using Ripple.SigningKeys.Utils;
+using Ripple.Signing.Utils;
 
-namespace Ripple.SigningKeys.K256
+namespace Ripple.Signing.K256
 {
     using ECPrivateKeyParameters = Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters;
     using ECDSASigner = Org.BouncyCastle.Crypto.Signers.ECDsaSigner;
@@ -80,9 +80,9 @@ namespace Ripple.SigningKeys.K256
         {
             if (_isNodeKey)
             {
-                return Address.EncodeNodePublic(CanonicalPubBytes());
+                return Address.Codec.EncodeNodePublic(CanonicalPubBytes());
             }
-            return Address.EncodeAddress(PubKeyHash());
+            return Address.Codec.EncodeAddress(PubKeyHash());
         }
     }
 

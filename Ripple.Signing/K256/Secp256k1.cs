@@ -1,6 +1,6 @@
 ﻿using Org.BouncyCastle.Math;
 
-namespace Ripple.SigningKeys.K256
+namespace Ripple.Signing.K256
 {
     using SECNamedCurves = Org.BouncyCastle.Asn1.Sec.SecNamedCurves;
     using ECDomainParameters = Org.BouncyCastle.Crypto.Parameters.ECDomainParameters;
