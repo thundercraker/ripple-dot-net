@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Ripple.Core
 {
-    public class Hop
+    public class PathHop
     {
         public static byte TypeAccount = 0x01;
         public static byte TypeCurrency = 0x10;
@@ -16,7 +16,7 @@ namespace Ripple.Core
         public readonly Currency Currency;
         public readonly int Type;
 
-        public Hop(AccountId account, AccountId issuer, Currency currency)
+        public PathHop(AccountId account, AccountId issuer, Currency currency)
         {
             Account = account;
             Issuer = issuer;
@@ -24,9 +24,9 @@ namespace Ripple.Core
             Type = SynthesizeType();
         }
 
-        public static Hop FromJson(JToken json)
+        public static PathHop FromJson(JToken json)
         {
-            return new Hop(json["account"], json["issuer"], json["currency"]);
+            return new PathHop(json["account"], json["issuer"], json["currency"]);
         }
 
         public bool HasIssuer()
@@ -44,7 +44,7 @@ namespace Ripple.Core
 
         public int SynthesizeType()
         {
-            int type = 0;
+            var type = 0;
 
             if (HasAccount())
             {
@@ -62,14 +62,14 @@ namespace Ripple.Core
         }
 
     }
-    public class Path : List<Hop>
+    public class Path : List<PathHop>
     {
-        private Path(IEnumerable<Hop> enumerable) : base(enumerable)
+        private Path(IEnumerable<PathHop> enumerable) : base(enumerable)
         {
         }
         public static Path FromJson(JToken json)
         {
-            return new Path(json.Select(Hop.FromJson));
+            return new Path(json.Select(PathHop.FromJson));
         }
     }
 
@@ -111,7 +111,7 @@ namespace Ripple.Core
             buffer.Add(PathsetEndByte);
         }
 
-        public static ISerializedType FromJson(JToken token)
+        public static PathSet FromJson(JToken token)
         {
             return new PathSet(token.Select(Path.FromJson));
         }

@@ -27,16 +27,12 @@ namespace Ripple.Core
         {
             byte[] empty = new byte[20];
             var sourceArray = Bits.GetBytes(value);
-            if (Bits.IsLittleEndian)
-            {
-                Array.Reverse(sourceArray);
-            }
             Array.Copy(sourceArray, 0, empty, 16, 4);
             return new AccountId(empty);
         }
         public static implicit operator AccountId(JToken json)
         {
-            return FromJson(json);
+            return json == null ? null : FromJson(json);
         }
 
         public static readonly AccountId Zero = 0;
@@ -48,7 +44,7 @@ namespace Ripple.Core
 
         public new static AccountId FromJson(JToken json)
         {
-            return json == null ? null : json.ToString();
+            return json?.ToString();
         }
     }
 }

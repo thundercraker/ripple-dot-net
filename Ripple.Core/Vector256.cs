@@ -15,7 +15,7 @@ namespace Ripple.Core
                 hash.ToBytes(sink);
             }
         }
-        public static ISerializedType FromJson(JToken token)
+        public static Vector256 FromJson(JToken token)
         {
             return new Vector256(token.Select(Hash256.FromJson));
         }

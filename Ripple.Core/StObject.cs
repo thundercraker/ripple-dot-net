@@ -9,24 +9,24 @@ namespace Ripple.Core
     {
         static StObject()
         {
-            var d = new Dictionary<Type, FromJson>
+            var d = new Dictionary<FieldType, FromJson>
             {
-                [Type.AccountId] = AccountId.FromJson,
-                [Type.StObject] = FromJson,
-                [Type.StArray] = StArray.FromJson,
-                [Type.Blob] = Blob.FromJson,
-                [Type.Uint8] = Uint8.FromJson,
-                [Type.Uint32] = Uint32.FromJson,
-                [Type.Uint64] = Uint64.FromJson,
-                [Type.Uint16] = Uint16.FromJson,
-                [Type.Amount] = Amount.FromJson,
-                [Type.Hash128] = Hash128.FromJson,
-                [Type.Hash256] = Hash256.FromJson,
-                [Type.Hash160] = Hash160.FromJson,
-                [Type.Amount] = Amount.FromJson,
-                [Type.Blob] = Blob.FromJson,
-                [Type.PathSet] = PathSet.FromJson,
-                [Type.Vector256] = Vector256.FromJson
+                [FieldType.AccountId] = AccountId.FromJson,
+                [FieldType.StObject] = FromJson,
+                [FieldType.StArray] = StArray.FromJson,
+                [FieldType.Blob] = Blob.FromJson,
+                [FieldType.Uint8] = Uint8.FromJson,
+                [FieldType.Uint32] = Uint32.FromJson,
+                [FieldType.Uint64] = Uint64.FromJson,
+                [FieldType.Uint16] = Uint16.FromJson,
+                [FieldType.Amount] = Amount.FromJson,
+                [FieldType.Hash128] = Hash128.FromJson,
+                [FieldType.Hash256] = Hash256.FromJson,
+                [FieldType.Hash160] = Hash160.FromJson,
+                [FieldType.Amount] = Amount.FromJson,
+                [FieldType.Blob] = Blob.FromJson,
+                [FieldType.PathSet] = PathSet.FromJson,
+                [FieldType.Vector256] = Vector256.FromJson
             };
             foreach (var field in Field.Values.Where(
                 field => d.ContainsKey(field.Type)))

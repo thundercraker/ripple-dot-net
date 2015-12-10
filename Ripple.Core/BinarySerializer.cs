@@ -98,11 +98,11 @@ namespace Ripple.Core
             else
             {
                 value.ToBytes(_sink);
-                if (field.Type == Type.StObject)
+                if (field.Type == FieldType.StObject)
                 {
                     AddFieldHeader(Field.ObjectEndMarker);
                 }
-                else if (field.Type == Type.StArray)
+                else if (field.Type == FieldType.StArray)
                 {
                     AddFieldHeader(Field.ArrayEndMarker);
                 }
