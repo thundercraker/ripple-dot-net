@@ -36,7 +36,7 @@ namespace Ripple.Signing.Tests
         }
 
         [TestMethod()]
-        public void GenerateNodeKey()
+        public void GenerateNodeKeyTest()
         {
             var zeroBytes = new byte[16];
             var pair = new Seed(zeroBytes).SetNodeKey().KeyPair();

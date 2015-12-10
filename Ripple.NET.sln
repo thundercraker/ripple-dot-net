@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Signing.Tests", "Rip
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Address.Tests", "Ripple.Address\Ripple.Address.Tests\Ripple.Address.Tests.csproj", "{3FA8E575-3C5E-4756-8E57-2B309868FF85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Core", "Ripple.Core\Ripple.Core.csproj", "{DF3CA9A2-E707-43E2-93B9-21BB37518047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripple.Core.Tests", "Ripple.Core\Ripple.Core.Tests\Ripple.Core.Tests.csproj", "{1A9A8D15-BEED-4734-87BF-CC4B4D3E3961}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FA8E575-3C5E-4756-8E57-2B309868FF85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF3CA9A2-E707-43E2-93B9-21BB37518047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF3CA9A2-E707-43E2-93B9-21BB37518047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF3CA9A2-E707-43E2-93B9-21BB37518047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF3CA9A2-E707-43E2-93B9-21BB37518047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A9A8D15-BEED-4734-87BF-CC4B4D3E3961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A9A8D15-BEED-4734-87BF-CC4B4D3E3961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A9A8D15-BEED-4734-87BF-CC4B4D3E3961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A9A8D15-BEED-4734-87BF-CC4B4D3E3961}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
