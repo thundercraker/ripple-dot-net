@@ -1,13 +1,22 @@
-﻿namespace Ripple.Signing
+﻿using Ripple.Signing.Utils;
+
+namespace Ripple.Signing
 {
-	public interface IKeyPair
-	{
-		byte[] CanonicalPubBytes();
+    public interface IKeyPair
+    {
+        byte[] CanonicalPubBytes();
 
         bool Verify(byte[] message, byte[] signature);
-		byte[] Sign(byte[] message);
+        byte[] Sign(byte[] message);
 
-        byte[] PubKeyHash();
-        string ID();
-	}
+        string Id();
+    }
+
+    public static class KeyPairExtensions
+    {
+        public static byte[] PubKeyHash(this IKeyPair pair)
+        {
+            return HashUtils.PublicKeyHash(pair.CanonicalPubBytes());
+        }
+    }
 }

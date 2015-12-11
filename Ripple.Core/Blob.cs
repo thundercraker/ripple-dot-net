@@ -32,5 +32,10 @@ namespace Ripple.Core
         {
             sink.Add(Buffer);
         }
+
+        public override string ToString()
+        {
+            return B16.ToHex(Buffer);
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace Ripple.Signing.Ed25519
             return new EdKeyPair(pair);
         }
 
-        public string ID()
+        public string Id()
         {
             return Address.AddressCodec.EncodeAddress(PubKeyHash());
         }

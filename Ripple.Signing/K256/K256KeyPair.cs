@@ -57,11 +57,11 @@ namespace Ripple.Signing.K256
 
         private byte[] SignHash(byte[] bytes)
         {
-            EcdsaSignature sig = CreateECDSASignature(bytes);
-            return sig.EncodeToDER();
+            EcdsaSignature sig = CreateEcdsaSignature(bytes);
+            return sig.EncodeToDer();
         }
 
-        private EcdsaSignature CreateECDSASignature(byte[] hash)
+        private EcdsaSignature CreateEcdsaSignature(byte[] hash)
         {
 
             BigInteger[] sigs = _signer.GenerateSignature(hash);
@@ -76,7 +76,7 @@ namespace Ripple.Signing.K256
             return new EcdsaSignature(r, s);
         }
 
-        public string ID()
+        public string Id()
         {
             if (_isNodeKey)
             {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ripple.Signing.Tests")]
+[assembly: AssemblyTitle("Ripple.TxSigning")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Ripple.Signing.Tests")]
+[assembly: AssemblyProduct("Ripple.TxSigning")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the Id of the typelib if this project is exposed to COM
-[assembly: Guid("76702c72-6807-4556-9c35-9060865f28ec")]
+[assembly: Guid("35a86cb5-9c41-4f6c-8abf-a838acc56da8")]
 
 // Version information for an assembly consists of the following four values:
 //

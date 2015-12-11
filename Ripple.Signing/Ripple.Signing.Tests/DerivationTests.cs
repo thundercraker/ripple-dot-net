@@ -10,27 +10,27 @@ namespace Ripple.Signing.Tests
         [TestMethod()]
         public void GenerateRootAccountTest()
         {
-            string passphrase = "masterpassphrase";
-            string encodedSeed = "snoPBrXtMeMyMHUVTgbuqAfg1SUTb";
-            string rootAccount = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
-            Seed seed = Seed.FromPassPhrase(passphrase);
+            var passphrase = "masterpassphrase";
+            var encodedSeed = "snoPBrXtMeMyMHUVTgbuqAfg1SUTb";
+            var rootAccount = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
+            var seed = Seed.FromPassPhrase(passphrase);
             var pair = seed.KeyPair();
             Assert.AreEqual(encodedSeed, seed.ToString());
-            Assert.AreEqual(rootAccount, pair.ID());
+            Assert.AreEqual(rootAccount, pair.Id());
         }
 
         [TestMethod()]
         public void GenerateNiqEd25519Test()
         {
-            string passphrase = "niq";
-            string encodedSeed = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
-            string accountID = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN";
+            var passphrase = "niq";
+            var encodedSeed = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
+            var accountID = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN";
 
-            var idFromSeed = Seed.FromBase58(encodedSeed).KeyPair().ID();
-            Seed seed = Seed.FromPassPhrase(passphrase).SetEd25519();
+            var idFromSeed = Seed.FromBase58(encodedSeed).KeyPair().Id();
+            var seed = Seed.FromPassPhrase(passphrase).SetEd25519();
             var pair = seed.KeyPair();
 
-            Assert.AreEqual(accountID, pair.ID());
+            Assert.AreEqual(accountID, pair.Id());
             Assert.AreEqual(encodedSeed, seed.ToString());
             Assert.AreEqual(accountID, idFromSeed);
         }
@@ -41,7 +41,7 @@ namespace Ripple.Signing.Tests
             var zeroBytes = new byte[16];
             var pair = new Seed(zeroBytes).SetNodeKey().KeyPair();
             Assert.AreEqual("n9LPxYzbDpWBZ1bC3J3Fdkgqoa3FEhVKCnS8yKp7RFQFwuvd8Q2c", 
-                            pair.ID());
+                            pair.Id());
         }
     }
 }

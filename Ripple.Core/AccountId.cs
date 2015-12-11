@@ -35,8 +35,6 @@ namespace Ripple.Core
             return json == null ? null : FromJson(json);
         }
 
-        public static readonly AccountId Zero = 0;
-        public static readonly AccountId Neutral = 1;
         public override string ToString()
         {
             return _value;
@@ -46,5 +44,9 @@ namespace Ripple.Core
         {
             return json?.ToString();
         }
+
+        public static readonly AccountId Zero = 0;
+        public static readonly AccountId Neutral = 1;
+
     }
 }

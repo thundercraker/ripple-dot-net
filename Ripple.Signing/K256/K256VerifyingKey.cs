@@ -31,8 +31,8 @@ namespace Ripple.Signing.K256
 
         private bool VerifyHash(byte[] data, byte[] signature)
         {
-            var sig = EcdsaSignature.DecodeFromDER(signature);
-            return sig != null && Verifier.VerifySignature(data, sig.r, sig.s);
+            var sig = EcdsaSignature.DecodeFromDer(signature);
+            return sig != null && Verifier.VerifySignature(data, sig.R, sig.S);
         }
 
         protected void SetVerifier(ECPoint pub)

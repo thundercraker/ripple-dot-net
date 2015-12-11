@@ -23,7 +23,8 @@ namespace Ripple.Core
             Value =  ParseDecimal(value);
             Currency = currency ?? Currency.Xrp;
             Issuer = issuer ?? (Currency.IsNative ? 
-                                    AccountId.Zero : AccountId.Neutral);
+                                    AccountId.Zero : 
+                                    AccountId.Neutral);
         }
 
         private static BigDecimal ParseDecimal(string value)

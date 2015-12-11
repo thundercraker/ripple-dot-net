@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ripple.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ripple.Core.Tests
 {
@@ -12,7 +6,7 @@ namespace Ripple.Core.Tests
     public class CurrencyTests
     {
         [TestMethod()]
-        public void SomeTests()
+        public void UsdTest()
         {
             Currency c = "USD";
             Assert.IsFalse(c.IsNative);

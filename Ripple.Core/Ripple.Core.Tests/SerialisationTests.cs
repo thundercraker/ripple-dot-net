@@ -45,7 +45,6 @@ namespace Ripple.Core.Tests
         public void TransactionSigningTest()
         {
             var json = JObject.Parse(TxJson);
-
             var obj = StObject.FromJson(json);
             var hex = obj.ToHex();
             

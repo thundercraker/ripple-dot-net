@@ -3,9 +3,9 @@ using Org.BouncyCastle.Crypto.Digests;
 
 namespace Ripple.Signing.Utils
 {
-    internal class Sha512
+    public class Sha512
     {
-        private Sha512Digest _messageDigest;
+        private readonly Sha512Digest _messageDigest;
 
         public Sha512()
         {
