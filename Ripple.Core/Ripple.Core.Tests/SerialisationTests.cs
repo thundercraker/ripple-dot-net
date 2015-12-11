@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using Deveel.Math;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -74,6 +76,7 @@ namespace Ripple.Core.Tests
             {
                 StObject txn = whole["tx_json"];
                 Assert.AreEqual(whole["blob_with_no_signing"], txn.ToHex());
+                AssertDeepEqual(txn.ToJson(), whole["tx_json"]);
             }
         }
 
@@ -89,14 +92,37 @@ namespace Ripple.Core.Tests
             var passed = array.Count(test =>
             {
                 var expected = test["expected_hex"].ToString();
-                var fromJson = Amount.FromJson(test["test_json"]);
-                var actual = fromJson.ToHex();
-                var debugInfo = test["test_json"].Type + " typed: " + test.ToString();
+                var testJson = test["test_json"];
+                var parsedAmount = Amount.FromJson(testJson);
+                var actual = parsedAmount.ToHex();
+                var debugInfo = testJson.Type + " typed: " + test.ToString();
                 Assert.AreEqual(expected, actual, debugInfo);
-                Assert.AreEqual(test["is_native"], fromJson.IsNative, debugInfo);
+                Assert.AreEqual(test["is_native"], parsedAmount.IsNative, debugInfo);
+                var reJsonified = parsedAmount.ToJson();
+                AssertAmountEqual(testJson, reJsonified);
+
                 return true;
             });
             Assert.AreEqual(array.Length, passed);
+        }
+
+        private static void AssertAmountEqual(JToken expected, JToken actual)
+        {
+            if (expected.Type == JTokenType.String)
+            {
+                Assert.AreEqual(expected.ToString(), actual.ToString());
+            }
+            if (!JToken.DeepEquals(expected, actual))
+            {
+                Assert.IsTrue(BigDecimal.Parse(expected["value"].ToString()).CompareTo(
+                              BigDecimal.Parse(actual["value"].ToString())) == 0,
+                              $"expected: {expected}\nactual: {actual}");
+            }
+        }
+
+        private static void AssertDeepEqual(JToken expected, JToken actual)
+        {
+            Assert.IsTrue(JToken.DeepEquals(actual, expected), actual + "\n" + expected);
         }
     }
 }

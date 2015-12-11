@@ -61,6 +61,24 @@ namespace Ripple.Core
             return type;
         }
 
+        public JObject ToJson()
+        {
+            var hop = new JObject {["type"] = Type};
+
+            if (HasAccount())
+            {
+                hop["account"] = Account;
+            }
+            if (HasCurrency())
+            {
+                hop["currency"] = Currency;
+            }
+            if (HasIssuer())
+            {
+                hop["issuer"] = Issuer;
+            }
+            return hop;
+        }
     }
     public class Path : List<PathHop>
     {
@@ -70,6 +88,15 @@ namespace Ripple.Core
         public static Path FromJson(JToken json)
         {
             return new Path(json.Select(PathHop.FromJson));
+        }
+        public JArray ToJson()
+        {
+            var array = new JArray();
+            foreach (var hop in this)
+            {
+                array.Add(hop.ToJson());
+            }
+            return array;
         }
     }
 
@@ -109,6 +136,16 @@ namespace Ripple.Core
                 }
             }
             buffer.Add(PathsetEndByte);
+        }
+
+        public JToken ToJson()
+        {
+            var array = new JArray();
+            foreach (var path in this)
+            {
+                array.Add(path.ToJson());
+            }
+            return array;
         }
 
         public static PathSet FromJson(JToken token)

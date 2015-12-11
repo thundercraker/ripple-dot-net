@@ -28,5 +28,9 @@ namespace Ripple.Core
             return new Uint64(v);
         }
 
+        public override JToken ToJson()
+        {
+            return ToString();
+        }
     }
 }

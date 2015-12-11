@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Ripple.Core;
 using Ripple.Signing;
 using static Ripple.Core.Util.B16;
@@ -33,7 +35,6 @@ namespace Ripple.TxSigning
 
             var blob = so.Blob();
             var hash = Utils.TransactionId(blob);
-
             return new SignedTx(hash, ToHex(blob), txJson);
         }
         public static TxSigner FromKeyPair(IKeyPair keyPair)

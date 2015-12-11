@@ -1,3 +1,6 @@
+using Newtonsoft.Json.Linq;
+using Ripple.Core.Util;
+
 namespace Ripple.Core
 {
     public abstract class Hash : ISerializedType
@@ -10,6 +13,16 @@ namespace Ripple.Core
         public void ToBytes(IBytesSink sink)
         {
             sink.Add(Buffer);
+        }
+
+        public JToken ToJson()
+        {
+            return ToString();
+        }
+
+        public override string ToString()
+        {
+            return B16.ToHex(Buffer);
         }
     }
 }

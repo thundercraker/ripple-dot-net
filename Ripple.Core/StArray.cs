@@ -19,6 +19,16 @@ namespace Ripple.Core
             }
         }
 
+        public JToken ToJson()
+        {
+            var arr = new JArray();
+            foreach (var so in this)
+            {
+                arr.Add(so.ToJson());
+            }
+            return arr;
+        }
+
         public static StArray FromJson(JToken token)
         {
             return new StArray(token.Select(StObject.FromJson));

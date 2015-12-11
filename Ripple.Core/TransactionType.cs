@@ -18,6 +18,12 @@ namespace Ripple.Core
         {
             sink.Add(Bytes);
         }
+
+        public JToken ToJson()
+        {
+            return ToString();
+        }
+
         public static TransactionType FromJson(JToken token)
         {
             return token.Type == JTokenType.String ?

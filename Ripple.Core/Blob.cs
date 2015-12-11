@@ -33,6 +33,11 @@ namespace Ripple.Core
             sink.Add(Buffer);
         }
 
+        public JToken ToJson()
+        {
+            return ToString();
+        }
+
         public override string ToString()
         {
             return B16.ToHex(Buffer);

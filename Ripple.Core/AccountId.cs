@@ -35,6 +35,11 @@ namespace Ripple.Core
             return json == null ? null : FromJson(json);
         }
 
+        public static implicit operator JToken(AccountId v)
+        {
+            return v.ToString();
+        }
+
         public override string ToString()
         {
             return _value;

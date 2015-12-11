@@ -1,4 +1,5 @@
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using Ripple.Core.Util;
 
 namespace Ripple.Core
@@ -6,6 +7,7 @@ namespace Ripple.Core
     public interface ISerializedType
     {
         void ToBytes(IBytesSink sink);
+        JToken ToJson();
     }
 
     public static class StExtensions

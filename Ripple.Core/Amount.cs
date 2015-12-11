@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Globalization;
+using Newtonsoft.Json.Linq;
 using Deveel.Math;
 
 namespace Ripple.Core
@@ -61,6 +62,20 @@ namespace Ripple.Core
                 Currency.ToBytes(sink);
                 Issuer.ToBytes(sink);
             }
+        }
+
+        public JToken ToJson()
+        {
+            if (IsNative)
+            {
+                return Value.ToString();
+            }
+            return new JObject()
+            {
+                ["value"] = Value.ToPlainString(),
+                ["currency"] = Currency,
+                ["issuer"] = Issuer,
+            };
         }
 
         public static Amount FromJson(JToken token)

@@ -91,7 +91,6 @@ namespace Ripple.Core
             return currencyBytes;
         }
 
-
         public static implicit operator Currency(string v)
         {
             return FromString(v);
@@ -100,6 +99,18 @@ namespace Ripple.Core
         {
             return FromJson(v);
         }
+        public static implicit operator JToken(Currency v)
+        {
+            return v.ToString();
+        }
 
+        public override string ToString()
+        {
+            if (IsoCode != null)
+            {
+                return IsoCode;
+            }
+            return base.ToString();
+        }
     }
 }

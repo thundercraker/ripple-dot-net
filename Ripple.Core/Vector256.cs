@@ -15,6 +15,17 @@ namespace Ripple.Core
                 hash.ToBytes(sink);
             }
         }
+
+        public JToken ToJson()
+        {
+            var arr = new JArray();
+            foreach (var hash in this)
+            {
+                arr.Add(hash.ToJson());
+            }
+            return arr;
+        }
+
         public static Vector256 FromJson(JToken token)
         {
             return new Vector256(token.Select(Hash256.FromJson));

@@ -57,6 +57,16 @@ namespace Ripple.Core
             ToBytes(to, null);
         }
 
+        public JToken ToJson()
+        {
+            JObject json = new JObject();
+            foreach (var pair in this)
+            {
+                json[pair.Key] = pair.Value.ToJson();
+            }
+            return json;
+        }
+
         public void ToBytes(IBytesSink to, Func<Field, bool> p)
         {
             var serializer = new BinarySerializer(to);
