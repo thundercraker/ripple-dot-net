@@ -43,8 +43,11 @@ namespace Ripple.Core
             foreach (var pair in (JObject) token)
             {
                 var fieldForType = Field.Values[pair.Key];
-                var st = fieldForType.FromJson(pair.Value);
-                so[fieldForType] = st;
+                if (fieldForType != null)
+                {
+                    var st = fieldForType.FromJson(pair.Value);
+                    so[fieldForType] = st;
+                }
             }
             return so;
         }

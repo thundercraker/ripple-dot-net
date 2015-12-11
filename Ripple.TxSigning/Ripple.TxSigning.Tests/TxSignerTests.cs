@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Ripple.Signing;
 
 namespace Ripple.TxSigning.Tests
@@ -47,14 +49,45 @@ namespace Ripple.TxSigning.Tests
             'TransactionType' : 'Payment'
         }";
 
+        public class PodoTx
+        {
+            public string Account;
+            public string Amount;
+            public string Destination;
+            public string Fee;
+            public long Flags;
+            public int Sequence;
+            public string TransactionType;
+        }
+
+        public readonly PodoTx UnsignedTxPodo = new PodoTx()
+        {
+            Account = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN",
+            Amount = "1000",
+            Destination = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
+            Fee = "10",
+            Flags = 2147483648,
+            Sequence = 1,
+            TransactionType = "Payment"
+        };
+
         public const string Secret = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
 
         [TestMethod()]
-        public void SignTest()
+        public void SignJObjectTest()
         {
-            var unsigned = JObject.Parse(UnsignedTxJson);
-            var signed = TxSigner.Sign(unsigned, Secret);
+            TestSigning(JObject.Parse(UnsignedTxJson));
+        }
 
+        [TestMethod()]
+        public void PodoSignTest()
+        {
+            TestSigning(JObject.FromObject(UnsignedTxPodo));
+        }
+
+        private static void TestSigning(JObject unsigned)
+        {
+            var signed = TxSigner.Sign(unsigned, Secret);
             Assert.AreEqual(ExpectedTxnSignature, signed.TxJson["TxnSignature"]);
             Assert.AreEqual(ExpectedSigningPubKey, signed.TxJson["SigningPubKey"]);
             Assert.AreEqual(ExpectedHash, signed.Hash);
