@@ -11,8 +11,12 @@ namespace Ripple.Core
 
         public static Hash128 FromJson(JToken token)
         {
-            return new Hash128(B16.FromHex(token.ToString()));
+            return new Hash128(B16.Decode(token.ToString()));
         }
 
+        public static Hash128 FromParser(BinaryParser parser, int? hint=null)
+        {
+            return new Hash128(parser.Read(16));
+        }
     }
 }

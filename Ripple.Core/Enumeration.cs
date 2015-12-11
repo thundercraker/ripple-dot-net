@@ -45,5 +45,10 @@ namespace Ripple.Core
         {
             return _byDefinitionOrder.GetEnumerator();
         }
+
+        public bool Has(string key)
+        {
+            return _byText.ContainsKey(key);
+        }
     }
 }

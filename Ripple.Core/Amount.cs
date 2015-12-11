@@ -106,5 +106,37 @@ namespace Ripple.Core
                 Value.Precision - 
                 Value.Scale;
         }
+
+        public static Amount FromParser(BinaryParser parser, int? hint=null)
+        {
+            BigDecimal value;
+            var mantissa = parser.Read(8);
+            var b1 = mantissa[0];
+            var b2 = mantissa[1];
+
+            var isIou = (b1 & 0x80) != 0;
+            var isPositive = (b1 & 0x40) != 0;
+            var sign = isPositive ? 1 : -1;
+
+            if (isIou)
+            {
+                mantissa[0] = 0;
+                var curr = Currency.FromParser(parser);
+                var issuer = AccountId.FromParser(parser);
+                var exponent = ((b1 & 0x3F) << 2) + ((b2 & 0xff) >> 6) - 97;
+                mantissa[1] &= 0x3F;
+
+                value = new BigDecimal(new BigInteger(sign, mantissa), -exponent);
+                return new Amount(value.StripTrailingZeros(), curr, issuer);
+            }
+            mantissa[0] &= 0x3F;
+            value = DropsFromMantissa(mantissa, sign);
+            return new Amount(value);
+        }
+
+        private static BigDecimal DropsFromMantissa(byte[] mantissa, int sign)
+        {
+            return new BigDecimal(new BigInteger(sign, mantissa));
+        }
     }
 }

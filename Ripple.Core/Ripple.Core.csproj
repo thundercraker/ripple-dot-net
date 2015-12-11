@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountId.cs" />
+    <Compile Include="BinaryParser.cs" />
     <Compile Include="BinarySerializer.cs" />
     <Compile Include="Blob.cs" />
     <Compile Include="BytesList.cs" />

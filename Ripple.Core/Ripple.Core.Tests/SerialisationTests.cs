@@ -55,7 +55,7 @@ namespace Ripple.Core.Tests
             Seed seed = Seed.FromPassPhrase("niq").SetEd25519();
             
             // The ed25519 Signature
-            var sig = seed.KeyPair().Sign(B16.FromHex(MessageBytes));
+            var sig = seed.KeyPair().Sign(B16.Decode(MessageBytes));
             var expectedSig = ExpectedSig;
             Assert.AreEqual(expectedSig, B16.ToHex(sig));
         }
@@ -76,7 +76,10 @@ namespace Ripple.Core.Tests
             {
                 StObject txn = whole["tx_json"];
                 Assert.AreEqual(whole["blob_with_no_signing"], txn.ToHex());
-                AssertDeepEqual(txn.ToJson(), whole["tx_json"]);
+                AssertDeepEqual(whole["tx_json"], txn.ToJson());
+
+                var txnFromBinary = StObject.FromHex($"{whole["blob_with_no_signing"]}");
+                AssertDeepEqual(whole["tx_json"], txnFromBinary.ToJson());
             }
         }
 
@@ -114,15 +117,20 @@ namespace Ripple.Core.Tests
             }
             if (!JToken.DeepEquals(expected, actual))
             {
-                Assert.IsTrue(BigDecimal.Parse(expected["value"].ToString()).CompareTo(
-                              BigDecimal.Parse(actual["value"].ToString())) == 0,
-                              $"expected: {expected}\nactual: {actual}");
+                Assert.IsTrue(BigDecimal.Parse(expected["value"].ToString())
+                                .CompareTo(BigDecimal.Parse(
+                                      actual["value"].ToString())) 
+                                       == 0,
+                                          $"expected: {expected}\n" +
+                                          $"actual: {actual}");
             }
         }
 
         private static void AssertDeepEqual(JToken expected, JToken actual)
         {
-            Assert.IsTrue(JToken.DeepEquals(actual, expected), actual + "\n" + expected);
+            Assert.IsTrue(JToken.DeepEquals(actual, expected), 
+                          $"expected: {expected}\n" +
+                          $"actual: {actual}");
         }
     }
 }

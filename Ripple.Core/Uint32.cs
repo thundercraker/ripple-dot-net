@@ -22,5 +22,10 @@ namespace Ripple.Core
         {
             return Bits.GetBytes(Value);
         }
+
+        public static Uint32 FromParser(BinaryParser parser, int? hint=null)
+        {
+            return Bits.ToUInt32(parser.Read(4), 0);
+        }
     }
 }

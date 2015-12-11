@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 namespace Ripple.Core
 {
     public delegate ISerializedType FromJson(JToken token);
+    public delegate ISerializedType FromParser(BinaryParser parser, int? hint = null);
 
     public class Field : EnumItem
     {
@@ -15,6 +16,7 @@ namespace Ripple.Core
         public readonly byte[] Header;
 
         public FromJson FromJson;
+        public FromParser FromParser;
 
         #endregion
 

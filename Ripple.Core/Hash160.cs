@@ -10,7 +10,11 @@ namespace Ripple.Core
         }
         public static Hash160 FromJson(JToken token)
         {
-            return new Hash160(B16.FromHex(token.ToString()));
+            return new Hash160(B16.Decode(token.ToString()));
+        }
+        public static Hash160 FromParser(BinaryParser parser, int? hint = null)
+        {
+            return new Hash160(parser.Read(20));
         }
     }
 }

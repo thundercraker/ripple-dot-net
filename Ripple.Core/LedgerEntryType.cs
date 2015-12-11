@@ -34,8 +34,6 @@ namespace Ripple.Core
         public static readonly LedgerEntryType DirectoryNode = new LedgerEntryType(nameof(DirectoryNode), 'd');
         public static readonly LedgerEntryType GeneratorMap = new LedgerEntryType(nameof(GeneratorMap), 'g');
         public static readonly LedgerEntryType RippleState = new LedgerEntryType(nameof(RippleState), 'r');
-        // Deprecated
-        //public static readonly LedgerEntryType Nickname = new LedgerEntryType(nameof(Nickname), 'n');
         public static readonly LedgerEntryType Offer = new LedgerEntryType(nameof(Offer), 'o');
         public static readonly LedgerEntryType Contract = new LedgerEntryType(nameof(Contract), 'c');
         public static readonly LedgerEntryType LedgerHashes = new LedgerEntryType(nameof(LedgerHashes), 'h');
@@ -43,5 +41,10 @@ namespace Ripple.Core
         public static readonly LedgerEntryType FeeSettings = new LedgerEntryType(nameof(FeeSettings), 's');
         public static readonly LedgerEntryType Ticket = new LedgerEntryType(nameof(Ticket), 'T');
         public static readonly LedgerEntryType SignerList = new LedgerEntryType(nameof(SignerList), 'S');
+
+        public static LedgerEntryType FromParser(BinaryParser parser, int? hint = null)
+        {
+            return Values[Bits.ToUInt16(parser.Read(2), 0)];
+        }
     }
 }

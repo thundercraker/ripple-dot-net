@@ -23,5 +23,10 @@ namespace Ripple.Core
         {
             return new Uint8(v);
         }
+
+        public static Uint8 FromParser(BinaryParser parser, int? hint=null)
+        {
+            return parser.ReadOne();
+        }
     }
 }

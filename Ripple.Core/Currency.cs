@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Util;
 
@@ -69,7 +70,7 @@ namespace Ripple.Core
             }
             if (str.Length == 40)
             {
-                return new Currency(B16.FromHex(str));
+                return new Currency(B16.Decode(str));
             }
             if (str.Length == 3)
             {
@@ -111,6 +112,11 @@ namespace Ripple.Core
                 return IsoCode;
             }
             return base.ToString();
+        }
+
+        public new static Currency FromParser(BinaryParser parser, int? hint = null)
+        {
+            return new Currency(parser.Read(20));
         }
     }
 }

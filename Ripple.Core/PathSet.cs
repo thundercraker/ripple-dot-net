@@ -82,7 +82,11 @@ namespace Ripple.Core
     }
     public class Path : List<PathHop>
     {
-        private Path(IEnumerable<PathHop> enumerable) : base(enumerable)
+        public Path()
+        {
+        }
+
+        public Path(IEnumerable<PathHop> enumerable) : base(enumerable)
         {
         }
         public static Path FromJson(JToken json)
@@ -107,6 +111,11 @@ namespace Ripple.Core
 
         private PathSet(IEnumerable<Path> enumerable) : base(enumerable)
         {
+        }
+
+        private PathSet()
+        {
+            
         }
 
         public void ToBytes(IBytesSink buffer)
@@ -152,5 +161,51 @@ namespace Ripple.Core
         {
             return new PathSet(token.Select(Path.FromJson));
         }
+
+        public static PathSet FromParser(BinaryParser parser, int? hint=null)
+        {
+            var pathSet = new PathSet();
+            Path path = null;
+            while (!parser.End())
+            {
+                byte type = parser.ReadOne();
+                if (type == PathsetEndByte)
+                {
+                    break;
+                }
+                if (path == null)
+                {
+                    path = new Path();
+                    pathSet.Add(path);
+                }
+                if (type == PathSeparatorByte)
+                {
+                    path = null;
+                    continue;
+                }
+
+                AccountId account = null;
+                AccountId issuer = null;
+                Currency currency = null;
+
+                if ((type & PathHop.TypeAccount) != 0)
+                {
+                    account = AccountId.FromParser(parser);
+                }
+                if ((type & PathHop.TypeCurrency) != 0)
+                {
+                    currency = Currency.FromParser(parser);
+                }
+                if ((type & PathHop.TypeIssuer) != 0)
+                {
+                    issuer = AccountId.FromParser(parser);
+                }
+                var hop = new PathHop(account, issuer, currency);
+                path.Add(hop);
+
+            }
+            return pathSet;
+        }
+
     }
 }

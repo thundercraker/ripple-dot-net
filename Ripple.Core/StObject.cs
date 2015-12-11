@@ -7,34 +7,77 @@ namespace Ripple.Core
 {
     public class StObject : SortedDictionary<Field, ISerializedType>, ISerializedType
     {
+        internal class BuildFrom
+        {
+            public  FromParser Parser;
+            public  FromJson Json;
+
+            public BuildFrom(FromJson json, FromParser parser=null)
+            {
+                Parser = parser;
+                Json = json;
+            }
+        }
+
         static StObject()
         {
-            var d = new Dictionary<FieldType, FromJson>
+            var d2 = new Dictionary<FieldType, BuildFrom>
             {
-                [FieldType.AccountId] = AccountId.FromJson,
-                [FieldType.StObject] = FromJson,
-                [FieldType.StArray] = StArray.FromJson,
-                [FieldType.Blob] = Blob.FromJson,
-                [FieldType.Uint8] = Uint8.FromJson,
-                [FieldType.Uint32] = Uint32.FromJson,
-                [FieldType.Uint64] = Uint64.FromJson,
-                [FieldType.Uint16] = Uint16.FromJson,
-                [FieldType.Amount] = Amount.FromJson,
-                [FieldType.Hash128] = Hash128.FromJson,
-                [FieldType.Hash256] = Hash256.FromJson,
-                [FieldType.Hash160] = Hash160.FromJson,
-                [FieldType.Amount] = Amount.FromJson,
-                [FieldType.Blob] = Blob.FromJson,
-                [FieldType.PathSet] = PathSet.FromJson,
-                [FieldType.Vector256] = Vector256.FromJson
+                [FieldType.StObject] = new BuildFrom(FromJson, FromParser),
+                [FieldType.StArray] = new BuildFrom(StArray.FromJson, StArray.FromParser),
+                [FieldType.Uint8] = new BuildFrom(Uint8.FromJson, Uint8.FromParser),
+                [FieldType.Uint32] = new BuildFrom(Uint32.FromJson, Uint32.FromParser),
+                [FieldType.Uint64] = new BuildFrom(Uint64.FromJson, Uint64.FromParser),
+                [FieldType.Uint16] = new BuildFrom(Uint16.FromJson, Uint16.FromParser),
+                [FieldType.Amount] = new BuildFrom(Amount.FromJson, Amount.FromParser),
+                [FieldType.Hash128] = new BuildFrom(Hash128.FromJson, Hash128.FromParser),
+                [FieldType.Hash256] = new BuildFrom(Hash256.FromJson, Hash256.FromParser),
+                [FieldType.Hash160] = new BuildFrom(Hash160.FromJson, Hash160.FromParser),
+                [FieldType.AccountId] = new BuildFrom(AccountId.FromJson, AccountId.FromParser),
+                [FieldType.Blob] = new BuildFrom(Blob.FromJson, Blob.FromParser),
+                [FieldType.PathSet] = new BuildFrom(PathSet.FromJson, PathSet.FromParser),
+                [FieldType.Vector256] = new BuildFrom(Vector256.FromJson, Vector256.FromParser),
             };
             foreach (var field in Field.Values.Where(
-                field => d.ContainsKey(field.Type)))
+                        field => d2.ContainsKey(field.Type)))
             {
-                field.FromJson = d[field.Type];
+                var buildFrom = d2[field.Type];
+                field.FromJson = buildFrom.Json;
+                field.FromParser= buildFrom.Parser;
             }
             Field.TransactionType.FromJson = TransactionType.FromJson;
+            Field.TransactionType.FromParser= TransactionType.FromParser;
+            Field.TransactionType.FromJson = TransactionType.FromJson;
             Field.LedgerEntryType.FromJson = LedgerEntryType.FromJson;
+        }
+
+        public static StObject FromParser(BinaryParser parser, int? hint = null)
+        {
+            var so = new StObject();
+
+            // hint, is how many bytes to parse
+            if (hint != null)
+            {
+                // end hint
+                hint = parser.Pos() + hint;
+            }
+
+            while (!parser.End(hint))
+            {
+                var field = parser.ReadField();
+                if (field == Field.ObjectEndMarker)
+                {
+                    break;
+                }
+                var sizeHint = field.IsVlEncoded ? parser.ReadVlLength() : (int?) null;
+                var st = field.FromParser(parser, sizeHint);
+                if (st == null)
+                {
+                    throw new InvalidOperationException("Parsed " + field + " as null");
+                }
+                so[field] = st;
+            }
+            return so;
         }
 
         public static StObject FromJson(JToken token)
@@ -42,12 +85,13 @@ namespace Ripple.Core
             var so = new StObject();
             foreach (var pair in (JObject) token)
             {
-                var fieldForType = Field.Values[pair.Key];
-                if (fieldForType != null)
+                if (!Field.Values.Has(pair.Key))
                 {
-                    var st = fieldForType.FromJson(pair.Value);
-                    so[fieldForType] = st;
+                    continue;
                 }
+                var fieldForType = Field.Values[pair.Key];
+                var st = fieldForType.FromJson(pair.Value);
+                so[fieldForType] = st;
             }
             return so;
         }
@@ -79,6 +123,11 @@ namespace Ripple.Core
         public static implicit operator StObject(JToken v)
         {
             return FromJson(v);
+        }
+
+        public static StObject FromHex(string s)
+        {
+            return FromParser(new BinaryParser(s));
         }
     }
 }

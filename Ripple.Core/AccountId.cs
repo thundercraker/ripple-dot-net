@@ -53,5 +53,9 @@ namespace Ripple.Core
         public static readonly AccountId Zero = 0;
         public static readonly AccountId Neutral = 1;
 
+        public new static AccountId FromParser(BinaryParser parser, int? hint=null)
+        {
+            return new AccountId(parser.Read(20));
+        }
     }
 }

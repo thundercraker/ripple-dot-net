@@ -46,5 +46,10 @@ namespace Ripple.Core
         public static readonly TransactionType TrustSet = new TransactionType(nameof(TrustSet), 20);
         public static readonly TransactionType EnableAmendment = new TransactionType(nameof(EnableAmendment), 100);
         public static readonly TransactionType SetFee = new TransactionType(nameof(SetFee), 101);
+
+        public static TransactionType FromParser(BinaryParser parser, int? hint=null)
+        {
+            return Values[Bits.ToUInt16(parser.Read(2), 0)];
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace Ripple.Core
 
         public static Uint64 FromJson(JToken token)
         {
-            return Bits.ToUInt64(B16.FromHex(token.ToString()), 0);
+            return Bits.ToUInt64(B16.Decode(token.ToString()), 0);
         }
         public static implicit operator Uint64(ulong v)
         {
@@ -31,6 +31,11 @@ namespace Ripple.Core
         public override JToken ToJson()
         {
             return ToString();
+        }
+
+        public static Uint64 FromParser(BinaryParser parser, int? hint=null)
+        {
+            return Bits.ToUInt64(parser.Read(8), 0);
         }
     }
 }

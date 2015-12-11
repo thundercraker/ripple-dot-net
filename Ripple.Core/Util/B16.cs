@@ -22,7 +22,7 @@ namespace Ripple.Core.Util
                 s.Append(HexTbl[v]);
             return s.ToString();
         }
-        public static byte[] FromHex(string hex)
+        public static byte[] Decode(string hex)
         {
             if (hex.Length % 2 == 1)
                 throw new Exception("The binary key cannot have an odd number of digits");

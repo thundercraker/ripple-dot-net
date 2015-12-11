@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Util;
 
@@ -13,7 +14,7 @@ namespace Ripple.Core
         }
         public static Blob FromHex(string value)
         {
-            return B16.FromHex(value);
+            return B16.Decode(value);
         }
         public static implicit operator Blob(byte[] value)
         {
@@ -41,6 +42,12 @@ namespace Ripple.Core
         public override string ToString()
         {
             return B16.ToHex(Buffer);
+        }
+
+        public static Blob FromParser(BinaryParser parser, int? hint=null)
+        {
+            Debug.Assert(hint != null, "hint != null");
+            return parser.Read((int) hint);
         }
     }
 }

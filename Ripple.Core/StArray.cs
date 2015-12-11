@@ -11,6 +11,10 @@ namespace Ripple.Core
         {
         }
 
+        public StArray()
+        {
+        }
+
         public void ToBytes(IBytesSink sink)
         {
             foreach (var so in this)
@@ -32,6 +36,22 @@ namespace Ripple.Core
         public static StArray FromJson(JToken token)
         {
             return new StArray(token.Select(StObject.FromJson));
+        }
+
+        public static ISerializedType FromParser(BinaryParser parser, int? hint = null)
+        {
+            StArray stArray = new StArray();
+            while (!parser.End())
+            {
+                var field = parser.ReadField();
+                if (field == Field.ArrayEndMarker)
+                {
+                    break;
+                }
+                var outer = new StObject {[field] = StObject.FromParser(parser)};
+                stArray.Add(outer);
+            }
+            return stArray;
         }
     }
 }

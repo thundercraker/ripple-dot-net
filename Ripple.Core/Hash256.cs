@@ -10,7 +10,12 @@ namespace Ripple.Core
         }
         public static Hash256 FromJson(JToken token)
         {
-            return new Hash256(B16.FromHex(token.ToString()));
+            return new Hash256(B16.Decode(token.ToString()));
+        }
+
+        public static Hash256 FromParser(BinaryParser parser, int? hint = null)
+        {
+            return new Hash256(parser.Read(32));
         }
     }
 }
