@@ -1,14 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ripple.TxSigning;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using Ripple.Signing;
 
 namespace Ripple.TxSigning.Tests
 {
@@ -76,18 +67,17 @@ namespace Ripple.TxSigning.Tests
         [TestMethod()]
         public void SignJObjectTest()
         {
-            TestSigning(JObject.Parse(UnsignedTxJson));
+            AssertOk(TxSigner.SignJson(JObject.Parse(UnsignedTxJson), Secret));
         }
 
         [TestMethod()]
-        public void PodoSignTest()
+        public void SignPodoTest()
         {
-            TestSigning(JObject.FromObject(UnsignedTxPodo));
+            AssertOk(TxSigner.SignPodo(UnsignedTxPodo, Secret));
         }
 
-        private static void TestSigning(JObject unsigned)
+        private static void AssertOk(SignedTx signed)
         {
-            var signed = TxSigner.Sign(unsigned, Secret);
             Assert.AreEqual(ExpectedTxnSignature, signed.TxJson["TxnSignature"]);
             Assert.AreEqual(ExpectedSigningPubKey, signed.TxJson["SigningPubKey"]);
             Assert.AreEqual(ExpectedHash, signed.Hash);
@@ -99,9 +89,9 @@ namespace Ripple.TxSigning.Tests
 
     Notes re: test fixtures
 
-    We test that we can recreate the second transaction submitted here, 
-    which was signed with an ed25519 key and has deterministic signature,
-    more friendly for testing purposes. At the time of writing rippled
+    We test that we can recreate the second transaction submitted here, which
+    was signed with an ed25519 key and has deterministic signature, more
+    friendly for testing purposes. At the time of writing rippled
 
     ➜  rippled git:(develop) ✗ build/clang.debug/rippled submit masterpassphrase '
                 {"TransactionType" : "Payment",  

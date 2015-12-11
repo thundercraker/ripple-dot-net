@@ -28,11 +28,6 @@ namespace Ripple.Signing.Ed25519
                        1, _pairImpl.PublicKey.Length);
         }
 
-        public byte[] PubKeyHash()
-        {
-            return HashUtils.PublicKeyHash(CanonicalPubBytes());
-        }
-
         public byte[] Sign(byte[] message)
         {
             return PublicKeyAuth.SignDetached(message, _pairImpl.PrivateKey);
@@ -45,14 +40,14 @@ namespace Ripple.Signing.Ed25519
 
         internal static IKeyPair From128Seed(byte[] seed)
         {
-            var edSecret = new Sha512(seed).Finish256();
+            var edSecret = Sha512.Half(seed);
             var pair = PublicKeyAuth.GenerateKeyPair(edSecret);
             return new EdKeyPair(pair);
         }
 
         public string Id()
         {
-            return Address.AddressCodec.EncodeAddress(PubKeyHash());
+            return Address.AddressCodec.EncodeAddress(this.PubKeyHash());
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
@@ -159,8 +161,7 @@ namespace Ripple.Address
                 temp[--j] = (byte) _mAlphabet[0];
             }
 
-            byte[] output;
-            output = CopyOfRange(temp, j, temp.Length);
+            var output = CopyOfRange(temp, j, temp.Length);
             return output;
         }
 
@@ -189,19 +190,19 @@ namespace Ripple.Address
                 input58[i] = (byte) digit58;
             }
             // Count leading zeroes
-            int zeroCount = 0;
+            var zeroCount = 0;
             while (zeroCount < input58.Length && input58[zeroCount] == 0)
             {
                 ++zeroCount;
             }
             // The encoding
-            byte[] temp = new byte[input.Length];
-            int j = temp.Length;
+            var temp = new byte[input.Length];
+            var j = temp.Length;
 
-            int startAt = zeroCount;
+            var startAt = zeroCount;
             while (startAt < input58.Length)
             {
-                byte mod = DivMod256(input58, startAt);
+                var mod = DivMod256(input58, startAt);
                 if (input58[startAt] == 0)
                 {
                     ++startAt;
@@ -242,7 +243,8 @@ namespace Ripple.Address
             return DecodeMulti(input, expectedLength, new byte[][] { version }).Payload;
         }
 
-        public virtual Decoded DecodeMulti(string input, int expectedLength, byte[][] possibleVersions, params String[] typeNames)
+        public virtual Decoded DecodeMulti(string input, 
+            int expectedLength, byte[][] possibleVersions, params string[] typeNames)
         {
 
             byte[] buffer = DecodeAndCheck(input);
@@ -273,20 +275,12 @@ namespace Ripple.Address
             return new Decoded(foundVersion, bytes, typeName);
         }
 
-        private bool ArrayEquals(byte[] a, byte[] b)
+        internal static bool ArrayEquals(
+            IReadOnlyCollection<byte> a, 
+            IReadOnlyList<byte> b)
         {
-            if (a.Length == b.Length)
-            {
-                for (int i = 0; i < a.Length; i++)
-                {
-                    if (a[i] != b[i]) 
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return false;
+            if (a.Count != b.Count) return false;
+            return !a.Where((t, i) => t != b[i]).Any();
         }
 
         private byte[] DecodeAndCheck(string input)
@@ -311,13 +305,13 @@ namespace Ripple.Address
         //
         // number -> number / 58, returns number % 58
         //
-        private byte DivMod58(byte[] number, int startAt)
+        private static byte DivMod58(IList<byte> number, int startAt)
         {
-            int remainder = 0;
-            for (int i = startAt; i < number.Length; i++)
+            var remainder = 0;
+            for (var i = startAt; i < number.Count; i++)
             {
-                int digit256 = (int) number[i] & 0xFF;
-                int temp = remainder * 256 + digit256;
+                var digit256 = number[i] & 0xFF;
+                var temp = remainder * 256 + digit256;
 
                 number[i] = (byte)(temp / 58);
 
@@ -330,15 +324,15 @@ namespace Ripple.Address
         //
         // number -> number / 256, returns number % 256
         //
-        private byte DivMod256(byte[] number58, int startAt)
+        private static byte DivMod256(IList<byte> number58, int startAt)
         {
-            int remainder = 0;
-            for (int i = startAt; i < number58.Length; i++)
+            var remainder = 0;
+            for (var i = startAt; i < number58.Count; i++)
             {
-                int digit58 = (int) number58[i] & 0xFF;
-                int temp = remainder * 58 + digit58;
+                var digit58 = number58[i] & 0xFF;
+                var temp = remainder * 58 + digit58;
 
-                number58[i] = unchecked((byte)(temp / 256));
+                number58[i] = (byte)(temp / 256);
 
                 remainder = temp % 256;
             }
@@ -346,7 +340,7 @@ namespace Ripple.Address
             return (byte) remainder;
         }
 
-        private byte[] CopyOfRange(byte[] source, int from, int to)
+        private static byte[] CopyOfRange(byte[] source, int from, int to)
         {
             byte[] range = new byte[to - from];
             Array.Copy(source, from, range, 0, range.Length);

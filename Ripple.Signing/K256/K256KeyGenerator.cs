@@ -9,20 +9,15 @@ namespace Ripple.Signing.K256
         // See https://wiki.ripple.com/Account_Family
         public static K256KeyPair From128Seed(byte[] seedBytes, int keyIndex)
         {
-            BigInteger secret, privateGen;
             // The private generator (aka root private key, master private key)
-            privateGen = ComputePrivateGen(seedBytes);
+            var privateGen = ComputePrivateGen(seedBytes);
             if (keyIndex == -1)
             {
                 // The root keyPair
                 return new K256KeyPair(privateGen);
             }
-            else
-            {
-                secret = ComputeSecretKey(privateGen, (uint) keyIndex);
-                return new K256KeyPair(secret);
-            }
-
+            var secret = ComputeSecretKey(privateGen, (uint) keyIndex);
+            return new K256KeyPair(secret);
         }
 
         public static BigInteger ComputePrivateGen(byte[] seedBytes)
@@ -36,8 +31,7 @@ namespace Ripple.Signing.K256
         {
             ECPoint publicGen = ComputePublicGenerator(privateGen);
             return ComputeScalar(publicGen.GetEncoded(true), accountNumber)
-                .Add(privateGen)
-                .Mod(Secp256K1.Order());
+                            .Add(privateGen).Mod(Secp256K1.Order());
         }
 
         ///
@@ -47,7 +41,7 @@ namespace Ripple.Signing.K256
         /// </returns>
         public static ECPoint ComputePublicGenerator(BigInteger privateGen)
         {
-            return K256KeyGenerator.ComputePublicKey(privateGen);
+            return ComputePublicKey(privateGen);
         }
 
         public static byte[] ComputePublicKey(byte[] publicGenBytes, uint accountNumber)
@@ -68,14 +62,14 @@ namespace Ripple.Signing.K256
             BigInteger key = null;
             for (uint i = 0; i <= 0xFFFFFFFFL; i++)
             {
-                Sha512 sha512 = new Sha512(seedBytes);
+                var sha512 = new Sha512(seedBytes);
                 if (discriminator != null)
                 {
                     sha512.AddU32(discriminator.Value);
                 }
                 sha512.AddU32(i);
                 byte[] keyBytes = sha512.Finish256();
-                key = Utils.Misc.UBigInt(keyBytes);
+                key = Misc.UBigInt(keyBytes);
                 if (key.CompareTo(BigInteger.Zero) == 1 &&
                     key.CompareTo(Secp256K1.Order()) == -1)
                 {

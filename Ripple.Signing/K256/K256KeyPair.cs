@@ -13,7 +13,7 @@ namespace Ripple.Signing.K256
     {
         private readonly BigInteger _privKey;
         private ECDSASigner _signer;
-        private bool _isNodeKey = false;
+        private bool _isNodeKey;
 
         public K256KeyPair(BigInteger priv) : 
             this(priv, K256KeyGenerator.ComputePublicKey(priv))
@@ -46,28 +46,22 @@ namespace Ripple.Signing.K256
 
         public byte[] Sign(byte[] message)
         {
-            byte[] hash = HashUtils.HalfSha512(message);
-            return SignHash(hash);
-        }
-
-        public byte[] PubKeyHash()
-        {
-            return HashUtils.PublicKeyHash(PubKeyBytes);
+            return SignHash(Sha512.Half(message));
         }
 
         private byte[] SignHash(byte[] bytes)
         {
-            EcdsaSignature sig = CreateEcdsaSignature(bytes);
-            return sig.EncodeToDer();
+            return CreateEcdsaSignature(bytes).EncodeToDer();
         }
 
         private EcdsaSignature CreateEcdsaSignature(byte[] hash)
         {
 
             BigInteger[] sigs = _signer.GenerateSignature(hash);
-            BigInteger r = sigs[0], s = sigs[1];
+            var r = sigs[0];
+            var s = sigs[1];
 
-            BigInteger otherS = Secp256K1.Order().Subtract(s);
+            var otherS = Secp256K1.Order().Subtract(s);
             if (s.CompareTo(otherS) == 1)
             {
                 s = otherS;
@@ -82,7 +76,7 @@ namespace Ripple.Signing.K256
             {
                 return Address.AddressCodec.EncodeNodePublic(CanonicalPubBytes());
             }
-            return Address.AddressCodec.EncodeAddress(PubKeyHash());
+            return Address.AddressCodec.EncodeAddress(this.PubKeyHash());
         }
     }
 

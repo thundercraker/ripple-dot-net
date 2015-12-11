@@ -1,4 +1,5 @@
-﻿using Ripple.Signing.Utils;
+﻿using Org.BouncyCastle.Utilities.Encoders;
+using Ripple.Signing.Utils;
 
 namespace Ripple.Signing
 {

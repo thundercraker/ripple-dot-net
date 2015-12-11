@@ -5,11 +5,11 @@ namespace Ripple.Signing.Utils
 {
     public class Sha512
     {
-        private readonly Sha512Digest _messageDigest;
+        private readonly Sha512Digest _digest;
 
         public Sha512()
         {
-            _messageDigest = new Sha512Digest();
+            _digest = new Sha512Digest();
         }
 
         public Sha512(byte[] start) : this()
@@ -19,16 +19,16 @@ namespace Ripple.Signing.Utils
 
         public Sha512 Add(byte[] bytes)
         {
-            _messageDigest.BlockUpdate(bytes, 0, bytes.Length);
+            _digest.BlockUpdate(bytes, 0, bytes.Length);
             return this;
         }
 
         public Sha512 AddU32(uint i)
         {
-            _messageDigest.Update((byte)(i >> 24 & 0xFFu));
-            _messageDigest.Update((byte)(i >> 16 & 0xFFu));
-            _messageDigest.Update((byte)(i >> 8 & 0xFFu));
-            _messageDigest.Update((byte)(i & 0xFFu));
+            _digest.Update((byte)(i >> 24 & 0xFFu));
+            _digest.Update((byte)(i >> 16 & 0xFFu));
+            _digest.Update((byte)(i >> 8 & 0xFFu));
+            _digest.Update((byte)(i & 0xFFu));
             return this;
         }
 
@@ -44,7 +44,7 @@ namespace Ripple.Signing.Utils
         public byte[] Finish()
         {
             byte[] finished = new byte[64];
-            _messageDigest.DoFinal(finished, 0);
+            _digest.DoFinal(finished, 0);
             return finished;
         }
 
@@ -56,6 +56,15 @@ namespace Ripple.Signing.Utils
         public byte[] Finish256()
         {
             return FinishTaking(32);
+        }
+
+        public static byte[] Half(byte[] input)
+        {
+            return new Sha512(input).Finish256();
+        }
+        public static byte[] Quarter(byte[] input)
+        {
+            return new Sha512(input).Finish128();
         }
     }
 }

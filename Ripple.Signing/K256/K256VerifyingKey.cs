@@ -25,7 +25,7 @@ namespace Ripple.Signing.K256
 
         public bool Verify(byte[] message, byte[] signature)
         {
-            byte[] hash = HashUtils.HalfSha512(message);
+            byte[] hash = Sha512.Half(message);
             return VerifyHash(hash, signature);
         }
 
