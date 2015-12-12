@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Ripple.Core
 {
@@ -21,17 +21,20 @@ namespace Ripple.Core
         #endregion
 
         public static readonly Enumeration<Field> Values = new Enumeration<Field>();
-        public Field(string name, 
+        public Field(string name,
             int nthOfType,
-            FieldType type, 
-            bool isSigningField=true, 
-            bool isSerialised=true) : 
-                base(name, 
+            FieldType type,
+            bool isSigningField=true,
+            bool isSerialised=true) :
+                base(name,
                     (type.Ordinal << 16 | nthOfType))
         {
+            // catch auxiliary fields
+            var valid = nthOfType > 0 && NthOfType < 256 &&
+                        type.Ordinal > 0 && type.Ordinal < 256;
             Type = type;
-            IsSigningField = isSigningField;
-            IsSerialised = isSerialised;
+            IsSigningField = valid && isSigningField;
+            IsSerialised = valid && isSerialised;
             NthOfType = nthOfType;
             IsVlEncoded = IsVlEncodedType();
             Header = CalculateHeader();
@@ -64,8 +67,8 @@ namespace Ripple.Core
 
         private bool IsVlEncodedType()
         {
-            return Type == FieldType.Vector256 || 
-                   Type == FieldType.Blob || 
+            return Type == FieldType.Vector256 ||
+                   Type == FieldType.Blob ||
                    Type == FieldType.AccountId;
         }
 
@@ -157,6 +160,7 @@ namespace Ripple.Core
         public static readonly Field HighLimit = new Field(nameof(HighLimit), 7, FieldType.Amount);
         public static readonly Field Fee = new Field(nameof(Fee), 8, FieldType.Amount);
         public static readonly Field SendMax = new Field(nameof(SendMax), 9, FieldType.Amount);
+        public static readonly Field DeliverMin = new Field(nameof(DeliverMin), 10, FieldType.Amount);
         public static readonly Field MinimumOffer = new Field(nameof(MinimumOffer), 16, FieldType.Amount);
         public static readonly Field RippleEscrow = new Field(nameof(RippleEscrow), 17, FieldType.Amount);
         // Added in rippled commit: e7f0b8eca69dd47419eee7b82c8716b3aa5a9e39
@@ -171,7 +175,9 @@ namespace Ripple.Core
         public static readonly Field PublicKey = new Field(nameof(PublicKey), 1, FieldType.Blob);
         public static readonly Field MessageKey = new Field(nameof(MessageKey), 2, FieldType.Blob);
         public static readonly Field SigningPubKey = new Field(nameof(SigningPubKey), 3, FieldType.Blob);
-        public static readonly Field TxnSignature = new Field(nameof(TxnSignature), 4, FieldType.Blob);
+
+        // ReSharper disable once RedundantArgumentNameForLiteralExpression
+        public static readonly Field TxnSignature = new Field(nameof(TxnSignature), 4, FieldType.Blob, isSigningField: false);
         public static readonly Field Generator = new Field(nameof(Generator), 5, FieldType.Blob);
         public static readonly Field Signature = new Field(nameof(Signature), 6, FieldType.Blob);
         public static readonly Field Domain = new Field(nameof(Domain), 7, FieldType.Blob);
@@ -205,7 +211,9 @@ namespace Ripple.Core
 
         public static readonly Field ArrayEndMarker = new Field(nameof(ArrayEndMarker), 1, FieldType.StArray);
         //    SigningAccounts(2, FieldType.StArray),
-        public static readonly Field Signers = new Field(nameof(Signers), 3, FieldType.StArray);
+
+        // ReSharper disable once RedundantArgumentNameForLiteralExpression
+        public static readonly Field Signers = new Field(nameof(Signers), 3, FieldType.StArray, isSigningField: false);
         public static readonly Field SignerEntries = new Field(nameof(SignerEntries), 4, FieldType.StArray);
         public static readonly Field Template = new Field(nameof(Template), 5, FieldType.StArray);
         public static readonly Field Necessary = new Field(nameof(Necessary), 6, FieldType.StArray);
