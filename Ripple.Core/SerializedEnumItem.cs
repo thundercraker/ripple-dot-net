@@ -26,7 +26,7 @@ namespace Ripple.Core
             switch (width)
             {
                 case 1:
-                    Bytes = Bits.GetBytes((byte) ordinal);
+                    Bytes = new[] { (byte)ordinal };
                     break;
                 case 2:
                     Bytes = Bits.GetBytes((ushort) ordinal);
