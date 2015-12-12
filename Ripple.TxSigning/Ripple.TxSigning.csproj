@@ -52,9 +52,6 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Ripple.Core\Ripple.Core.csproj">
       <Project>{df3ca9a2-e707-43e2-93b9-21bb37518047}</Project>
       <Name>Ripple.Core</Name>
@@ -63,6 +60,9 @@
       <Project>{3e5d4819-0e18-4376-b9a8-d62d79724b7f}</Project>
       <Name>Ripple.Signing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
