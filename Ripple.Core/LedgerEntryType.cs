@@ -1,50 +1,30 @@
 ﻿using System;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Util;
 
 namespace Ripple.Core
 {
-    public class LedgerEntryType : EnumItem, ISerializedType
+    public class LedgerEntryType : SerializedEnumItem<ushort>
     {
-        public readonly byte[] Bytes;
-        public static Enumeration<LedgerEntryType> Values = new Enumeration<LedgerEntryType>();
-
-        public LedgerEntryType(string name, int ordinal) : base(name, ordinal)
+        public class Enumeration : SerializedEnumeration<LedgerEntryType, ushort>{}
+        public static Enumeration Values = new Enumeration();
+        private LedgerEntryType(string name, int ordinal) : base(name, ordinal){}
+        private static LedgerEntryType Add(string reference, int ordinal)
         {
-            Bytes = Bits.GetBytes((ushort) ordinal);
-            Values.AddEnum(this);
+            return Values.AddEnum(new LedgerEntryType(reference, ordinal));
         }
-        public void ToBytes(IBytesSink sink)
-        {
-            sink.Add(Bytes);
-        }
-
-        public JToken ToJson()
-        {
-            return ToString();
-        }
-
-        public static LedgerEntryType FromJson(JToken token)
-        {
-            return token.Type == JTokenType.String ?
-                Values[token.ToString()] : Values[(int) token];
-        }
-        public static readonly LedgerEntryType Invalid = new LedgerEntryType(nameof(Invalid), -1);
-        public static readonly LedgerEntryType AccountRoot = new LedgerEntryType(nameof(AccountRoot), 'a');
-        public static readonly LedgerEntryType DirectoryNode = new LedgerEntryType(nameof(DirectoryNode), 'd');
-        public static readonly LedgerEntryType GeneratorMap = new LedgerEntryType(nameof(GeneratorMap), 'g');
-        public static readonly LedgerEntryType RippleState = new LedgerEntryType(nameof(RippleState), 'r');
-        public static readonly LedgerEntryType Offer = new LedgerEntryType(nameof(Offer), 'o');
-        public static readonly LedgerEntryType Contract = new LedgerEntryType(nameof(Contract), 'c');
-        public static readonly LedgerEntryType LedgerHashes = new LedgerEntryType(nameof(LedgerHashes), 'h');
-        public static readonly LedgerEntryType EnabledAmendments = new LedgerEntryType(nameof(EnabledAmendments), 'f');
-        public static readonly LedgerEntryType FeeSettings = new LedgerEntryType(nameof(FeeSettings), 's');
-        public static readonly LedgerEntryType Ticket = new LedgerEntryType(nameof(Ticket), 'T');
-        public static readonly LedgerEntryType SignerList = new LedgerEntryType(nameof(SignerList), 'S');
-
-        public static LedgerEntryType FromParser(BinaryParser parser, int? hint = null)
-        {
-            return Values[Bits.ToUInt16(parser.Read(2), 0)];
-        }
+        public static readonly LedgerEntryType Invalid = Add(nameof(Invalid), -1);
+        public static readonly LedgerEntryType AccountRoot = Add(nameof(AccountRoot), 'a');
+        public static readonly LedgerEntryType DirectoryNode = Add(nameof(DirectoryNode), 'd');
+        public static readonly LedgerEntryType GeneratorMap = Add(nameof(GeneratorMap), 'g');
+        public static readonly LedgerEntryType RippleState = Add(nameof(RippleState), 'r');
+        public static readonly LedgerEntryType Offer = Add(nameof(Offer), 'o');
+        public static readonly LedgerEntryType Contract = Add(nameof(Contract), 'c');
+        public static readonly LedgerEntryType LedgerHashes = Add(nameof(LedgerHashes), 'h');
+        public static readonly LedgerEntryType EnabledAmendments = Add(nameof(EnabledAmendments), 'f');
+        public static readonly LedgerEntryType FeeSettings = Add(nameof(FeeSettings), 's');
+        public static readonly LedgerEntryType Ticket = Add(nameof(Ticket), 'T');
+        public static readonly LedgerEntryType SignerList = Add(nameof(SignerList), 'S');
     }
 }

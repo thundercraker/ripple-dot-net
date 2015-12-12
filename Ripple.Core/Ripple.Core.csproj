@@ -54,6 +54,7 @@
     <Compile Include="Blob.cs" />
     <Compile Include="BytesList.cs" />
     <Compile Include="Currency.cs" />
+    <Compile Include="EngineResult.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="EnumItem.cs" />
     <Compile Include="Field.cs" />
@@ -68,6 +69,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerializedEnumeration.cs" />
+    <Compile Include="SerializedEnumItem.cs" />
     <Compile Include="StArray.cs" />
     <Compile Include="StObject.cs" />
     <Compile Include="TransactionType.cs" />

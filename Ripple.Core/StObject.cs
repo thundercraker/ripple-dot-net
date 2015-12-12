@@ -12,7 +12,7 @@ namespace Ripple.Core
             public  FromParser Parser;
             public  FromJson Json;
 
-            public BuildFrom(FromJson json, FromParser parser=null)
+            public BuildFrom(FromJson json, FromParser parser)
             {
                 Parser = parser;
                 Json = json;
@@ -45,10 +45,14 @@ namespace Ripple.Core
                 field.FromJson = buildFrom.Json;
                 field.FromParser= buildFrom.Parser;
             }
-            Field.TransactionType.FromJson = TransactionType.FromJson;
-            Field.TransactionType.FromParser= TransactionType.FromParser;
-            Field.TransactionType.FromJson = TransactionType.FromJson;
-            Field.LedgerEntryType.FromJson = LedgerEntryType.FromJson;
+
+            Field.TransactionType.FromJson = TransactionType.Values.FromJson;
+            Field.TransactionType.FromParser= TransactionType.Values.FromParser;
+            Field.TransactionResult.FromJson = EngineResult.Values.FromJson;
+            Field.TransactionResult.FromParser = EngineResult.Values.FromParser;
+            Field.LedgerEntryType.FromJson = LedgerEntryType.Values.FromJson;
+            Field.LedgerEntryType.FromParser = LedgerEntryType.Values.FromParser;
+
         }
 
         public static StObject FromParser(BinaryParser parser, int? hint = null)

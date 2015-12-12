@@ -1,55 +1,37 @@
 using System;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Util;
 
 namespace Ripple.Core
 {
-    public class TransactionType : EnumItem, ISerializedType
+    public class TransactionType : SerializedEnumItem<ushort>
     {
-        public readonly byte[] Bytes;
-        public static Enumeration<TransactionType> Values = new Enumeration<TransactionType>();
+        public class Enumeration : SerializedEnumeration<TransactionType, ushort>{}
+        public static Enumeration Values = new Enumeration();
+        private TransactionType(string reference, int ordinal) : base(reference, ordinal){}
 
-        public TransactionType(string name, int ordinal) : base(name, ordinal)
+        private static TransactionType Add(string name, int ordinal)
         {
-            Bytes = Bits.GetBytes((ushort)ordinal);
-            Values.AddEnum(this);
-        }
-        public void ToBytes(IBytesSink sink)
-        {
-            sink.Add(Bytes);
+            return Values.AddEnum(new TransactionType(name, ordinal));
         }
 
-        public JToken ToJson()
-        {
-            return ToString();
-        }
-
-        public static TransactionType FromJson(JToken token)
-        {
-            return token.Type == JTokenType.String ?
-                Values[token.ToString()] : Values[(int)token];
-        }
-        public static readonly TransactionType Invalid = new TransactionType(nameof(Invalid), -1);
-        public static readonly TransactionType Payment = new TransactionType(nameof(Payment), 0);
-        public static readonly TransactionType Claim = new TransactionType(nameof(Claim), 1);
-        public static readonly TransactionType WalletAdd = new TransactionType(nameof(WalletAdd), 2);
-        public static readonly TransactionType AccountSet = new TransactionType(nameof(AccountSet), 3);
-        public static readonly TransactionType PasswordFund = new TransactionType(nameof(PasswordFund), 4);
-        public static readonly TransactionType SetRegularKey = new TransactionType(nameof(SetRegularKey), 5);
-        public static readonly TransactionType NickNameSet = new TransactionType(nameof(NickNameSet), 6);
-        public static readonly TransactionType OfferCreate = new TransactionType(nameof(OfferCreate), 7);
-        public static readonly TransactionType OfferCancel = new TransactionType(nameof(OfferCancel), 8);
-        public static readonly TransactionType Contract = new TransactionType(nameof(Contract), 9);
-        public static readonly TransactionType TicketCreate = new TransactionType(nameof(TicketCreate), 10);
-        public static readonly TransactionType TicketCancel = new TransactionType(nameof(TicketCancel), 11);
-        public static readonly TransactionType SignerListSet = new TransactionType(nameof(SignerListSet), 12);
-        public static readonly TransactionType TrustSet = new TransactionType(nameof(TrustSet), 20);
-        public static readonly TransactionType EnableAmendment = new TransactionType(nameof(EnableAmendment), 100);
-        public static readonly TransactionType SetFee = new TransactionType(nameof(SetFee), 101);
-
-        public static TransactionType FromParser(BinaryParser parser, int? hint=null)
-        {
-            return Values[Bits.ToUInt16(parser.Read(2), 0)];
-        }
+        public static readonly TransactionType Invalid = Add(nameof(Invalid), -1);
+        public static readonly TransactionType Payment = Add(nameof(Payment), 0);
+        public static readonly TransactionType Claim = Add(nameof(Claim), 1);
+        public static readonly TransactionType WalletAdd = Add(nameof(WalletAdd), 2);
+        public static readonly TransactionType AccountSet = Add(nameof(AccountSet), 3);
+        public static readonly TransactionType PasswordFund = Add(nameof(PasswordFund), 4);
+        public static readonly TransactionType SetRegularKey = Add(nameof(SetRegularKey), 5);
+        public static readonly TransactionType NickNameSet = Add(nameof(NickNameSet), 6);
+        public static readonly TransactionType OfferCreate = Add(nameof(OfferCreate), 7);
+        public static readonly TransactionType OfferCancel = Add(nameof(OfferCancel), 8);
+        public static readonly TransactionType Contract = Add(nameof(Contract), 9);
+        public static readonly TransactionType TicketCreate = Add(nameof(TicketCreate), 10);
+        public static readonly TransactionType TicketCancel = Add(nameof(TicketCancel), 11);
+        public static readonly TransactionType SignerListSet = Add(nameof(SignerListSet), 12);
+        public static readonly TransactionType TrustSet = Add(nameof(TrustSet), 20);
+        public static readonly TransactionType EnableAmendment = Add(nameof(EnableAmendment), 100);
+        public static readonly TransactionType SetFee = Add(nameof(SetFee), 101);
     }
 }

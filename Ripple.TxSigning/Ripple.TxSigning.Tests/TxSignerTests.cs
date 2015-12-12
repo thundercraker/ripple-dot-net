@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using Ripple.Core;
 
 namespace Ripple.TxSigning.Tests
 {
@@ -92,7 +93,8 @@ namespace Ripple.TxSigning.Tests
 
     We test that we can recreate the second transaction submitted here, which
     was signed with an ed25519 key and has deterministic signature, more
-    friendly for testing purposes. At the time of writing rippled
+    friendly for testing purposes. At the time of writing rippled didn't yet
+    support rfc6979 deterministic signatures for secp256k1.
 
     ➜  rippled git:(develop) ✗ build/clang.debug/rippled submit masterpassphrase '
                 {"TransactionType" : "Payment",  
