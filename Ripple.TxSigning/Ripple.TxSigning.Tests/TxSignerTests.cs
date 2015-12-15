@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using Ripple.Core;
@@ -59,7 +59,7 @@ namespace Ripple.TxSigning.Tests
             Amount = "1000",
             Destination = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
             Fee = "10",
-            Flags = 2147483648,
+            //Flags = 2147483648 canonical sig flag will be set automatically
             Sequence = 1,
             TransactionType = "Payment"
         };

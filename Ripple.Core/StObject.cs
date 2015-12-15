@@ -122,7 +122,12 @@ namespace Ripple.Core
 
         public JToken ToJson()
         {
-            JObject json = new JObject();
+            return ToJsonObject();
+        }
+
+        public JObject ToJsonObject()
+        {
+            var json = new JObject();
             foreach (var pair in this)
             {
                 json[pair.Key] = pair.Value.ToJson();
@@ -147,6 +152,11 @@ namespace Ripple.Core
         public static StObject FromHex(string s)
         {
             return FromParser(new BinaryParser(s));
+        }
+
+        public bool Has(Field field)
+        {
+            return ContainsKey(field);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ripple.Core;
@@ -9,6 +9,8 @@ namespace Ripple.TxSigning
 {
     public class TxSigner
     {
+        public const uint CanonicalSigFlag = 0x80000000u;
+
         private readonly IKeyPair _keyPair;
 
         private TxSigner(IKeyPair keyPair)
@@ -25,18 +27,25 @@ namespace Ripple.TxSigning
         }
         public SignedTx SignJson(JObject tx)
         {
-            var txJson = tx.DeepClone() as JObject;
-
-            txJson[Field.SigningPubKey] = ToHex(_keyPair.CanonicalPubBytes());
-            var so = StObject.FromJson(txJson);
-            var sig = _keyPair.Sign(so.SigningData());
-            txJson[Field.TxnSignature] = ToHex(sig);
-            so[Field.TxnSignature] = (Blob)sig;
-
+            var so = StObject.FromJson(tx);
+            SetCanonicalSigFlag(so);
+            so[Field.SigningPubKey] = (Blob) _keyPair.CanonicalPubBytes();
+            so[Field.TxnSignature] = (Blob) _keyPair.Sign(so.SigningData());
             var blob = so.Blob();
             var hash = Utils.TransactionId(blob);
-            return new SignedTx(hash, ToHex(blob), txJson);
+            return new SignedTx(hash, ToHex(blob), so.ToJsonObject());
         }
+
+        private static void SetCanonicalSigFlag(StObject so)
+        {
+            var flags = CanonicalSigFlag;
+            if (so.Has(Field.Flags))
+            {
+                flags |= ((Uint32) so[Field.Flags]).Value;
+            }
+            so[Field.Flags] = (Uint32) flags;
+        }
+
         public static TxSigner FromKeyPair(IKeyPair keyPair)
         {
             return new TxSigner(keyPair);
