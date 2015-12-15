@@ -62,6 +62,7 @@
     <Compile Include="Hash128.cs" />
     <Compile Include="Hash160.cs" />
     <Compile Include="Hash256.cs" />
+    <Compile Include="InvalidJson.cs" />
     <Compile Include="LedgerEntryType.cs" />
     <Compile Include="PathSet.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

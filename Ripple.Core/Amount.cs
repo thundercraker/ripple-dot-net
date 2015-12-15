@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Security.Policy;
 using Newtonsoft.Json.Linq;
 using Deveel.Math;
 
@@ -23,8 +23,8 @@ namespace Ripple.Core
         {
             Value =  ParseDecimal(value);
             Currency = currency ?? Currency.Xrp;
-            Issuer = issuer ?? (Currency.IsNative ? 
-                                    AccountId.Zero : 
+            Issuer = issuer ?? (Currency.IsNative ?
+                                    AccountId.Zero :
                                     AccountId.Neutral);
         }
 
@@ -80,15 +80,27 @@ namespace Ripple.Core
 
         public static Amount FromJson(JToken token)
         {
-            if (token.Type == JTokenType.String)
+            switch (token.Type)
             {
-                return new Amount(token.ToString());
+                case JTokenType.Integer:
+                    return (int) token;
+                case JTokenType.String:
+                    return new Amount(token.ToString());
+                case JTokenType.Object:
+                    return new Amount(token["value"].ToString(),
+                        token["currency"],
+                        token["issuer"]);
+                default:
+                    throw new InvalidJson("Can not create " +
+                                          $"amount from `{token}`");
             }
-            return new Amount(token["value"].ToString(),  
-                              token["currency"], 
-                              token["issuer"]);
         }
-        
+
+        public static implicit operator Amount(int a)
+        {
+            return new Amount(a.ToString("D"));
+        }
+
         private byte[] CalculateMantissa()
         {
             var e = CalculateExponent();
@@ -101,9 +113,9 @@ namespace Ripple.Core
 
         private int CalculateExponent()
         {
-            return IsNative ? 0 :  
+            return IsNative ? 0 :
                 -MaximumIouPrecision + 
-                Value.Precision - 
+                Value.Precision -
                 Value.Scale;
         }
 

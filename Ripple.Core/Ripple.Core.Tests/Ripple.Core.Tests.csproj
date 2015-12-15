@@ -46,6 +46,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -61,6 +62,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AccountIdTests.cs" />
+    <Compile Include="AmountTests.cs" />
     <Compile Include="CurrencyTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

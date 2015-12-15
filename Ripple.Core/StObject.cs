@@ -86,6 +86,11 @@ namespace Ripple.Core
 
         public static StObject FromJson(JToken token)
         {
+            if (token.Type != JTokenType.Object)
+            {
+                throw new InvalidJson("{token} is not an object");
+            }
+
             var so = new StObject();
             foreach (var pair in (JObject) token)
             {
@@ -94,7 +99,17 @@ namespace Ripple.Core
                     continue;
                 }
                 var fieldForType = Field.Values[pair.Key];
-                var st = fieldForType.FromJson(pair.Value);
+                var jsonForField = pair.Value;
+                ISerializedType st;
+                try
+                {
+                    st = fieldForType.FromJson(jsonForField);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidJson($"Can't decode `{fieldForType}` " +
+                                          $"from `{jsonForField}`", e);
+                }
                 so[fieldForType] = st;
             }
             return so;
