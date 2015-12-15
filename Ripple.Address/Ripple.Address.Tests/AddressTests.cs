@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ripple.Address.Tests
@@ -57,10 +57,17 @@ namespace Ripple.Address.Tests
             Type kls = typeof(Ripple.Address.AddressCodec);
             var encode = kls.GetMethod("Encode" + type);
             var decode = kls.GetMethod("Decode" + type);
+            var validate = kls.GetMethod("IsValid" + type);
             var encoded = Helpers.Invoke<string>(encode, Helpers.DecodeHex(hex));
             var decoded = Helpers.Invoke<byte[]>(decode, base58);
+            var valid = Helpers.Invoke<bool>(validate, base58);
+            var hexIsValidB58 = Helpers.Invoke<bool>(validate, hex);
+
             Assert.AreEqual(base58, encoded);
             Assert.AreEqual(hex, Helpers.EncodeHex(decoded));
+            Assert.IsTrue(valid);
+            Assert.IsFalse(hexIsValidB58);
+
         }
 
     }
