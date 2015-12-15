@@ -4,6 +4,11 @@ The purpose of this code is primarily for signing transactions, and the
 internals may change without warning. Only the Transaction signing api shown
 below has any guarantees.
 
+## Requirements
+
+* Visual Studio 2015 or equivalent compiler with c#6 support
+* .NET framework 4.5.0+
+
 ## Transaction signing
 
 ```c#
