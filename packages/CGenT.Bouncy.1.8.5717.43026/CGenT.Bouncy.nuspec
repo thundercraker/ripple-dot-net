@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CGenT.Bouncy</id>
+    <version>1.8.5717.43026</version>
+    <title>CGenT.Bouncy</title>
+    <authors>CGenTools</authors>
+    <owners>CGenTools</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An unchanged, but signed, re-targetted, repackaging of Portable.BouncyCastle (V1.8.0-beta4-update1)</description>
+    <copyright>Copyright 2015</copyright>
+    <dependencies />
+  </metadata>
+</package>
