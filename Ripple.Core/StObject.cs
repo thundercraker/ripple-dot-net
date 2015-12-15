@@ -138,7 +138,8 @@ namespace Ripple.Core
         public void ToBytes(IBytesSink to, Func<Field, bool> p)
         {
             var serializer = new BinarySerializer(to);
-            foreach (var pair in this.Where(pair => p == null || p(pair.Key)))
+            foreach (var pair in this.Where(pair => pair.Key.IsSerialised &&
+                                                    (p == null || p(pair.Key))))
             {
                 serializer.Add(pair.Key, pair.Value);
             }
