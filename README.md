@@ -2,9 +2,10 @@
 
 # Ripple.NET [![Build status](https://ci.appveyor.com/api/projects/status/w1jnx38oreo35a6b?svg=true)](https://ci.appveyor.com/project/sublimator/ripple-dot-net)
 
-The purpose of this code is primarily for signing transactions, and the
-internals may change without warning. Only the Transaction signing api shown
-below has any guarantees.
+The purpose of this code is primarily for signing transactions, and while the
+code can do a bit more than what is shown here, at this stage, it may change
+without warning. Only the Transaction signing api shown below has any
+guarantees.
 
 ## Requirements
 
@@ -51,6 +52,24 @@ Console.WriteLine(signed.TxBlob);
 
 ```
 
+### Signing Podos (including anonymous ones)
+
+
+```c#
+var anonymouse = new
+{
+    Account = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN",
+    Amount = "1000",
+    Destination = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
+    Fee = "10",
+    //Flags = 2147483648 canonical sig flag will be set automatically
+    Sequence = 1,
+    TransactionType = "Payment"
+};
+var signed = TxSigner.SignPodo(anonymouse, Secret);
+```
+
 ## Dependencies
 
-Requires libsodium.dll to be on PATH
+Requires libsodium.dll to be on PATH. Look in the packages folder in libsodium-
+net*/output/

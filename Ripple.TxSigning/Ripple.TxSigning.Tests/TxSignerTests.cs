@@ -78,6 +78,22 @@ namespace Ripple.TxSigning.Tests
             AssertOk(TxSigner.SignPodo(UnsignedTxPodo, Secret));
         }
 
+        [TestMethod()]
+        public void SignAnonymousPodoTest()
+        {
+            var anonymouse = new
+            {
+                Account = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN",
+                Amount = "1000",
+                Destination = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
+                Fee = "10",
+                //Flags = 2147483648 canonical sig flag will be set automatically
+                Sequence = 1,
+                TransactionType = "Payment"
+            };
+            AssertOk(TxSigner.SignPodo(anonymouse, Secret));
+        }
+
         private static void AssertOk(SignedTx signed)
         {
             Assert.AreEqual(ExpectedTxnSignature, signed.TxJson["TxnSignature"]);
