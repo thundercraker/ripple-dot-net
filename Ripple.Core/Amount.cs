@@ -83,7 +83,7 @@ namespace Ripple.Core
             switch (token.Type)
             {
                 case JTokenType.Integer:
-                    return (int) token;
+                    return (ulong)token;
                 case JTokenType.String:
                     return new Amount(token.ToString());
                 case JTokenType.Object:
@@ -96,7 +96,7 @@ namespace Ripple.Core
             }
         }
 
-        public static implicit operator Amount(int a)
+        public static implicit operator Amount(ulong a)
         {
             return new Amount(a.ToString("D"));
         }
