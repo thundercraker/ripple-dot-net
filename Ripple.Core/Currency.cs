@@ -33,7 +33,7 @@ namespace Ripple.Core
             if (allZero)
             {
                 isNative = true;
-                return "Xrp";
+                return "XRP";
             }
             if (zeroInNonCurrencyBytes)
             {

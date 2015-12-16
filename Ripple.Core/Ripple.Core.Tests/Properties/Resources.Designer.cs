@@ -78,5 +78,15 @@ namespace Ripple.Core.Tests.Properties {
                 return ResourceManager.GetString("TestResource", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] TransactionsWithMeta {
+            get {
+                object obj = ResourceManager.GetObject("TransactionsWithMeta", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

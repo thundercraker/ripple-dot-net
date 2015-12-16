@@ -1,6 +1,6 @@
-using System.Security.Policy;
+using System;
 using Newtonsoft.Json.Linq;
-using Deveel.Math;
+
 
 namespace Ripple.Core
 {
@@ -9,34 +9,34 @@ namespace Ripple.Core
     {
         public readonly AccountId Issuer;
         public readonly Currency Currency;
-        public readonly BigDecimal Value;
         public bool IsNative => Currency.IsNative;
 
         public const int MaximumIouPrecision = 16;
         public const int MaximumNativeScale = 6;
 
-        private static MathContext _mathContext = new MathContext(16, RoundingMode.HalfUp);
+        public AmountValue Value;
 
-        public Amount(string value = "0", 
-                      Currency currency=null, 
+        public Amount(AmountValue value,
+                      Currency currency=null,
                       AccountId issuer=null)
         {
-            Value =  ParseDecimal(value);
             Currency = currency ?? Currency.Xrp;
             Issuer = issuer ?? (Currency.IsNative ?
                                     AccountId.Zero :
                                     AccountId.Neutral);
+
+            Value = AmountValue.FromString(value.ToString());
         }
 
-        private static BigDecimal ParseDecimal(string value)
+        public Amount(string v="0", Currency c=null, AccountId i=null) :
+                      this(AmountValue.FromString(v), c, i)
         {
-            _mathContext = MathContext.Decimal64;
-            return BigDecimal.Parse(value, _mathContext);
+
         }
 
         public void ToBytes(IBytesSink sink)
         {
-            var notNegative = Value.Sign != -1;
+            var notNegative = !Value.IsNegative;
             var mantissa = CalculateMantissa();
 
             if (IsNative)
@@ -53,7 +53,7 @@ namespace Ripple.Core
                     {
                         mantissa[0] |= 0x40;
                     }
-                    var exponent = CalculateExponent();
+                    var exponent = Exponent;
                     var exponentByte = 97 + exponent;
                     mantissa[0] |= (byte)(exponentByte >> 2);
                     mantissa[1] |= (byte)((exponentByte & 0x03) << 6);
@@ -70,9 +70,9 @@ namespace Ripple.Core
             {
                 return Value.ToString();
             }
-            return new JObject()
+            return new JObject
             {
-                ["value"] = Value.ToPlainString(),
+                ["value"] = Value.ToString(),
                 ["currency"] = Currency,
                 ["issuer"] = Issuer,
             };
@@ -85,9 +85,10 @@ namespace Ripple.Core
                 case JTokenType.Integer:
                     return (ulong)token;
                 case JTokenType.String:
-                    return new Amount(token.ToString());
+                    return new Amount(token);
                 case JTokenType.Object:
-                    return new Amount(token["value"].ToString(),
+                    return new Amount(
+                        token["value"],
                         token["currency"],
                         token["issuer"]);
                 default:
@@ -103,25 +104,22 @@ namespace Ripple.Core
 
         private byte[] CalculateMantissa()
         {
-            var e = CalculateExponent();
-            var scaledAbs = Value.Abs().ScaleByPowerOfTen(-e);
-            var byteArray = scaledAbs
-                .ToBigIntegerExact()
-                .ToByteArray();
-            return Utils.ZeroPad(byteArray, 8);
+            var units = Value.Mantissa;
+            if (IsNative)
+            {
+                // TODO, this seems kind of pointless, and the 
+                // AmountValue should just store it as a mantissa
+                // with an exponent of zero?
+                units /= (ulong) Math.Pow(10, -Value.Exponent);
+            }
+            return Bits.GetBytes(units);
         }
 
-        private int CalculateExponent()
-        {
-            return IsNative ? 0 :
-                -MaximumIouPrecision + 
-                Value.Precision -
-                Value.Scale;
-        }
+        public int Exponent => Value.Exponent;
 
         public static Amount FromParser(BinaryParser parser, int? hint=null)
         {
-            BigDecimal value;
+            AmountValue value;
             var mantissa = parser.Read(8);
             var b1 = mantissa[0];
             var b2 = mantissa[1];
@@ -137,18 +135,12 @@ namespace Ripple.Core
                 var issuer = AccountId.FromParser(parser);
                 var exponent = ((b1 & 0x3F) << 2) + ((b2 & 0xff) >> 6) - 97;
                 mantissa[1] &= 0x3F;
-
-                value = new BigDecimal(new BigInteger(sign, mantissa), -exponent);
-                return new Amount(value.StripTrailingZeros(), curr, issuer);
+                value = new AmountValue(mantissa, sign, exponent);
+                return new Amount(value, curr, issuer);
             }
             mantissa[0] &= 0x3F;
-            value = DropsFromMantissa(mantissa, sign);
+            value = new AmountValue(mantissa, sign);
             return new Amount(value);
-        }
-
-        private static BigDecimal DropsFromMantissa(byte[] mantissa, int sign)
-        {
-            return new BigDecimal(new BigInteger(sign, mantissa));
         }
     }
 }
