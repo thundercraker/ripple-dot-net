@@ -24,14 +24,12 @@ namespace Ripple.Core
             Issuer = issuer ?? (Currency.IsNative ?
                                     AccountId.Zero :
                                     AccountId.Neutral);
-
-            Value = AmountValue.FromString(value.ToString());
+            Value = value;
         }
 
         public Amount(string v="0", Currency c=null, AccountId i=null) :
                       this(AmountValue.FromString(v), c, i)
         {
-
         }
 
         public void ToBytes(IBytesSink sink)

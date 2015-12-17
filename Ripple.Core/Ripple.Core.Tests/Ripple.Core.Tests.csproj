@@ -61,7 +61,7 @@
     <Compile Include="AccountIdTests.cs" />
     <Compile Include="AmountTests.cs" />
     <Compile Include="CurrencyTests.cs" />
-    <Compile Include="IouValueTests.cs" />
+    <Compile Include="AmountValueTests.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

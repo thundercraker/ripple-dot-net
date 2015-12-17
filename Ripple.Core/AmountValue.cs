@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Util;
@@ -12,7 +14,11 @@ namespace Ripple.Core
         public readonly int Precision;
         public bool IsZero => Mantissa == 0;
 
-        private const string ValueRegex = @"([-+])?(\d+)?(.(\d+))?([eE]([+-]?\d+))?";
+        public const int MinExponent = -96;
+        public const int MaxExponent = 80;
+        public const int MaxPrecision = 16;
+
+        private const string ValueRegex = @"^([-+])?(\d+)?(.(\d+))?([eE]([+-]?\d+))?$";
         private static readonly ulong MinMantissa = Ul("1000,0000,0000,0000");
         private static readonly ulong MaxMantissa = Ul("9999,9999,9999,9999");
 
@@ -29,10 +35,21 @@ namespace Ripple.Core
                                       Mantissa.ToString()
                                               .Trim('0')
                                               .Length);
+
         }
 
         public AmountValue(byte[] mantissa, int sign, int exponent=0) :
-                this(Bits.ToUInt64(mantissa, 0), exponent, sign == -1) {}
+                this(ParseMantissa(mantissa), exponent, sign == -1) {}
+
+        private static ulong ParseMantissa(byte[] mantissa)
+        {
+            if (mantissa.Length > 8)
+            {
+                throw new PrecisionError(
+                    "encoded mantissa must be only 8 bytes maximum");
+            }
+            return Bits.ToUInt64(mantissa, 0);
+        }
 
         public override string ToString()
         {
@@ -75,6 +92,13 @@ namespace Ripple.Core
         public static AmountValue FromString(string value)
         {
             var match = Regex.Match(value, ValueRegex);
+
+            if (!match.Success)
+            {
+                throw new InvalidAmountValue($"invalid value: {value}, " +
+                                             $"must match {ValueRegex}");
+            }
+
             var signGroup = match.Groups[1];
             var numberGroup = match.Groups[2];
             var fractionGroup = match.Groups[4];
@@ -105,6 +129,12 @@ namespace Ripple.Core
             var mantissa = ulong.Parse(trimmed);
             var precision = trimmed.Length;
             var isNegative = signGroup.Success && signGroup.Value == "-";
+
+            if (precision > MaxPrecision)
+            {
+                throw new PrecisionError();
+            }
+
             return new AmountValue(mantissa, exponent, isNegative, precision);
         }
 
@@ -121,6 +151,10 @@ namespace Ripple.Core
                 mantissa /= 10;
                 exponent += 1;
             }
+            if (exponent > MaxExponent || exponent < MinExponent)
+            {
+                throw new PrecisionError();
+            }
         }
 
         private static ulong Ul(string s)
@@ -131,6 +165,24 @@ namespace Ripple.Core
         public static implicit operator AmountValue(JToken token)
         {
             return FromString(token.ToString());
+        }
+    }
+
+    public class InvalidAmountValue : Exception
+    {
+        public InvalidAmountValue(string s) : base(s)
+        {
+        }
+    }
+
+    public class PrecisionError : Exception
+    {
+        public PrecisionError()
+        {
+        }
+
+        public PrecisionError(string message) : base(message)
+        {
         }
     }
 }
