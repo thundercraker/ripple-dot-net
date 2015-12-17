@@ -1,17 +1,18 @@
-﻿using System;
-using Ripple.Signing.Utils;
-using Sodium;
+using System;
+using Sha512 = Ripple.Signing.Utils.Sha512;
 
 namespace Ripple.Signing.Ed25519
 {
     public class EdKeyPair : IKeyPair
     {
-        private readonly KeyPair _pairImpl;
         private byte[] _canonicalisedPubBytes;
+        private readonly byte[] _pubBytes;
+        private readonly byte[] _privBytes;
 
-        private EdKeyPair(KeyPair pair)
+        private EdKeyPair(byte[] publicKey, byte[] expandedPrivateKey)
         {
-            this._pairImpl = pair;
+            _pubBytes = publicKey;
+            _privBytes = expandedPrivateKey;
             ComputeCanonicalPub();
         }
 
@@ -23,26 +24,28 @@ namespace Ripple.Signing.Ed25519
         private void ComputeCanonicalPub()
         {
             _canonicalisedPubBytes = new byte[33];
-            _canonicalisedPubBytes[0] = (byte)0xed;
-            Array.Copy(_pairImpl.PublicKey, 0, _canonicalisedPubBytes,
-                       1, _pairImpl.PublicKey.Length);
+            _canonicalisedPubBytes[0] = 0xed;
+            Array.Copy(_pubBytes, 0, _canonicalisedPubBytes,
+                       1, _pubBytes.Length);
         }
 
         public byte[] Sign(byte[] message)
         {
-            return PublicKeyAuth.SignDetached(message, _pairImpl.PrivateKey);
+            return Chaos.NaCl.Ed25519.Sign(message, _privBytes);
         }
 
         public bool Verify(byte[] message, byte[] signature)
         {
-            return PublicKeyAuth.VerifyDetached(signature, message, _pairImpl.PublicKey);
+            return Chaos.NaCl.Ed25519.Verify(signature, message, _pubBytes);
         }
 
         internal static IKeyPair From128Seed(byte[] seed)
         {
             var edSecret = Sha512.Half(seed);
-            var pair = PublicKeyAuth.GenerateKeyPair(edSecret);
-            return new EdKeyPair(pair);
+            byte[] publicKey;
+            byte[] expandedPrivateKey;
+            Chaos.NaCl.Ed25519.KeyPairFromSeed(out publicKey, out expandedPrivateKey, edSecret);
+            return new EdKeyPair(publicKey, expandedPrivateKey);
         }
 
         public string Id()
