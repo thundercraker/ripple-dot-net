@@ -1,5 +1,3 @@
-# Warning. Do not use except for testing purposes. There's an issue with the decimal library currently in use.
-
 # Ripple.NET [![Build status](https://ci.appveyor.com/api/projects/status/w1jnx38oreo35a6b?svg=true)](https://ci.appveyor.com/project/sublimator/ripple-dot-net)
 
 The purpose of this code is primarily for signing transactions, and while the
@@ -68,8 +66,3 @@ var anonymouse = new
 };
 var signed = TxSigner.SignPodo(anonymouse, Secret);
 ```
-
-## Dependencies
-
-Requires libsodium.dll to be on PATH. Look in the packages folder in libsodium-
-net*/output/
