@@ -121,6 +121,12 @@
   <data name="DataDrivenTests" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\data-driven-tests.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="LedgerFull38129" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ledger-full-38129.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LedgerFull40000" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ledger-full-40000.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="TestResource" xml:space="preserve">
     <value>works</value>
   </data>

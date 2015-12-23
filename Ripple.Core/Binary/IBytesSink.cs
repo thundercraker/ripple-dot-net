@@ -2,7 +2,7 @@ namespace Ripple.Core.Binary
 {
     public interface IBytesSink
     {
-        void Add(byte aByte);
-        void Add(byte[] bytes);
+        void Put(byte aByte);
+        void Put(byte[] bytes);
     }
 }

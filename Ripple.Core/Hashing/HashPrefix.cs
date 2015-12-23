@@ -1,6 +1,6 @@
-﻿namespace Ripple.TxSigning
+namespace Ripple.Core.Hashing
 {
-    internal enum HashPrefix : uint
+    public enum HashPrefix : uint
     {
         TransactionId = 0x54584E00u,
         // transaction plus metadata

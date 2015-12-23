@@ -125,26 +125,26 @@ namespace Ripple.Core.Types
             {
                 if (n++ != 0)
                 {
-                    buffer.Add(PathSeparatorByte);
+                    buffer.Put(PathSeparatorByte);
                 }
                 foreach (var hop in path)
                 {
-                    buffer.Add((byte)hop.Type);
+                    buffer.Put((byte)hop.Type);
                     if (hop.HasAccount())
                     {
-                        buffer.Add(hop.Account.Buffer);
+                        buffer.Put(hop.Account.Buffer);
                     }
                     if (hop.HasCurrency())
                     {
-                        buffer.Add(hop.Currency.Buffer);
+                        buffer.Put(hop.Currency.Buffer);
                     }
                     if (hop.HasIssuer())
                     {
-                        buffer.Add(hop.Issuer.Buffer);
+                        buffer.Put(hop.Issuer.Buffer);
                     }
                 }
             }
-            buffer.Add(PathsetEndByte);
+            buffer.Put(PathsetEndByte);
         }
 
         public JToken ToJson()

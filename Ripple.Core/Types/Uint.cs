@@ -14,7 +14,7 @@ namespace Ripple.Core.Types
             Value = value;
         }
 
-        public void ToBytes(IBytesSink sink) => sink.Add(ToBytes());
+        public void ToBytes(IBytesSink sink) => sink.Put(ToBytes());
         public virtual JToken ToJson() => Convert.ToUInt32(Value);
         public override string ToString()
         {

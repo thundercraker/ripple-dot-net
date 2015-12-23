@@ -1,8 +1,6 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Tests.Properties;
 using Ripple.Core.Types;
@@ -69,7 +67,7 @@ namespace Ripple.Core.Tests
             return (JArray) ParseJsonBytes(Resources.TransactionsWithMeta);
         }
 
-        private static JToken ParseJsonBytes(byte[] testBytes)
+        public static JToken ParseJsonBytes(byte[] testBytes)
         {
             var utf8 = UTF8.GetString(testBytes);
             var obj = JToken.Parse(utf8);

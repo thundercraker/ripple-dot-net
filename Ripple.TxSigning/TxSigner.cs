@@ -33,7 +33,7 @@ namespace Ripple.TxSigning
             SetCanonicalSigFlag(so);
             so[Field.SigningPubKey] = (Blob) _keyPair.CanonicalPubBytes();
             so[Field.TxnSignature] = (Blob) _keyPair.Sign(so.SigningData());
-            var blob = so.Blob();
+            var blob = so.ToBytes();
             var hash = Utils.TransactionId(blob);
             return new SignedTx(hash, ToHex(blob), so.ToJsonObject());
         }

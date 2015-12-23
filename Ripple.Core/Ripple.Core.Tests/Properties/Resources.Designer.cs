@@ -71,6 +71,26 @@ namespace Ripple.Core.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] LedgerFull38129 {
+            get {
+                object obj = ResourceManager.GetObject("LedgerFull38129", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] LedgerFull40000 {
+            get {
+                object obj = ResourceManager.GetObject("LedgerFull40000", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to works.
         /// </summary>
         public static string TestResource {

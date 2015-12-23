@@ -12,7 +12,7 @@ namespace Ripple.Core.Enums
         protected readonly byte[] Bytes; 
         public void ToBytes(IBytesSink sink)
         {
-            sink.Add(Bytes);
+            sink.Put(Bytes);
         }
 
         public JToken ToJson()

@@ -31,7 +31,7 @@ namespace Ripple.Core.Types
 
         public void ToBytes(IBytesSink sink)
         {
-            sink.Add(Buffer);
+            sink.Put(Buffer);
         }
 
         public JToken ToJson()

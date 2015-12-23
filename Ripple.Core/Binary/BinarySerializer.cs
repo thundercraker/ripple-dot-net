@@ -12,15 +12,15 @@ namespace Ripple.Core.Binary
             _sink = sink;
         }
 
-        public virtual void Add(byte[] n)
+        public virtual void Put(byte[] n)
         {
-            _sink.Add(n);
+            _sink.Put(n);
         }
 
         public virtual void AddLengthEncoded(byte[] n)
         {
-            Add(EncodeVl(n.Length));
-            Add(n);
+            Put(EncodeVl(n.Length));
+            Put(n);
         }
 
         public static byte[] EncodeVl(int length)
@@ -62,7 +62,7 @@ namespace Ripple.Core.Binary
         {
             foreach (byte[] bytes in bl.RawList())
             {
-                _sink.Add(bytes);
+                _sink.Put(bytes);
             }
         }
 
@@ -74,18 +74,18 @@ namespace Ripple.Core.Binary
                     $"Field {f} is a discardable field");
             }
             var n = f.Header;
-            Add(n);
+            Put(n);
             return n.Length;
         }
 
-        public virtual void Add(byte type)
+        public virtual void Put(byte type)
         {
-            _sink.Add(type);
+            _sink.Put(type);
         }
 
         public virtual void AddLengthEncoded(BytesList bytes)
         {
-            Add(EncodeVl(bytes.BytesLength()));
+            Put(EncodeVl(bytes.BytesLength()));
             Add(bytes);
         }
 

@@ -6,6 +6,8 @@ namespace Ripple.Core.Types
 {
     public class Hash256 : Hash
     {
+        public static readonly Hash256 Zero = new Hash256(new byte[32]);
+
         public Hash256(byte[] buffer) : base(buffer)
         {
         }

@@ -14,16 +14,16 @@ namespace Ripple.Core.Binary
         {
             foreach (byte[] bytes in bl.RawList())
             {
-                Add(bytes);
+                Put(bytes);
             }
         }
 
-        public void Add(byte aByte)
+        public void Put(byte aByte)
         {
-            Add(new[] { aByte });
+            Put(new[] { aByte });
         }
 
-        public void Add(byte[] bytes)
+        public void Put(byte[] bytes)
         {
             _len += bytes.Length;
             _buffer.Add(bytes);

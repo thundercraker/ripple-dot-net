@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
 using Ripple.Core.Util;
@@ -40,7 +41,7 @@ namespace Ripple.Core.Types
             if (IsNative)
             {
                 mantissa[0] |= (byte) (notNegative ?  0x40 : 0x00);
-                sink.Add(mantissa);
+                sink.Put(mantissa);
             }
             else
             {
@@ -56,7 +57,7 @@ namespace Ripple.Core.Types
                     mantissa[0] |= (byte)(exponentByte >> 2);
                     mantissa[1] |= (byte)((exponentByte & 0x03) << 6);
                 }
-                sink.Add(mantissa);
+                sink.Put(mantissa);
                 Currency.ToBytes(sink);
                 Issuer.ToBytes(sink);
             }
@@ -103,12 +104,20 @@ namespace Ripple.Core.Types
         private byte[] CalculateMantissa()
         {
             var units = Value.Mantissa;
-            if (IsNative)
+            if (IsNative && Value.Exponent != 0)
             {
                 // TODO, this seems kind of pointless, and the 
                 // AmountValue should just store it as a mantissa
                 // with an exponent of zero?
-                units /= (ulong) Math.Pow(10, -Value.Exponent);
+                var pow = (ulong) Math.Pow(10, Math.Abs(Value.Exponent));
+                if (Value.Exponent < 0)
+                {
+                    units /= pow;
+                }
+                else
+                {
+                    units *= pow;
+                }
             }
             return Bits.GetBytes(units);
         }

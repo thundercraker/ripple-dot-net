@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -16,7 +16,7 @@ namespace Ripple.Address
         internal static byte[] Sha256(byte[] buffer)
         {
             var hash = SHA256.Create();
-            return hash.ComputeHash(buffer, 0, buffer.Length);
+            return hash.ComputeHash(buffer);
         }
     }
 

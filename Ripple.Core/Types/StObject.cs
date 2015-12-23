@@ -4,6 +4,8 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
 using Ripple.Core.Enums;
+using Ripple.Core.Hashing;
+using Ripple.Core.Util;
 
 namespace Ripple.Core.Types
 {
@@ -36,7 +38,7 @@ namespace Ripple.Core.Types
                 [FieldType.Hash256] = new BuildFrom(Hash256.FromJson, Hash256.FromParser),
                 [FieldType.Hash160] = new BuildFrom(Hash160.FromJson, Hash160.FromParser),
                 [FieldType.AccountId] = new BuildFrom(AccountId.FromJson, AccountId.FromParser),
-                [FieldType.Blob] = new BuildFrom(Blob.FromJson, Blob.FromParser),
+                [FieldType.Blob] = new BuildFrom(Types.Blob.FromJson, Types.Blob.FromParser),
                 [FieldType.PathSet] = new BuildFrom(PathSet.FromJson, PathSet.FromParser),
                 [FieldType.Vector256] = new BuildFrom(Vector256.FromJson, Vector256.FromParser),
             };
@@ -160,6 +162,29 @@ namespace Ripple.Core.Types
         public bool Has(Field field)
         {
             return ContainsKey(field);
+        }
+
+        public byte[] SigningData()
+        {
+            var list = new BytesList();
+            list.Put(HashPrefix.TxSign.Bytes());
+            ToBytes(list, f => f.IsSigningField);
+            return list.Bytes();
+        }
+
+        public byte[] ToBytes()
+        {
+            var list = new BytesList();
+            ToBytes(list, f => f.IsSerialised);
+            return list.Bytes();
+        }
+    }
+
+    internal static class Extensions
+    {
+        internal static byte[] Bytes(this HashPrefix hp)
+        {
+            return Bits.GetBytes((uint)hp);
         }
     }
 }

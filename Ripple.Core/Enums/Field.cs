@@ -31,7 +31,7 @@ namespace Ripple.Core.Enums
                     (type.Ordinal << 16 | nthOfType))
         {
             // catch auxiliary fields
-            var valid = nthOfType > 0 && NthOfType < 256 &&
+            var valid = (nthOfType > 0) && nthOfType < 256 &&
                         type.Ordinal > 0 && type.Ordinal < 256;
             Type = type;
             IsSigningField = valid && isSigningField;
