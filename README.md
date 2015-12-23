@@ -17,8 +17,8 @@ guarantees.
 // using Ripple.TxSigning
 // using Newtonsoft.Json.Linq;
 
-public string Secret = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
-public string UnsignedTxJson = @"{
+var secret = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
+var unsignedTxJson = @"{
     'Account': 'rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN',
     'Amount': '1000',
     'Destination': 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
@@ -28,7 +28,7 @@ public string UnsignedTxJson = @"{
     'TransactionType' : 'Payment'
 }";
 
-var signed = TxSigner.SignJson(JObject.Parse(UnsignedTxJson), Secret);
+var signed = TxSigner.SignJson(JObject.Parse(unsignedTxJson), secret);
 
 Console.WriteLine(signed.Hash);
 Console.WriteLine(signed.TxJson);
@@ -64,5 +64,5 @@ var anonymouse = new
     Sequence = 1,
     TransactionType = "Payment"
 };
-var signed = TxSigner.SignPodo(anonymouse, Secret);
+var signed = TxSigner.SignPodo(anonymouse, secret);
 ```
