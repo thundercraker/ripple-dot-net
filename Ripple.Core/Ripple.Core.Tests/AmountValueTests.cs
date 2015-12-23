@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ripple.Core.Types;
 using Ripple.Core.Util;
 
 namespace Ripple.Core.Tests

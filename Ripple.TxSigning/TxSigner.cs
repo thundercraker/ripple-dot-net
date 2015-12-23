@@ -2,6 +2,8 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ripple.Core;
+using Ripple.Core.Enums;
+using Ripple.Core.Types;
 using Ripple.Signing;
 using static Ripple.Core.Util.B16;
 

@@ -1,4 +1,6 @@
 using Ripple.Core;
+using Ripple.Core.Binary;
+using Ripple.Core.Types;
 using Ripple.Core.Util;
 
 namespace Ripple.TxSigning

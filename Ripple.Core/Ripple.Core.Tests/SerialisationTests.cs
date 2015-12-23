@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Tests.Properties;
+using Ripple.Core.Types;
 using Ripple.Core.Util;
 using Ripple.Signing;
 using static System.Text.Encoding;
