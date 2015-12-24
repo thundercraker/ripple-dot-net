@@ -31,6 +31,13 @@ namespace Ripple.Core.Tests
             //FF FFC0 6FF2 8623
         }
 
+        [TestMethod()]
+        public void IllegalAmountTest()
+        {
+            var thatDamnOffer = "1000000000000000100";
+            var val = AmountValue.FromString(thatDamnOffer);
+            Assert.AreEqual(thatDamnOffer, val.ToString());
+        }
 
         [TestMethod()]
         public void ExponentTest()

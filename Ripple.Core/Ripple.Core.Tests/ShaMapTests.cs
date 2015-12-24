@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
@@ -124,6 +125,25 @@ namespace Ripple.Core.Tests
         {
             var ledger = (JObject)ParseJsonBytes(Resources.LedgerFull40000);
             TestLedgerTreeHashing(ledger);
+        }
+
+        [TestMethod]
+        public void LedgerFromFileTest()
+        {
+            const string ledgerJson = @"Z:\windowsshare\ledger-full-1000000.json";
+            if (!File.Exists(ledgerJson)) return;
+            var ledger1E6 = FileToByteArray(ledgerJson);
+            var ledger = (JObject)ParseJsonBytes(ledger1E6);
+            TestLedgerTreeHashing(ledger);
+        }
+
+        public byte[] FileToByteArray(string fileName)
+        {
+            var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var br = new BinaryReader(fs);
+            var numBytes = new FileInfo(fileName).Length;
+            var buff = br.ReadBytes((int)numBytes);
+            return buff;
         }
 
         private static void TestLedgerTreeHashing(JObject ledger)

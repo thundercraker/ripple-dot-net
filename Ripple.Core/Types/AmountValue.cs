@@ -17,18 +17,30 @@ namespace Ripple.Core.Types
         public const int MaxExponent = 80;
         public const int MaxPrecision = 16;
 
-        private const string ValueRegex = @"^([-+])?(\d+)?(.(\d+))?([eE]([+-]?\d+))?$";
+        private const string ValueRegex = @"^([-+])?(\d+)?(\.(\d+))?([eE]([+-]?\d+))?$";
         private static readonly ulong MinMantissa = Ul("1000,0000,0000,0000");
         private static readonly ulong MaxMantissa = Ul("9999,9999,9999,9999");
+
+        private const string IllegalOfferMantissaString = "1000000000000000100";
+        public static readonly AmountValue IllegalOffer = new AmountValue(
+                mantissa: ulong.Parse(IllegalOfferMantissaString),
+                exponent:0,
+                isNegative:false,
+                precision:17,
+                normalise:false);
 
         public AmountValue(ulong mantissa,
                            int exponent,
                            bool isNegative,
-                           int? precision=null)
+                           int? precision=null,
+                           bool normalise=true)
         {
             Mantissa = mantissa;
             Exponent = exponent;
-            Normalize(ref Mantissa, ref Exponent);
+            if (normalise)
+            {
+                Normalize(ref Mantissa, ref Exponent);
+            }
             IsNegative = isNegative;
             Precision = precision ?? (IsZero ? 1 :
                                       Mantissa.ToString()
@@ -52,6 +64,11 @@ namespace Ripple.Core.Types
 
         public override string ToString()
         {
+            if (this == IllegalOffer)
+            {
+                return IllegalOfferMantissaString;
+            }
+
             if (Mantissa == 0)
             {
                 return "0";
@@ -131,6 +148,10 @@ namespace Ripple.Core.Types
 
             if (precision > MaxPrecision)
             {
+                if (value == IllegalOfferMantissaString)
+                {
+                    return IllegalOffer;
+                }
                 throw new PrecisionError();
             }
 
