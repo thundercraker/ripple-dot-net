@@ -60,18 +60,11 @@ namespace Ripple.Core.Tests
 
         private static JObject GetTestsJson()
         {
-            return (JObject) ParseJsonBytes(Resources.DataDrivenTests);
+            return (JObject) Utils.ParseJsonBytes(Resources.DataDrivenTests);
         }
         private static JArray GetTransactionsWithMetaJson()
         {
-            return (JArray) ParseJsonBytes(Resources.TransactionsWithMeta);
-        }
-
-        public static JToken ParseJsonBytes(byte[] testBytes)
-        {
-            var utf8 = UTF8.GetString(testBytes);
-            var obj = JToken.Parse(utf8);
-            return obj;
+            return (JArray) Utils.ParseJsonBytes(Resources.TransactionsWithMeta);
         }
 
         [TestMethod()]
@@ -156,8 +149,8 @@ namespace Ripple.Core.Tests
             }
             if (!JToken.DeepEquals(expected, actual))
             {
-                Assert.AreEqual(AmountValue.FromString(expected["value"].ToString()).ToString(),
-                                AmountValue.FromString(expected["value"].ToString()).ToString(),
+                Assert.AreEqual(IouValue.FromString(expected["value"].ToString()).ToString(),
+                                IouValue.FromString(expected["value"].ToString()).ToString(),
                                           $"expected: {expected}\n" +
                                           $"actual: {actual}");
             }

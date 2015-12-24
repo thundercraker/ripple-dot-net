@@ -35,7 +35,7 @@ namespace Ripple.Core.Tests
         public void IllegalAmountTest()
         {
             var thatDamnOffer = "1000000000000000100";
-            var val = AmountValue.FromString(thatDamnOffer);
+            var val = IouValue.FromString(thatDamnOffer, native: true);
             Assert.AreEqual(thatDamnOffer, val.ToString());
         }
 
@@ -84,20 +84,20 @@ namespace Ripple.Core.Tests
          TestMethod()]
         public void PrecisionTest()
         {
-            AmountValue.FromString("1234" + "1234" + "1234" + "1234" + 1);
+            IouValue.FromString("1234" + "1234" + "1234" + "1234" + 1);
         }
 
         [ExpectedException(typeof(InvalidAmountValue)),
          TestMethod()]
         public void InvalidAmountValueTest()
         {
-            var silly = AmountValue.FromString("silly");
+            var silly = (IouValue) IouValue.FromString("silly");
             Debug.WriteLine(silly.Exponent);
         }
 
         private static void AssertExponent(string valueString, int expectedExponent)
         {
-            Assert.AreEqual(AmountValue.FromString(valueString).Exponent, expectedExponent);
+            Assert.AreEqual(IouValue.FromString(valueString).Exponent, expectedExponent);
         }
 
         public void AssertValue(string value, string mantissa, int exponent, bool isNegative, int? precision = null)
@@ -105,7 +105,7 @@ namespace Ripple.Core.Tests
             Normalize(ref mantissa);
             Normalize(ref value);
 
-            var val = AmountValue.FromString(value);
+            var val = IouValue.FromString(value);
 
             Assert.AreEqual(mantissa, val.Mantissa.ToString(), $"mantissa for {value}");
             Assert.AreEqual(exponent, val.Exponent, $"exponent for {value}");

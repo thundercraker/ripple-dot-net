@@ -99,13 +99,6 @@ namespace Ripple.Core.Tests
     [TestClass]
     public class ShaMapTests
     {
-        public static JToken ParseJsonBytes(byte[] testBytes)
-        {
-            var utf8 = UTF8.GetString(testBytes);
-            var obj = JToken.Parse(utf8);
-            return obj;
-        }
-
         [TestMethod]
         public void EmptyMapHasZeroHash()
         {
@@ -116,14 +109,14 @@ namespace Ripple.Core.Tests
         [TestMethod]
         public void LedgerFull38129Test()
         {
-            var ledger = (JObject) ParseJsonBytes(Resources.LedgerFull38129);
+            var ledger = (JObject) Utils.ParseJsonBytes(Resources.LedgerFull38129);
             TestLedgerTreeHashing(ledger);
         }
 
         [TestMethod]
         public void LedgerFull40000Test()
         {
-            var ledger = (JObject)ParseJsonBytes(Resources.LedgerFull40000);
+            var ledger = (JObject)Utils.ParseJsonBytes(Resources.LedgerFull40000);
             TestLedgerTreeHashing(ledger);
         }
 
@@ -132,19 +125,50 @@ namespace Ripple.Core.Tests
         {
             const string ledgerJson = @"Z:\windowsshare\ledger-full-1000000.json";
             if (!File.Exists(ledgerJson)) return;
-            var ledger1E6 = FileToByteArray(ledgerJson);
-            var ledger = (JObject)ParseJsonBytes(ledger1E6);
+            var ledger1E6 = Utils.FileToByteArray(ledgerJson);
+            var ledger = (JObject)Utils.ParseJsonBytes(ledger1E6);
             TestLedgerTreeHashing(ledger);
         }
 
-        public byte[] FileToByteArray(string fileName)
+        [TestMethod]
+        public void AccountStateTest()
         {
-            var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            var br = new BinaryReader(fs);
-            var numBytes = new FileInfo(fileName).Length;
-            var buff = br.ReadBytes((int)numBytes);
-            return buff;
+            const string path = @"Z:\windowsshare\as-ledger-4320278.json";
+            JArray state;
+            if (!ParseJsonArray(path, out state)) return;
+            var stateMap = ParseAccountState(state);
+            Assert.AreEqual("CF37E77AE0C3BE12369133B0CA212CE7B0FCB282F5B3F1079739B69944FB0D2E", 
+                stateMap.Hash().ToString());
         }
+
+        private static bool ParseJsonArray(string path, out JArray state)
+        {
+            state = null;
+            if (!File.Exists(path))
+            {
+                return false;
+            }
+            var ledger1E6 = Utils.FileToByteArray(path);
+            state = (JArray) Utils.ParseJsonBytes(ledger1E6);
+            return true;
+        }
+
+        private static ShaMap.ShaMap ParseAccountState(JArray state)
+        {
+            var stateMap = new ShaMap.ShaMap();
+            var entries = state.Select((t) =>
+            {
+                StObject so = t["json"];
+                Assert.AreEqual(t["binary"].ToString(), so.ToHex(), t.ToString() + " " + so.ToJson());
+                return new LedgerEntry(so);
+            });
+            foreach (var ledgerEntry in entries)
+            {
+                stateMap.AddItem(ledgerEntry.Index(), ledgerEntry);
+            }
+            return stateMap;
+        }
+
 
         private static void TestLedgerTreeHashing(JObject ledger)
         {
