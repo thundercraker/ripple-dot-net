@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binary\BinaryParser.cs" />
+    <Compile Include="Binary\StreamParser.cs" />
     <Compile Include="Hashing\HashPrefix.cs" />
     <Compile Include="Hashing\Sha512.cs" />
     <Compile Include="ShaMap\PathToIndex.cs" />
