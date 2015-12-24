@@ -1,40 +1,19 @@
 using System;
 using Ripple.Core.Enums;
-using Ripple.Core.Util;
 
 namespace Ripple.Core.Binary
 {
-    public class BinaryParser
+    public abstract class BinaryParser
     {
-        protected internal readonly int Size;
-        protected internal byte[] Bytes;
+        protected internal int Size;
         protected internal int Cursor;
-
         public bool End() => Cursor >= Size;
         public int Pos() => Cursor;
         public int ReadOneInt() => ReadOne() & 0xFF;
 
-        public BinaryParser(byte[] bytes)
-        {
-            Size = bytes.Length;
-            Bytes = bytes;
-        }
-
-        public BinaryParser(string hex) : this(B16.Decode(hex))
-        {
-            
-        }
-
-        public void Skip(int n) => Cursor += n;
-        public byte ReadOne() => Bytes[Cursor++];
-
-        public byte[] Read(int n)
-        {
-            byte[] ret = new byte[n];
-            Array.Copy(Bytes, Cursor, ret, 0, n);
-            Cursor += n;
-            return ret;
-        }
+        public abstract void Skip(int n);
+        public abstract byte ReadOne();
+        public abstract byte[] Read(int n);
 
         public Field ReadField()
         {
@@ -44,7 +23,7 @@ namespace Ripple.Core.Binary
             {
                 throw new InvalidOperationException(
                     $"Couldn't parse field from " +
-                          $"{fieldCode.ToString("x")}");
+                    $"{fieldCode.ToString("x")}");
             }
 
             return field;
@@ -101,8 +80,7 @@ namespace Ripple.Core.Binary
         public bool End(int? customEnd)
         {
             return Cursor >= Size ||
-                    (customEnd != null && Cursor >= customEnd);
+                   (customEnd != null && Cursor >= customEnd);
         }
     }
-
 }

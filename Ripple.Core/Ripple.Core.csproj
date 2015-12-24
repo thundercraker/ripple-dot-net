@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="Hashing\HashPrefix.cs" />
     <Compile Include="Hashing\Sha512.cs" />
-    <Compile Include="ShaMap\AtomicInteger.cs" />
     <Compile Include="ShaMap\PathToIndex.cs" />
     <Compile Include="ShaMap\ShaMap.cs" />
     <Compile Include="ShaMap\ShaMapInner.cs" />
@@ -56,7 +55,7 @@
     <Compile Include="ShaMap\ShaMapLeaf.cs" />
     <Compile Include="ShaMap\ShaMapNode.cs" />
     <Compile Include="Types\AccountId.cs" />
-    <Compile Include="Binary\BinaryParser.cs" />
+    <Compile Include="Binary\BufferParser.cs" />
     <Compile Include="Binary\BinarySerializer.cs" />
     <Compile Include="Types\Blob.cs" />
     <Compile Include="Binary\BytesList.cs" />

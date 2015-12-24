@@ -9,7 +9,6 @@ namespace Ripple.Core.Types
     {
         public readonly string IsoCode;
         public readonly bool IsNative;
-
         public static readonly Currency Xrp = new Currency(new byte[20]);
 
         public Currency(byte[] buffer) : base(buffer)
@@ -67,13 +66,12 @@ namespace Ripple.Core.Types
             {
                 return Xrp;
             }
-            if (str.Length == 40)
+            switch (str.Length)
             {
-                return new Currency(B16.Decode(str));
-            }
-            if (str.Length == 3)
-            {
-                return new Currency(EncodeCurrency(str));
+                case 40:
+                    return new Currency(B16.Decode(str));
+                case 3:
+                    return new Currency(EncodeCurrency(str));
             }
             throw new InvalidOperationException();
         }

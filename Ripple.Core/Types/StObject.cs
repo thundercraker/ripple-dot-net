@@ -156,7 +156,7 @@ namespace Ripple.Core.Types
 
         public static StObject FromHex(string s)
         {
-            return FromParser(new BinaryParser(s));
+            return FromParser(new BufferParser(s));
         }
 
         public bool Has(Field field)

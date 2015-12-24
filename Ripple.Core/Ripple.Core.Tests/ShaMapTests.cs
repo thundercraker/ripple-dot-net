@@ -19,13 +19,11 @@ namespace Ripple.Core.Tests
     {
         private readonly StObject _txn;
         private readonly StObject _meta;
-        private readonly int _ledgerIndex;
 
-        public TransactionResult(StObject txn, StObject meta, int ledgerIndex)
+        public TransactionResult(StObject txn, StObject meta)
         {
             _txn = txn;
             _meta = meta;
-            _ledgerIndex = ledgerIndex;
         }
 
         public void ToBytesSink(IBytesSink sink)
@@ -52,7 +50,7 @@ namespace Ripple.Core.Tests
 
         public static TransactionResult FromJson(JToken obj)
         {
-            return new TransactionResult(obj, obj["metaData"], 0);
+            return new TransactionResult(obj, obj["metaData"]);
         }
 
         public Hash256 Hash()
