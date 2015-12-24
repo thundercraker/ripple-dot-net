@@ -1,14 +1,25 @@
+using System.Threading;
+
 namespace Ripple.Core.ShaMap
 {
+    internal class Versioner
+    {
+        private int _value = 0;
+        public int IncrementAndGet()
+        {
+            return ++_value;
+        }
+    }
+
     public class ShaMap : ShaMapInner
     {
-        private AtomicInteger _copies;
+        private Versioner _copies;
 
         public ShaMap() : base(0)
         {
             // This way we can copy the first to the second,
             // copy the second, then copy the first again ;)
-            _copies = new AtomicInteger();
+            _copies = new Versioner();
         }
         public ShaMap(bool isCopy, int depth) : base(isCopy, depth, 0)
         {
