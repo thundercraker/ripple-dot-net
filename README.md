@@ -12,6 +12,8 @@ guarantees.
 
 ## Transaction signing
 
+Signing is done with either ecdsa/rfc6979 or ed25519. See [ripple-keypairs](https://github.com/ripple/ripple-keypairs) for how to generate a seed/secret, encoded in base58. 
+
 ```c#
 
 // using Ripple.TxSigning
