@@ -39,7 +39,7 @@ namespace Ripple.Core.Types
             return new StArray(token.Select(StObject.FromJson));
         }
 
-        public static ISerializedType FromParser(BinaryParser parser, int? hint = null)
+        public static StArray FromParser(BinaryParser parser, int? hint = null)
         {
             StArray stArray = new StArray();
             while (!parser.End())

@@ -22,7 +22,7 @@ namespace Ripple.Core.Binary
             if (field == null)
             {
                 throw new InvalidOperationException(
-                    $"Couldn't parse field from " +
+                    "Couldn't parse field from " +
                     $"{fieldCode.ToString("x")}");
             }
 
@@ -59,19 +59,19 @@ namespace Ripple.Core.Binary
             }
             else if (b1 <= 240)
             {
-                int b2 = ReadOneInt();
+                var b2 = ReadOneInt();
                 result = 193 + (b1 - 193) * 256 + b2;
             }
             else if (b1 <= 254)
             {
-                int b2 = ReadOneInt();
-                int b3 = ReadOneInt();
+                var b2 = ReadOneInt();
+                var b3 = ReadOneInt();
                 result = 12481 + (b1 - 241) * 65536 + b2 * 256 + b3;
             }
             else
             {
                 throw new Exception(
-                    "Invalid varint length indicator");
+                    "Invalid variable length indicator");
             }
 
             return result;
