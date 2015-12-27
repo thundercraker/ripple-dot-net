@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Ripple.Core.Types;
 
-namespace Ripple.Core.ShaMap
+namespace Ripple.Core.ShaMapTree
 {
     public class PathToIndex
     {

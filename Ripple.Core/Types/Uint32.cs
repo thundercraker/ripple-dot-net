@@ -17,7 +17,10 @@ namespace Ripple.Core.Types
         {
             return new Uint32(v);
         }
-
+        public static implicit operator uint(Uint32 v)
+        {
+            return v.Value;
+        }
         public override byte[] ToBytes()
         {
             return Bits.GetBytes(Value);

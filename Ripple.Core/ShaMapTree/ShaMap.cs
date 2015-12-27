@@ -1,6 +1,4 @@
-using System.Threading;
-
-namespace Ripple.Core.ShaMap
+namespace Ripple.Core.ShaMapTree
 {
     internal class Versioner
     {
@@ -34,6 +32,46 @@ namespace Ripple.Core.ShaMap
             var copy = (ShaMap)Copy(_copies.IncrementAndGet());
             copy._copies = _copies;
             return copy;
+        }
+    }
+
+    public class AccountState : ShaMap
+    {
+        public AccountState(bool isCopy, int depth) : base(isCopy, depth)
+        {
+        }
+
+        public AccountState()
+        {
+            
+        }
+
+        public bool Add(LedgerEntry entry)
+        {
+            return AddItem(entry.Index(), entry);
+        }
+
+        public bool Update(LedgerEntry readLedgerEntry)
+        {
+            return UpdateItem(readLedgerEntry.Index(), readLedgerEntry);
+        }
+
+        protected internal override ShaMapInner MakeInnerOfSameClass(int depth)
+        {
+            return new AccountState(true, depth);
+        }
+
+        public new AccountState Copy()
+        {
+            return (AccountState) base.Copy();
+        }
+    }
+
+    public class TransactionTree : ShaMap
+    {
+        public bool Add(TransactionResult tx)
+        {
+            return AddItem(tx.Hash(), tx);
         }
     }
 }

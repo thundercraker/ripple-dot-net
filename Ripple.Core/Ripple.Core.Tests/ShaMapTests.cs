@@ -3,119 +3,33 @@ using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
-using Ripple.Core.Binary;
-using Ripple.Core.Enums;
-using Ripple.Core.Hashing;
-using Ripple.Core.ShaMap;
+using Ripple.Core.ShaMapTree;
 using Ripple.Core.Tests.Properties;
 using Ripple.Core.Types;
-using static System.Text.Encoding;
 
 
 namespace Ripple.Core.Tests
 {
-
-    public class TransactionResult : IShaMapItem<TransactionResult>
-    {
-        private readonly StObject _txn;
-        private readonly StObject _meta;
-
-        public TransactionResult(StObject txn, StObject meta)
-        {
-            _txn = txn;
-            _meta = meta;
-        }
-
-        public void ToBytesSink(IBytesSink sink)
-        {
-            var ser = new BinarySerializer(sink);
-            ser.AddLengthEncoded(_txn);
-            ser.AddLengthEncoded(_meta);
-        }
-
-        public IShaMapItem<TransactionResult> Copy()
-        {
-            return this;
-        }
-
-        public TransactionResult Value()
-        {
-            return this;
-        }
-
-        public HashPrefix Prefix()
-        {
-            return HashPrefix.TxNode;
-        }
-
-        public static TransactionResult FromJson(JToken obj)
-        {
-            return new TransactionResult(obj, obj["metaData"]);
-        }
-
-        public Hash256 Hash()
-        {
-            return (Hash256) _txn[Field.hash];
-        }
-    }
-
-    public class LedgerEntry : IShaMapItem<LedgerEntry>
-    {
-        private readonly StObject _so;
-
-        public LedgerEntry(StObject so)
-        {
-            this._so = so;
-        }
-
-        public void ToBytesSink(IBytesSink sink)
-        {
-            _so.ToBytes(sink);
-        }
-
-        public IShaMapItem<LedgerEntry> Copy()
-        {
-            return this;
-        }
-
-        public LedgerEntry Value()
-        {
-            return this;
-        }
-
-        public HashPrefix Prefix()
-        {
-            return HashPrefix.LeafNode;
-        }
-
-        public Hash256 Index()
-        {
-            return (Hash256) _so[Field.index];
-        }
-    }
-
     [TestClass]
     public class ShaMapTests
     {
         [TestMethod]
         public void EmptyMapHasZeroHash()
         {
-            var shamap = new ShaMap.ShaMap();
+            var shamap = new ShaMap();
             Assert.AreEqual(Hash256.Zero, shamap.Hash());
         }
 
         [TestMethod]
         public void LedgerFull38129Test()
         {
-            var ledger = (JObject) Utils.ParseJsonBytes(Resources.LedgerFull38129);
-            TestLedgerTreeHashing(ledger);
+            TestLedgerTreeHashing(Utils.ParseJObject(Resources.LedgerFull38129));
         }
 
         [TestMethod]
         public void LedgerFull40000Test()
         {
-            var ledger = (JObject)Utils.ParseJsonBytes(Resources.LedgerFull40000);
-            TestLedgerTreeHashing(ledger);
+            TestLedgerTreeHashing(Utils.ParseJObject(Resources.LedgerFull40000));
         }
 
         [TestMethod]
@@ -124,8 +38,17 @@ namespace Ripple.Core.Tests
             const string ledgerJson = @"Z:\windowsshare\ledger-full-1000000.json";
             if (!File.Exists(ledgerJson)) return;
             var ledger1E6 = Utils.FileToByteArray(ledgerJson);
-            var ledger = (JObject)Utils.ParseJsonBytes(ledger1E6);
+            var ledger = (JObject)Utils.ParseJson(ledger1E6);
             TestLedgerTreeHashing(ledger);
+        }
+
+        // [TestMethod]
+        public void HistoryLoaderTest()
+        {
+            const string history = @"Z:\windowsshare\history.bin";
+            if (!File.Exists(history)) return;
+            var loader = new HistoryLoader(StReader.FromFile(history));
+            loader.ParseFast((header, state, txns) => true);
         }
 
         [TestMethod]
@@ -147,13 +70,13 @@ namespace Ripple.Core.Tests
                 return false;
             }
             var ledger1E6 = Utils.FileToByteArray(path);
-            state = (JArray) Utils.ParseJsonBytes(ledger1E6);
+            state = (JArray) Utils.ParseJson(ledger1E6);
             return true;
         }
 
-        private static ShaMap.ShaMap ParseAccountState(JArray state)
+        private static ShaMap ParseAccountState(JArray state)
         {
-            var stateMap = new ShaMap.ShaMap();
+            var stateMap = new ShaMap();
             var entries = state.Select((t) =>
             {
                 StObject so = t["json"];
@@ -170,8 +93,8 @@ namespace Ripple.Core.Tests
 
         private static void TestLedgerTreeHashing(JObject ledger)
         {
-            var txMap = new ShaMap.ShaMap();
-            var stateMap = new ShaMap.ShaMap();
+            var txMap = new ShaMap();
+            var stateMap = new ShaMap();
 
             var expectedTxHash = ledger["transaction_hash"].ToString();
             var expectedStateHash = ledger["account_hash"].ToString();

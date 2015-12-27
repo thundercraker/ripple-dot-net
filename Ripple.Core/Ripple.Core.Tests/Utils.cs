@@ -1,20 +1,25 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace Ripple.Core.Tests
 {
-    class Utils
+    public class Utils
     {
-        public static JToken ParseJsonBytes(byte[] testBytes)
+        public static JToken ParseJson(byte[] testBytes)
         {
             var utf8 = Encoding.UTF8.GetString(testBytes);
             var obj = JToken.Parse(utf8);
             return obj;
+        }
+        public static JObject ParseJObject(byte[] testBytes)
+        {
+            return (JObject)ParseJson(testBytes);
+        }
+
+        public static JArray ParseJArray(byte[] testBytes)
+        {
+            return (JArray)ParseJson(testBytes);
         }
 
         public static byte[] FileToByteArray(string fileName)

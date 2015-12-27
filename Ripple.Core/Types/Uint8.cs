@@ -12,7 +12,7 @@ namespace Ripple.Core.Types
 
         public override byte[] ToBytes()
         {
-            return Bits.GetBytes(Value);
+            return new [] {Value};
         }
 
         public static Uint8 FromJson(JToken token)

@@ -5,7 +5,7 @@ using Ripple.Core.Binary;
 using Ripple.Core.Hashing;
 using Ripple.Core.Types;
 
-namespace Ripple.Core.ShaMap
+namespace Ripple.Core.ShaMapTree
 {
     public class ShaMapInner : ShaMapNode
     {

@@ -21,6 +21,7 @@ namespace Ripple.Core.Binary
             {
                 throw new Exception();
             }
+            Cursor += n;
             return ret;
         }
 

@@ -60,11 +60,11 @@ namespace Ripple.Core.Tests
 
         private static JObject GetTestsJson()
         {
-            return (JObject) Utils.ParseJsonBytes(Resources.DataDrivenTests);
+            return (JObject) Utils.ParseJson(Resources.DataDrivenTests);
         }
         private static JArray GetTransactionsWithMetaJson()
         {
-            return (JArray) Utils.ParseJsonBytes(Resources.TransactionsWithMeta);
+            return (JArray) Utils.ParseJson(Resources.TransactionsWithMeta);
         }
 
         [TestMethod()]

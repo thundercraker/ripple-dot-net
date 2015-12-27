@@ -71,6 +71,11 @@ namespace Ripple.Core.Util
             return BitConverter.GetBytes(value).Reverse().ToArray();
         }
 
+        public static byte[] GetBytes(byte value)
+        {
+            return new[] {value};
+        }
+
         ///
         /// <summary>
         ///     Returns the specified Unicode character value as an array of bytes.

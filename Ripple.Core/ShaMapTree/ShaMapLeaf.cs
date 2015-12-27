@@ -2,7 +2,7 @@ using Ripple.Core.Binary;
 using Ripple.Core.Hashing;
 using Ripple.Core.Types;
 
-namespace Ripple.Core.ShaMap
+namespace Ripple.Core.ShaMapTree
 {
     public class ShaMapLeaf : ShaMapNode
     {
@@ -26,7 +26,7 @@ namespace Ripple.Core.ShaMap
 
         public override void ToBytesSink(IBytesSink sink)
         {
-            Item.ToBytesSink(sink);
+            Item.ToBytes(sink);
             Index.ToBytes(sink);
         }
 

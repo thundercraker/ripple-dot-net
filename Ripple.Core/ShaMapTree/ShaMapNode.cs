@@ -1,9 +1,8 @@
-using System.CodeDom;
 using Ripple.Core.Binary;
 using Ripple.Core.Hashing;
 using Ripple.Core.Types;
 
-namespace Ripple.Core.ShaMap
+namespace Ripple.Core.ShaMapTree
 {
     public abstract class ShaMapNode
     {

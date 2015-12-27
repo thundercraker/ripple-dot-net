@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
+using Ripple.Core.Hashing;
 using Ripple.Core.Util;
 
 namespace Ripple.Core.Types

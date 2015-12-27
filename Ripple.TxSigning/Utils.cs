@@ -7,11 +7,11 @@ namespace Ripple.TxSigning
     {
         internal static string TransactionId(byte[] txBlob)
         {
-            var hash = Half(txBlob);
+            var hash = TransactionIdBytes(txBlob);
             return B16.ToHex(hash);
         }
 
-        public static byte[] Half(byte[] txBlob)
+        public static byte[] TransactionIdBytes(byte[] txBlob)
         {
             return Sha512.Half(input: txBlob,
                                prefix: (uint) HashPrefix.TransactionId);

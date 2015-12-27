@@ -1,11 +1,11 @@
 using Ripple.Core.Binary;
 using Ripple.Core.Hashing;
 
-namespace Ripple.Core.ShaMap
+namespace Ripple.Core.ShaMapTree
 {
     public interface IShaMapItem<out T>
     {
-        void ToBytesSink(IBytesSink sink);
+        void ToBytes(IBytesSink sink);
         IShaMapItem<T> Copy();
         T Value();
         HashPrefix Prefix();
