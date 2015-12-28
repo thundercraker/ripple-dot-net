@@ -1,8 +1,5 @@
-using System;
-using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
-using Ripple.Core.Util;
 
 namespace Ripple.Core.Types
 {
@@ -77,6 +74,11 @@ namespace Ripple.Core.Types
         public static implicit operator Amount(ulong a)
         {
             return new Amount(a.ToString("D"));
+        }
+
+        public static implicit operator Amount(string v)
+        {
+            return new Amount(v);
         }
 
         public static Amount FromParser(BinaryParser parser, int? hint=null)
