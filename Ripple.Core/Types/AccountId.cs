@@ -8,16 +8,27 @@ namespace Ripple.Core.Types
 {
     public class AccountId : Hash160
     {
-        private readonly string _value;
+        private string _encoded;
+        private string Encoded
+        {
+            get
+            {
+                return _encoded ?? (
+                    _encoded = 
+                    AddressCodec.EncodeAddress(Buffer));
+            }
+            set { _encoded = value; }
+        }
 
         public AccountId(byte[] hash, string encoded) : base(hash)
         {
-            _value = encoded;
+            Encoded = encoded;
         }
-        public AccountId(string v) : 
+
+        public AccountId(string v) :
             this(AddressCodec.DecodeAddress(v), v) {}
-        public AccountId(byte[] hash) : 
-            this(hash, AddressCodec.EncodeAddress(hash)) {}
+        public AccountId(byte[] hash) :
+            this(hash, null) {}
 
         public static implicit operator AccountId(string value)
         {
@@ -43,7 +54,7 @@ namespace Ripple.Core.Types
 
         public override string ToString()
         {
-            return _value;
+            return Encoded;
         }
 
         public new static AccountId FromJson(JToken json)
