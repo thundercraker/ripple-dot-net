@@ -8,7 +8,7 @@ namespace Ripple.Core.Binary
     public class BytesList : IBytesSink
     {
         private readonly List<byte[]> _buffer = new List<byte[]>();
-        private int _len = 0;
+        private int _len;
 
         public void Add(BytesList bl)
         {
@@ -31,8 +31,8 @@ namespace Ripple.Core.Binary
 
         public byte[] Bytes()
         {
-            int n = BytesLength();
-            byte[] bytes = new byte[n];
+            var n = BytesLength();
+            var bytes = new byte[n];
             AddBytes(bytes, 0);
             return bytes;
         }
@@ -40,9 +40,9 @@ namespace Ripple.Core.Binary
         public static string[] HexLookup = new string[256];
         static BytesList()
         {
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
-                string s = i.ToString("x").ToUpper();
+                var s = i.ToString("x").ToUpper();
                 if (s.Length == 1)
                 {
                     s = "0" + s;
@@ -66,6 +66,7 @@ namespace Ripple.Core.Binary
             return _len;
         }
 
+        // ReSharper disable once UnusedMethodReturnValue.Local
         private int AddBytes(byte[] bytes, int destPos)
         {
 

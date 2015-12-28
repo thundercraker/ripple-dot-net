@@ -12,12 +12,12 @@ namespace Ripple.Core.Binary
             _sink = sink;
         }
 
-        public virtual void Put(byte[] n)
+        public void Put(byte[] n)
         {
             _sink.Put(n);
         }
 
-        public virtual void AddLengthEncoded(byte[] n)
+        public void AddLengthEncoded(byte[] n)
         {
             Put(EncodeVl(n.Length));
             Put(n);
@@ -58,7 +58,7 @@ namespace Ripple.Core.Binary
             return ret;
         }
 
-        public virtual void Add(BytesList bl)
+        public void Add(BytesList bl)
         {
             foreach (byte[] bytes in bl.RawList())
             {
@@ -66,11 +66,11 @@ namespace Ripple.Core.Binary
             }
         }
 
-        public virtual int AddFieldHeader(Field f)
+        public int AddFieldHeader(Field f)
         {
             if (!f.IsSerialised)
             {
-                throw new System.InvalidOperationException(
+                throw new InvalidOperationException(
                     $"Field {f} is a discardable field");
             }
             var n = f.Header;
@@ -78,18 +78,18 @@ namespace Ripple.Core.Binary
             return n.Length;
         }
 
-        public virtual void Put(byte type)
+        public void Put(byte type)
         {
             _sink.Put(type);
         }
 
-        public virtual void AddLengthEncoded(BytesList bytes)
+        public void AddLengthEncoded(BytesList bytes)
         {
             Put(EncodeVl(bytes.BytesLength()));
             Add(bytes);
         }
 
-        public virtual void Add(Field field, ISerializedType value)
+        public void Add(Field field, ISerializedType value)
         {
             AddFieldHeader(field);
             if (field.IsVlEncoded)
@@ -110,7 +110,7 @@ namespace Ripple.Core.Binary
             }
         }
 
-        public virtual void AddLengthEncoded(ISerializedType value)
+        public void AddLengthEncoded(ISerializedType value)
         {
             var bytes = new BytesList();
             value.ToBytes(bytes);

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
@@ -39,7 +38,7 @@ namespace Ripple.Core.Types
                 [FieldType.Hash256] = new BuildFrom(Hash256.FromJson, Hash256.FromParser),
                 [FieldType.Hash160] = new BuildFrom(Hash160.FromJson, Hash160.FromParser),
                 [FieldType.AccountId] = new BuildFrom(AccountId.FromJson, AccountId.FromParser),
-                [FieldType.Blob] = new BuildFrom(Types.Blob.FromJson, Types.Blob.FromParser),
+                [FieldType.Blob] = new BuildFrom(Blob.FromJson, Blob.FromParser),
                 [FieldType.PathSet] = new BuildFrom(PathSet.FromJson, PathSet.FromParser),
                 [FieldType.Vector256] = new BuildFrom(Vector256.FromJson, Vector256.FromParser),
             };
