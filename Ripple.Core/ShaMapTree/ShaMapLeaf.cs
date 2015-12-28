@@ -16,8 +16,8 @@ namespace Ripple.Core.ShaMapTree
             Item = item;
         }
 
-        public override bool Leaf => true;
-        public override bool Inner => false;
+        public override bool IsLeaf => true;
+        public override bool IsInner => false;
 
         internal override HashPrefix Prefix()
         {
@@ -30,7 +30,7 @@ namespace Ripple.Core.ShaMapTree
             Index.ToBytes(sink);
         }
 
-        public virtual ShaMapLeaf Copy()
+        public ShaMapLeaf Copy()
         {
             return new ShaMapLeaf(Index, Item.Copy());
         }

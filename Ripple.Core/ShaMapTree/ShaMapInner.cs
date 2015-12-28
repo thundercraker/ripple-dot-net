@@ -10,8 +10,8 @@ namespace Ripple.Core.ShaMapTree
     public class ShaMapInner : ShaMapNode
     {
         public int Depth;
-        internal int SlotBits = 0;
-        internal int Version = 0;
+        internal int SlotBits;
+        internal int Version;
         internal bool DoCoW;
         protected internal ShaMapNode[] Branches = new ShaMapNode[16];
 
@@ -21,14 +21,14 @@ namespace Ripple.Core.ShaMapTree
 
         public ShaMapInner(bool isCopy, int depth, int version)
         {
-            this.DoCoW = isCopy;
-            this.Depth = depth;
-            this.Version = version;
+            DoCoW = isCopy;
+            Depth = depth;
+            Version = version;
         }
 
-        protected internal virtual ShaMapInner Copy(int version)
+        protected internal ShaMapInner Copy(int version)
         {
-            ShaMapInner copy = MakeInnerOfSameClass(Depth);
+            var copy = MakeInnerOfSameClass(Depth);
             Array.Copy(Branches, 0, copy.Branches, 0, Branches.Length);
             copy.SlotBits = SlotBits;
             copy.CachedHash = CachedHash;
@@ -43,9 +43,9 @@ namespace Ripple.Core.ShaMapTree
             return new ShaMapInner(true, depth, Version);
         }
 
-        protected internal virtual ShaMapInner MakeInnerChild()
+        protected internal ShaMapInner MakeInnerChild()
         {
-            int childDepth = Depth + 1;
+            var childDepth = Depth + 1;
             if (childDepth >= 64)
             {
                 throw new Exception();
@@ -55,7 +55,7 @@ namespace Ripple.Core.ShaMapTree
 
         // Descend into the tree, find the leaf matching this index
         // and if the tree has it.
-        protected internal virtual void SetLeaf(ShaMapLeaf leaf)
+        protected internal void SetLeaf(ShaMapLeaf leaf)
         {
             if (leaf.Version == -1)
             {
@@ -69,77 +69,46 @@ namespace Ripple.Core.ShaMapTree
             RemoveBranch(SelectBranch(index));
         }
 
-        //public virtual void WalkLeaves(LeafWalker leafWalker)
-        //{
-        //    foreach (ShaMapNode branch in Branches)
-        //    {
-        //        if (branch != null)
-        //        {
-        //            if (branch.Inner)
-        //            {
-        //                branch.AsInner().WalkLeaves(leafWalker);
-        //            }
-        //            else if (branch.Leaf)
-        //            {
-        //                leafWalker.OnLeaf(branch.AsLeaf());
-        //            }
-        //        }
-        //    }
-        //}
+        public void WalkLeaves(OnLeaf leafWalker)
+        {
+            foreach (var branch in Branches.Where(branch => branch != null))
+            {
+                if (branch.IsInner)
+                {
+                    branch.AsInner().WalkLeaves(leafWalker);
+                }
+                else if (branch.IsLeaf)
+                {
+                    leafWalker(branch.AsLeaf());
+                }
+            }
+        }
 
-        //public virtual void WalkTree(TreeWalker treeWalker)
-        //{
-        //    treeWalker.OnInner(this);
-        //    foreach (ShaMapNode branch in Branches)
-        //    {
-        //        if (branch != null)
-        //        {
-        //            if (branch.Leaf)
-        //            {
-        //                ShaMapLeaf ln = branch.AsLeaf();
-        //                treeWalker.OnLeaf(ln);
-        //            }
-        //            else if (branch.Inner)
-        //            {
-        //                ShaMapInner childInner = branch.AsInner();
-        //                childInner.WalkTree(treeWalker);
-        //            }
-        //        }
-        //    }
-
-        //}
-
-        //public virtual void WalkHashedTree(HashedTreeWalker walker)
-        //{
-        //    walker.OnInner(Hash(), this);
-
-        //    foreach (ShaMapNode branch in Branches)
-        //    {
-        //        if (branch != null)
-        //        {
-        //            if (branch.Leaf)
-        //            {
-        //                ShaMapLeaf ln = branch.AsLeaf();
-        //                walker.OnLeaf(branch.Hash(), ln);
-        //            }
-        //            else if (branch.Inner)
-        //            {
-        //                ShaMapInner childInner = branch.AsInner();
-        //                childInner.WalkHashedTree(walker);
-        //            }
-        //        }
-        //    }
-        //}
+        public virtual void WalkTree(ITreeWalker treeWalker)
+        {
+            treeWalker.OnInner(this);
+            foreach (var branch in Branches.Where(branch => branch != null))
+            {
+                if (branch.IsLeaf)
+                {
+                    treeWalker.OnLeaf(branch.AsLeaf());
+                }
+                else if (branch.IsInner)
+                {
+                    branch.AsInner().WalkTree(treeWalker);
+                }
+            }
+        }
 
         /// <returns> the `only child` leaf or null if other children </returns>
-        public virtual ShaMapLeaf OnlyChildLeaf()
+        public ShaMapLeaf OnlyChildLeaf()
         {
             ShaMapLeaf leaf = null;
             var leaves = 0;
 
             foreach (var branch in Branches.Where(branch => branch != null))
             {
-                if (branch.Inner)
+                if (branch.IsInner)
                 {
                     leaf = null;
                     break;
@@ -157,9 +126,9 @@ namespace Ripple.Core.ShaMapTree
             return leaf;
         }
 
-        public virtual bool RemoveLeaf(Hash256 index)
+        public bool RemoveLeaf(Hash256 index)
         {
-            PathToIndex path = PathToIndex(index);
+            var path = PathToIndex(index);
             if (!path.HasMatchedLeaf()) return false;
             var top = path.DirtyOrCopyInners();
             top.RemoveBranch(index);
@@ -167,35 +136,35 @@ namespace Ripple.Core.ShaMapTree
             return true;
         }
 
-        public virtual IShaMapItem<object> GetItem(Hash256 index)
+        public IShaMapItem<object> GetItem(Hash256 index)
         {
             return GetLeaf(index)?.Item;
         }
 
-        public virtual bool AddItem(Hash256 index, IShaMapItem<object> item)
+        public bool AddItem(Hash256 index, IShaMapItem<object> item)
         {
             return AddLeaf(new ShaMapLeaf(index, item));
         }
 
-        public virtual bool UpdateItem(Hash256 index, IShaMapItem<object> item)
+        public bool UpdateItem(Hash256 index, IShaMapItem<object> item)
         {
             return UpdateLeaf(new ShaMapLeaf(index, item));
         }
 
-        public virtual bool HasLeaf(Hash256 index)
+        public bool HasLeaf(Hash256 index)
         {
             return PathToIndex(index).HasMatchedLeaf();
         }
 
-        public virtual ShaMapLeaf GetLeaf(Hash256 index)
+        public ShaMapLeaf GetLeaf(Hash256 index)
         {
-            PathToIndex stack = PathToIndex(index);
+            var stack = PathToIndex(index);
             return stack.HasMatchedLeaf() ? stack.Leaf : null;
         }
 
-        public virtual bool AddLeaf(ShaMapLeaf leaf)
+        public bool AddLeaf(ShaMapLeaf leaf)
         {
-            PathToIndex stack = PathToIndex(leaf.Index);
+            var stack = PathToIndex(leaf.Index);
             if (stack.HasMatchedLeaf())
             {
                 return false;
@@ -205,17 +174,17 @@ namespace Ripple.Core.ShaMapTree
             return true;
         }
 
-        public virtual bool UpdateLeaf(ShaMapLeaf leaf)
+        public bool UpdateLeaf(ShaMapLeaf leaf)
         {
-            PathToIndex stack = PathToIndex(leaf.Index);
+            var stack = PathToIndex(leaf.Index);
             if (!stack.HasMatchedLeaf()) return false;
-            ShaMapInner top = stack.DirtyOrCopyInners();
+            var top = stack.DirtyOrCopyInners();
             // Why not update in place? Because of structural sharing
             top.SetLeaf(leaf);
             return true;
         }
 
-        public virtual PathToIndex PathToIndex(Hash256 index)
+        public PathToIndex PathToIndex(Hash256 index)
         {
             return new PathToIndex(this, index);
         }
@@ -224,18 +193,18 @@ namespace Ripple.Core.ShaMapTree
         /// This should only be called on the deepest inners, as it
         /// does not do any dirtying. </summary>
         /// <param name="leaf"> to add to inner </param>
-        internal virtual void AddLeafToTerminalInner(ShaMapLeaf leaf)
+        internal void AddLeafToTerminalInner(ShaMapLeaf leaf)
         {
             var branch = GetBranch(leaf.Index);
             if (branch == null)
             {
                 SetLeaf(leaf);
             }
-            else if (branch.Inner)
+            else if (branch.IsInner)
             {
                 throw new Exception();
             }
-            else if (branch.Leaf)
+            else if (branch.IsLeaf)
             {
                 var inner = MakeInnerChild();
                 SetBranch(leaf.Index, inner);
@@ -244,40 +213,40 @@ namespace Ripple.Core.ShaMapTree
             }
         }
 
-        protected internal virtual void SetBranch(Hash256 index, ShaMapNode node)
+        protected internal void SetBranch(Hash256 index, ShaMapNode node)
         {
             SetBranch(SelectBranch(index), node);
         }
 
-        protected internal virtual ShaMapNode GetBranch(Hash256 index)
+        protected internal ShaMapNode GetBranch(Hash256 index)
         {
             return GetBranch(index.Nibblet(Depth));
         }
 
-        public virtual ShaMapNode GetBranch(int i)
+        public ShaMapNode GetBranch(int i)
         {
             return Branches[i];
         }
 
-        public virtual ShaMapNode Branch(int i)
+        public ShaMapNode Branch(int i)
         {
             return Branches[i];
         }
 
-        protected internal virtual int SelectBranch(Hash256 index)
+        protected internal int SelectBranch(Hash256 index)
         {
             return index.Nibblet(Depth);
         }
 
-        public virtual bool HasLeaf(int i)
+        public bool HasLeaf(int i)
         {
-            return Branches[i].Leaf;
+            return Branches[i].IsLeaf;
         }
-        public virtual bool HasInner(int i)
+        public bool HasInner(int i)
         {
-            return Branches[i].Inner;
+            return Branches[i].IsInner;
         }
-        public virtual bool HasNone(int i)
+        public bool HasNone(int i)
         {
             return Branches[i] == null;
         }
@@ -294,13 +263,13 @@ namespace Ripple.Core.ShaMapTree
             Branches[slot] = null;
             SlotBits = SlotBits & ~(1 << slot);
         }
-        public virtual bool Empty()
+        public bool Empty()
         {
             return SlotBits == 0;
         }
 
-        public override bool Inner => true;
-        public override bool Leaf => false;
+        public override bool IsInner => true;
+        public override bool IsLeaf => false;
 
         internal override HashPrefix Prefix()
         {
@@ -337,9 +306,9 @@ namespace Ripple.Core.ShaMapTree
             return base.Hash();
         }
 
-        public virtual ShaMapLeaf GetLeafForUpdating(Hash256 leaf)
+        public ShaMapLeaf GetLeafForUpdating(Hash256 leaf)
         {
-            PathToIndex path = PathToIndex(leaf);
+            var path = PathToIndex(leaf);
             if (path.HasMatchedLeaf())
             {
                 return path.InvalidatedPossiblyCopiedLeafForUpdating();
@@ -347,7 +316,7 @@ namespace Ripple.Core.ShaMapTree
             return null;
         }
 
-        public virtual int BranchCount()
+        public int BranchCount()
         {
             return Branches.Count(branch => branch != null);
         }

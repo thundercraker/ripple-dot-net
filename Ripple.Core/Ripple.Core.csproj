@@ -51,9 +51,12 @@
     <Compile Include="Hashing\HashPrefix.cs" />
     <Compile Include="Hashing\Sha512.cs" />
     <Compile Include="Ledger\LedgerHeader.cs" />
+    <Compile Include="ShaMapTree\ITreeWalker.cs" />
     <Compile Include="ShaMapTree\LedgerEntry.cs" />
+    <Compile Include="ShaMapTree\OnLeaf.cs" />
     <Compile Include="ShaMapTree\PathToIndex.cs" />
     <Compile Include="ShaMapTree\ShaMap.cs" />
+    <Compile Include="ShaMapTree\ShaMapDiff.cs" />
     <Compile Include="ShaMapTree\ShaMapInner.cs" />
     <Compile Include="ShaMapTree\IShaMapItem.cs" />
     <Compile Include="ShaMapTree\ShaMapLeaf.cs" />

@@ -14,42 +14,38 @@ namespace Ripple.Core.ShaMapTree
         private ShaMapInner[] _dirtied;
         private bool _matched;
 
-        public virtual bool HasLeaf()
+        public bool HasLeaf()
         {
             return Leaf != null;
         }
-        public virtual bool LeafMatchedIndex()
+        public bool LeafMatchedIndex()
         {
             return _matched;
         }
-        public virtual bool CopyLeafOnUpdate()
+        public bool CopyLeafOnUpdate()
         {
             return Leaf.Version != _dirtied[0].Version;
         }
 
-        internal virtual int Size()
+        internal int Size()
         {
             return _inners.Count;
         }
 
-        public virtual ShaMapInner Top()
+        public ShaMapInner Top()
         {
             return _dirtied[_dirtied.Length - 1];
         }
 
         // returns the
-        public virtual ShaMapInner DirtyOrCopyInners()
+        public ShaMapInner DirtyOrCopyInners()
         {
             if (MaybeCopyOnWrite())
             {
                 var ix = 0;
                 // We want to make a uniformly accessed array of the inners
                 _dirtied = new ShaMapInner[_inners.Count];
-                // from depth 0 to 1, to 2, to 3, don't be fooled by the api
                 IEnumerator<ShaMapInner> it = _inners.GetEnumerator();
-
-                // This is actually the root which COULD be the top of the stack
-                // Think about it ;)
                 var top = it.Current;
                 _dirtied[ix++] = top;
                 top.Invalidate();
@@ -79,12 +75,12 @@ namespace Ripple.Core.ShaMapTree
             return _inners.Last.Value;
         }
 
-        public virtual bool HasMatchedLeaf()
+        public bool HasMatchedLeaf()
         {
             return HasLeaf() && LeafMatchedIndex();
         }
 
-        public virtual void CollapseOnlyLeafChildInners()
+        public void CollapseOnlyLeafChildInners()
         {
             Debug.Assert(_dirtied != null);
             ShaMapLeaf onlyChild = null;
@@ -141,20 +137,20 @@ namespace Ripple.Core.ShaMapTree
                 {
                     break;
                 }
-                if (existing.Leaf)
+                if (existing.IsLeaf)
                 {
                     Leaf = existing.AsLeaf();
                     _matched = Leaf.Index.Equals(index);
                     break;
                 }
-                if (existing.Inner)
+                if (existing.IsInner)
                 {
                     top = existing.AsInner();
                 }
             }
         }
 
-        public virtual ShaMapLeaf InvalidatedPossiblyCopiedLeafForUpdating()
+        public ShaMapLeaf InvalidatedPossiblyCopiedLeafForUpdating()
         {
             Debug.Assert(_matched);
             if (_dirtied == null)

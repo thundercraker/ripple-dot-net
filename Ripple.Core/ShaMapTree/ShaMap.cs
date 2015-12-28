@@ -2,7 +2,7 @@ namespace Ripple.Core.ShaMapTree
 {
     internal class Versioner
     {
-        private int _value = 0;
+        private int _value;
         public int IncrementAndGet()
         {
             return ++_value;

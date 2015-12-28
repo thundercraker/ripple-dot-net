@@ -60,7 +60,7 @@ namespace Ripple.Core.ShaMapTree
             var txn = reader.ReadVlStObject();
             var meta = reader.ReadVlStObject();
             txn[Field.hash] = hash;
-            return new TransactionResult(txn, meta, ledgerIndex);;
+            return new TransactionResult(txn, meta, ledgerIndex);
         }
     }
 

@@ -8,15 +8,15 @@ namespace Ripple.Core.ShaMapTree
     {
         protected Hash256 CachedHash;
 
-        public abstract bool Leaf { get; }
-        public abstract bool Inner { get; }
+        public abstract bool IsLeaf { get; }
+        public abstract bool IsInner { get; }
 
-        public virtual ShaMapLeaf AsLeaf()
+        public ShaMapLeaf AsLeaf()
         {
             return (ShaMapLeaf)this;
         }
 
-        public virtual ShaMapInner AsInner()
+        public ShaMapInner AsInner()
         {
             return (ShaMapInner)this;
         }
@@ -24,7 +24,7 @@ namespace Ripple.Core.ShaMapTree
         internal abstract HashPrefix Prefix();
         public abstract void ToBytesSink(IBytesSink sink);
 
-        public virtual void Invalidate()
+        public void Invalidate()
         {
             CachedHash = null;
         }
@@ -33,26 +33,27 @@ namespace Ripple.Core.ShaMapTree
             return CachedHash ?? (CachedHash = CreateHash());
         }
 
-        public virtual Hash256 CreateHash()
+        public Hash256 CreateHash()
         {
             var half = new Sha512(Prefix().Bytes());
             ToBytesSink(half);
             return new Hash256(half.Finish256());
         }
-        ///// <summary>
-        ///// Walk any leaves, possibly this node itself, if it's terminal.
-        ///// </summary>
-        //public virtual void WalkAnyLeaves(LeafWalker leafWalker)
-        //{
-        //    if (Leaf)
-        //    {
-        //        leafWalker.OnLeaf(AsLeaf());
-        //    }
-        //    else
-        //    {
-        //        AsInner().WalkLeaves(leafWalker);
-        //    }
-        //}
+
+        /// <summary>
+        /// Walk any leaves, possibly this node itself, if it's terminal.
+        /// </summary>
+        public void WalkAnyLeaves(OnLeaf leafWalker)
+        {
+            if (IsLeaf)
+            {
+                leafWalker(AsLeaf());
+            }
+            else
+            {
+                AsInner().WalkLeaves(leafWalker);
+            }
+        }
     }
 }
 
