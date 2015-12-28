@@ -1,12 +1,13 @@
 using Ripple.Core.Binary;
 using Ripple.Core.Hashing;
 using System.IO;
-using Ripple.Core.Enums;
 
 namespace Ripple.Core.Types
 {
     public class StReader
     {
+        private const int Megs8 = 1024*1024*4;
+
         private readonly BinaryParser _parser;
 
         public StReader(BinaryParser parser)
@@ -16,7 +17,7 @@ namespace Ripple.Core.Types
 
         public static StReader FromFile(string path)
         {
-            var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, Megs8);
             return new StReader(new StreamParser(stream));
         }
         public StReader FromHex(string hex)
@@ -124,5 +125,8 @@ namespace Ripple.Core.Types
         {
             return StObject.FromParser(_parser, _parser.ReadVlLength());
         }
+
+        // Reader methods may be define via use of extension methods
+        // eg. see: TransactionResult
     }
 }
