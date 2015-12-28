@@ -6,8 +6,6 @@ namespace Ripple.Core.Types
 {
     public class StReader
     {
-        private const int Megs8 = 1024*1024*4;
-
         private readonly BinaryParser _parser;
 
         public StReader(BinaryParser parser)
@@ -17,7 +15,7 @@ namespace Ripple.Core.Types
 
         public static StReader FromFile(string path)
         {
-            var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, Megs8);
+            var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
             return new StReader(new StreamParser(stream));
         }
         public StReader FromHex(string hex)
