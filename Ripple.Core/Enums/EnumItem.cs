@@ -29,5 +29,10 @@ namespace Ripple.Core.Enums
         {
             return item.Name;
         }
+
+        public override int GetHashCode()
+        {
+            return Ordinal;
+        }
     }
 }
