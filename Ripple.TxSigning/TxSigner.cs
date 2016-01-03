@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ripple.Core;
 using Ripple.Core.Enums;
+using Ripple.Core.Transactions;
 using Ripple.Core.Types;
 using Ripple.Signing;
 using static Ripple.Core.Util.B16;
@@ -29,6 +30,8 @@ namespace Ripple.TxSigning
             SetCanonicalSigFlag(so);
             so[Field.SigningPubKey] = (Blob) _keyPair.CanonicalPubBytes();
             so[Field.TxnSignature] = (Blob) _keyPair.Sign(so.SigningData());
+            TxFormat.Validate(so);
+
             var blob = so.ToBytes();
             var hash = Utils.TransactionId(blob);
             return new SignedTx(hash, ToHex(blob), so.ToJsonObject());

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Binary\BinaryParser.cs" />
     <Compile Include="Binary\StreamParser.cs" />
+    <Compile Include="Transactions\TxFormat.cs" />
     <Compile Include="Hashing\HashPrefix.cs" />
     <Compile Include="Hashing\Sha512.cs" />
     <Compile Include="Ledger\LedgerHeader.cs" />

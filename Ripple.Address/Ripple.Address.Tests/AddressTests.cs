@@ -3,12 +3,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ripple.Address.Tests
 {
-    using static Ripple.Address.AddressCodec;
+    using static AddressCodec;
 
-    [TestClass()]
+    [TestClass]
     public class AddressTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void NodePublicTest()
         {
             AssertEncodes("NodePublic",
@@ -17,7 +17,7 @@ namespace Ripple.Address.Tests
               "n9MXXueo837zYH36DvMc13BwHcqtfAWNJY5czWVbp7uYTj7x17TH");
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SeedTest()
         {
             var decodedKoblitz = DecodeSeed("sn259rEFXrQrWyx3Q7XneWcwV6dfL");
@@ -38,7 +38,7 @@ namespace Ripple.Address.Tests
                  "sEdTM1uX8pu2do5XvTnutH6HsouMaM2");
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void AddressTest()
         {
             AssertEncodes(
@@ -54,7 +54,7 @@ namespace Ripple.Address.Tests
 
         public void AssertEncodes(string type, string hex, string base58)
         {
-            Type kls = typeof(Ripple.Address.AddressCodec);
+            Type kls = typeof(AddressCodec);
             var encode = kls.GetMethod("Encode" + type);
             var decode = kls.GetMethod("Decode" + type);
             var validate = kls.GetMethod("IsValid" + type);
