@@ -9,8 +9,15 @@ using Ripple.Core.Util;
 
 namespace Ripple.Core.Types
 {
-    public class StObject : SortedDictionary<Field, ISerializedType>, ISerializedType
+    public class StObject : ISerializedType
     {
+        protected internal readonly SortedDictionary<Field, ISerializedType> Fields;
+
+        public StObject()
+        {
+            Fields = new SortedDictionary<Field, ISerializedType>();
+        }
+
         internal class BuildFrom
         {
             public  FromParser Parser;
@@ -83,7 +90,7 @@ namespace Ripple.Core.Types
                 {
                     throw new InvalidOperationException("Parsed " + field + " as null");
                 }
-                so[field] = st;
+                so.Fields[field] = st;
             }
             return so;
         }
@@ -114,7 +121,7 @@ namespace Ripple.Core.Types
                     throw new InvalidJson($"Can't decode `{fieldForType}` " +
                                           $"from `{jsonForField}`", e);
                 }
-                so[fieldForType] = st;
+                so.Fields[fieldForType] = st;
             }
             return so;
         }
@@ -132,7 +139,7 @@ namespace Ripple.Core.Types
         public JObject ToJsonObject()
         {
             var json = new JObject();
-            foreach (var pair in this)
+            foreach (var pair in Fields)
             {
                 json[pair.Key] = pair.Value.ToJson();
             }
@@ -142,7 +149,7 @@ namespace Ripple.Core.Types
         public void ToBytes(IBytesSink to, Func<Field, bool> p)
         {
             var serializer = new BinarySerializer(to);
-            foreach (var pair in this.Where(pair => pair.Key.IsSerialised &&
+            foreach (var pair in Fields.Where(pair => pair.Key.IsSerialised &&
                                                     (p == null || p(pair.Key))))
             {
                 serializer.Add(pair.Key, pair.Value);
@@ -161,7 +168,7 @@ namespace Ripple.Core.Types
 
         public bool Has(Field field)
         {
-            return ContainsKey(field);
+            return Fields.ContainsKey(field);
         }
 
         public byte[] SigningData()
@@ -178,6 +185,92 @@ namespace Ripple.Core.Types
             ToBytes(list, f => f.IsSerialised);
             return list.Bytes();
         }
+        public AccountId this[AccountIdField f]
+        {
+            get { return (AccountId)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Amount this[AmountField f]
+        {
+            get { return (Amount)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Blob this[BlobField f]
+        {
+            get { return (Blob)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Hash128 this[Hash128Field f]
+        {
+            get { return (Hash128)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Hash160 this[Hash160Field f]
+        {
+            get { return (Hash160)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Hash256 this[Hash256Field f]
+        {
+            get { return (Hash256)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public PathSet this[PathSetField f]
+        {
+            get { return (PathSet)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public StArray this[StArrayField f]
+        {
+            get { return (StArray)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public StObject this[StObjectField f]
+        {
+            get { return (StObject)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Uint16 this[Uint16Field f]
+        {
+            get { return (Uint16)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public LedgerEntryType this[LedgerEntryTypeField f]
+        {
+            get { return (LedgerEntryType)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public TransactionType this[TransactionTypeField f]
+        {
+            get { return (TransactionType)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Uint32 this[Uint32Field f]
+        {
+            get { return (Uint32)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Uint64 this[Uint64Field f]
+        {
+            get { return (Uint64)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Uint8 this[Uint8Field f]
+        {
+            get { return (Uint8)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public EngineResult this[EngineResultField f]
+        {
+            get { return (EngineResult)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+        public Vector256 this[Vector256Field f]
+        {
+            get { return (Vector256)Fields[f]; }
+            set { Fields[f] = value; }
+        }
+
     }
 
     internal static class Extensions

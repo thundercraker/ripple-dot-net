@@ -41,7 +41,7 @@ namespace Ripple.Core.Types
 
         public static StArray FromParser(BinaryParser parser, int? hint = null)
         {
-            StArray stArray = new StArray();
+            var stArray = new StArray();
             while (!parser.End())
             {
                 var field = parser.ReadField();
@@ -49,7 +49,9 @@ namespace Ripple.Core.Types
                 {
                     break;
                 }
-                var outer = new StObject {[field] = StObject.FromParser(parser)};
+                var outer = new StObject {
+                    [(StObjectField) field] =
+                        StObject.FromParser(parser) };
                 stArray.Add(outer);
             }
             return stArray;

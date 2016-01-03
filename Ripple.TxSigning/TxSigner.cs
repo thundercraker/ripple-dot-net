@@ -28,8 +28,8 @@ namespace Ripple.TxSigning
         {
             var so = StObject.FromJson(tx);
             SetCanonicalSigFlag(so);
-            so[Field.SigningPubKey] = (Blob) _keyPair.CanonicalPubBytes();
-            so[Field.TxnSignature] = (Blob) _keyPair.Sign(so.SigningData());
+            so[Field.SigningPubKey] = _keyPair.CanonicalPubBytes();
+            so[Field.TxnSignature] = _keyPair.Sign(so.SigningData());
             TxFormat.Validate(so);
 
             var blob = so.ToBytes();

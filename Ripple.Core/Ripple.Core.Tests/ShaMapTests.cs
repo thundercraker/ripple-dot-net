@@ -32,7 +32,7 @@ namespace Ripple.Core.Tests
             TestLedgerTreeHashing(Utils.ParseJObject(Resources.LedgerFull40000));
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void LedgerFromFileTest()
         {
             const string ledgerJson = @"Z:\windowsshare\ledger-full-1000000.json";
@@ -51,7 +51,7 @@ namespace Ripple.Core.Tests
             loader.ParseFast((header, state, txns) => true);
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void AccountStateTest()
         {
             const string path = @"Z:\windowsshare\as-ledger-4320278.json";

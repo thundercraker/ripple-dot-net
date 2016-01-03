@@ -48,6 +48,22 @@
   <ItemGroup>
     <Compile Include="Binary\BinaryParser.cs" />
     <Compile Include="Binary\StreamParser.cs" />
+    <Compile Include="Enums\AccountIdField.cs" />
+    <Compile Include="Enums\AmountField.cs" />
+    <Compile Include="Enums\BlobField.cs" />
+    <Compile Include="Enums\FromJson.cs" />
+    <Compile Include="Enums\FromParser.cs" />
+    <Compile Include="Enums\Hash128Field.cs" />
+    <Compile Include="Enums\Hash160Field.cs" />
+    <Compile Include="Enums\Hash256Field.cs" />
+    <Compile Include="Enums\PathSetField.cs" />
+    <Compile Include="Enums\StArrayField.cs" />
+    <Compile Include="Enums\StObjectField.cs" />
+    <Compile Include="Enums\Uint16Field.cs" />
+    <Compile Include="Enums\Uint32Field.cs" />
+    <Compile Include="Enums\Uint64Field.cs" />
+    <Compile Include="Enums\Uint8Field.cs" />
+    <Compile Include="Enums\Vector256Field.cs" />
     <Compile Include="Transactions\TxFormat.cs" />
     <Compile Include="Hashing\HashPrefix.cs" />
     <Compile Include="Hashing\Sha512.cs" />

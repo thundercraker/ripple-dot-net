@@ -6,7 +6,7 @@ using Ripple.Core.Types;
 
 namespace Ripple.Core.Transactions
 {
-    public class TxFormat : SortedDictionary<Field, TxFormat.Requirement>
+    public class TxFormat : Dictionary<Field, TxFormat.Requirement>
     {
         public enum Requirement
         {
@@ -47,16 +47,16 @@ namespace Ripple.Core.Transactions
                 onError("Missing TransactionType field");
             }
 
-            var tt = (TransactionType)obj[Field.TransactionType];
+            var tt = obj[Field.TransactionType];
             var format = Formats[tt];
-            var allFields = new HashSet<Field>(obj.Keys);
+            var allFields = new HashSet<Field>(obj.Fields.Keys);
             allFields.UnionWith(format.Keys);
 
             foreach (var field in allFields)
             {
                 var inFormat = format.ContainsKey(field);
                 ISerializedType fieldValue;
-                var inObject = obj.TryGetValue(field, out fieldValue);
+                var inObject = obj.Fields.TryGetValue(field, out fieldValue);
                 if (!inFormat)
                 {
                     onError($"{tt} has no {field} field");

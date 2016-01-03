@@ -1,11 +1,5 @@
-using Newtonsoft.Json.Linq;
-using Ripple.Core.Binary;
-
 namespace Ripple.Core.Enums
 {
-    public delegate ISerializedType FromJson(JToken token);
-    public delegate ISerializedType FromParser(BinaryParser parser, int? hint = null);
-
     public class Field : EnumItem
     {
         #region members
@@ -73,171 +67,170 @@ namespace Ripple.Core.Enums
                    Type == FieldType.AccountId;
         }
 
+
         public static readonly Field Generic = new Field(nameof(Generic), 0, FieldType.Unknown);
         public static readonly Field Invalid = new Field(nameof(Invalid), -1, FieldType.Unknown);
 
-        public static readonly Field LedgerEntryType = new Field(nameof(LedgerEntryType), 1, FieldType.Uint16);
-        public static readonly Field TransactionType = new Field(nameof(TransactionType), 2, FieldType.Uint16);
-        public static readonly Field SignerWeight = new Field(nameof(SignerWeight), 3, FieldType.Uint16);
+        public static readonly LedgerEntryTypeField LedgerEntryType = new LedgerEntryTypeField(nameof(LedgerEntryType), 1);
+        public static readonly TransactionTypeField TransactionType = new TransactionTypeField(nameof(TransactionType), 2);
+        public static readonly Uint16Field SignerWeight = new Uint16Field(nameof(SignerWeight), 3);
 
-        public static readonly Field Flags = new Field(nameof(Flags), 2, FieldType.Uint32);
-        public static readonly Field SourceTag = new Field(nameof(SourceTag), 3, FieldType.Uint32);
-        public static readonly Field Sequence = new Field(nameof(Sequence), 4, FieldType.Uint32);
-        public static readonly Field PreviousTxnLgrSeq = new Field(nameof(PreviousTxnLgrSeq), 5, FieldType.Uint32);
-        public static readonly Field LedgerSequence = new Field(nameof(LedgerSequence), 6, FieldType.Uint32);
-        public static readonly Field CloseTime = new Field(nameof(CloseTime), 7, FieldType.Uint32);
-        public static readonly Field ParentCloseTime = new Field(nameof(ParentCloseTime), 8, FieldType.Uint32);
-        public static readonly Field SigningTime = new Field(nameof(SigningTime), 9, FieldType.Uint32);
-        public static readonly Field Expiration = new Field(nameof(Expiration), 10, FieldType.Uint32);
-        public static readonly Field TransferRate = new Field(nameof(TransferRate), 11, FieldType.Uint32);
-        public static readonly Field WalletSize = new Field(nameof(WalletSize), 12, FieldType.Uint32);
-        public static readonly Field OwnerCount = new Field(nameof(OwnerCount), 13, FieldType.Uint32);
-        public static readonly Field DestinationTag = new Field(nameof(DestinationTag), 14, FieldType.Uint32);
+        public static readonly Uint32Field Flags = new Uint32Field(nameof(Flags), 2);
+        public static readonly Uint32Field SourceTag = new Uint32Field(nameof(SourceTag), 3);
+        public static readonly Uint32Field Sequence = new Uint32Field(nameof(Sequence), 4);
+        public static readonly Uint32Field PreviousTxnLgrSeq = new Uint32Field(nameof(PreviousTxnLgrSeq), 5);
+        public static readonly Uint32Field LedgerSequence = new Uint32Field(nameof(LedgerSequence), 6);
+        public static readonly Uint32Field CloseTime = new Uint32Field(nameof(CloseTime), 7);
+        public static readonly Uint32Field ParentCloseTime = new Uint32Field(nameof(ParentCloseTime), 8);
+        public static readonly Uint32Field SigningTime = new Uint32Field(nameof(SigningTime), 9);
+        public static readonly Uint32Field Expiration = new Uint32Field(nameof(Expiration), 10);
+        public static readonly Uint32Field TransferRate = new Uint32Field(nameof(TransferRate), 11);
+        public static readonly Uint32Field WalletSize = new Uint32Field(nameof(WalletSize), 12);
+        public static readonly Uint32Field OwnerCount = new Uint32Field(nameof(OwnerCount), 13);
+        public static readonly Uint32Field DestinationTag = new Uint32Field(nameof(DestinationTag), 14);
 
-        public static readonly Field HighQualityIn = new Field(nameof(HighQualityIn), 16, FieldType.Uint32);
-        public static readonly Field HighQualityOut = new Field(nameof(HighQualityOut), 17, FieldType.Uint32);
-        public static readonly Field LowQualityIn = new Field(nameof(LowQualityIn), 18, FieldType.Uint32);
-        public static readonly Field LowQualityOut = new Field(nameof(LowQualityOut), 19, FieldType.Uint32);
-        public static readonly Field QualityIn = new Field(nameof(QualityIn), 20, FieldType.Uint32);
-        public static readonly Field QualityOut = new Field(nameof(QualityOut), 21, FieldType.Uint32);
-        public static readonly Field StampEscrow = new Field(nameof(StampEscrow), 22, FieldType.Uint32);
-        public static readonly Field BondAmount = new Field(nameof(BondAmount), 23, FieldType.Uint32);
-        public static readonly Field LoadFee = new Field(nameof(LoadFee), 24, FieldType.Uint32);
-        public static readonly Field OfferSequence = new Field(nameof(OfferSequence), 25, FieldType.Uint32);
-        public static readonly Field FirstLedgerSequence = new Field(nameof(FirstLedgerSequence), 26, FieldType.Uint32); // Deprecated: do not use
+        public static readonly Uint32Field HighQualityIn = new Uint32Field(nameof(HighQualityIn), 16);
+        public static readonly Uint32Field HighQualityOut = new Uint32Field(nameof(HighQualityOut), 17);
+        public static readonly Uint32Field LowQualityIn = new Uint32Field(nameof(LowQualityIn), 18);
+        public static readonly Uint32Field LowQualityOut = new Uint32Field(nameof(LowQualityOut), 19);
+        public static readonly Uint32Field QualityIn = new Uint32Field(nameof(QualityIn), 20);
+        public static readonly Uint32Field QualityOut = new Uint32Field(nameof(QualityOut), 21);
+        public static readonly Uint32Field StampEscrow = new Uint32Field(nameof(StampEscrow), 22);
+        public static readonly Uint32Field BondAmount = new Uint32Field(nameof(BondAmount), 23);
+        public static readonly Uint32Field LoadFee = new Uint32Field(nameof(LoadFee), 24);
+        public static readonly Uint32Field OfferSequence = new Uint32Field(nameof(OfferSequence), 25);
+        public static readonly Uint32Field FirstLedgerSequence = new Uint32Field(nameof(FirstLedgerSequence), 26); // Deprecated: do not use;
         // Added new semantics in 9486fc416ca7c59b8930b734266eed4d5b714c50
-        public static readonly Field LastLedgerSequence = new Field(nameof(LastLedgerSequence), 27, FieldType.Uint32);
-        public static readonly Field TransactionIndex = new Field(nameof(TransactionIndex), 28, FieldType.Uint32);
-        public static readonly Field OperationLimit = new Field(nameof(OperationLimit), 29, FieldType.Uint32);
-        public static readonly Field ReferenceFeeUnits = new Field(nameof(ReferenceFeeUnits), 30, FieldType.Uint32);
-        public static readonly Field ReserveBase = new Field(nameof(ReserveBase), 31, FieldType.Uint32);
-        public static readonly Field ReserveIncrement = new Field(nameof(ReserveIncrement), 32, FieldType.Uint32);
-        public static readonly Field SetFlag = new Field(nameof(SetFlag), 33, FieldType.Uint32);
-        public static readonly Field ClearFlag = new Field(nameof(ClearFlag), 34, FieldType.Uint32);
-        public static readonly Field SignerQuorum = new Field(nameof(SignerQuorum), 35, FieldType.Uint32);
-        public static readonly Field CancelAfter = new Field(nameof(CancelAfter), 36, FieldType.Uint32);
-        public static readonly Field FinishAfter = new Field(nameof(FinishAfter), 37, FieldType.Uint32);
-        public static readonly Field IndexNext = new Field(nameof(IndexNext), 1, FieldType.Uint64);
-        public static readonly Field IndexPrevious = new Field(nameof(IndexPrevious), 2, FieldType.Uint64);
-        public static readonly Field BookNode = new Field(nameof(BookNode), 3, FieldType.Uint64);
-        public static readonly Field OwnerNode = new Field(nameof(OwnerNode), 4, FieldType.Uint64);
-        public static readonly Field BaseFee = new Field(nameof(BaseFee), 5, FieldType.Uint64);
-        public static readonly Field ExchangeRate = new Field(nameof(ExchangeRate), 6, FieldType.Uint64);
-        public static readonly Field LowNode = new Field(nameof(LowNode), 7, FieldType.Uint64);
-        public static readonly Field HighNode = new Field(nameof(HighNode), 8, FieldType.Uint64);
+        public static readonly Uint32Field LastLedgerSequence = new Uint32Field(nameof(LastLedgerSequence), 27);
+        public static readonly Uint32Field TransactionIndex = new Uint32Field(nameof(TransactionIndex), 28);
+        public static readonly Uint32Field OperationLimit = new Uint32Field(nameof(OperationLimit), 29);
+        public static readonly Uint32Field ReferenceFeeUnits = new Uint32Field(nameof(ReferenceFeeUnits), 30);
+        public static readonly Uint32Field ReserveBase = new Uint32Field(nameof(ReserveBase), 31);
+        public static readonly Uint32Field ReserveIncrement = new Uint32Field(nameof(ReserveIncrement), 32);
+        public static readonly Uint32Field SetFlag = new Uint32Field(nameof(SetFlag), 33);
+        public static readonly Uint32Field ClearFlag = new Uint32Field(nameof(ClearFlag), 34);
+        public static readonly Uint32Field SignerQuorum = new Uint32Field(nameof(SignerQuorum), 35);
+        public static readonly Uint32Field CancelAfter = new Uint32Field(nameof(CancelAfter), 36);
+        public static readonly Uint32Field FinishAfter = new Uint32Field(nameof(FinishAfter), 37);
 
-        public static readonly Field EmailHash = new Field(nameof(EmailHash), 1, FieldType.Hash128);
+        public static readonly Uint64Field IndexNext = new Uint64Field(nameof(IndexNext), 1);
+        public static readonly Uint64Field IndexPrevious = new Uint64Field(nameof(IndexPrevious), 2);
+        public static readonly Uint64Field BookNode = new Uint64Field(nameof(BookNode), 3);
+        public static readonly Uint64Field OwnerNode = new Uint64Field(nameof(OwnerNode), 4);
+        public static readonly Uint64Field BaseFee = new Uint64Field(nameof(BaseFee), 5);
+        public static readonly Uint64Field ExchangeRate = new Uint64Field(nameof(ExchangeRate), 6);
+        public static readonly Uint64Field LowNode = new Uint64Field(nameof(LowNode), 7);
+        public static readonly Uint64Field HighNode = new Uint64Field(nameof(HighNode), 8);
 
-        public static readonly Field LedgerHash = new Field(nameof(LedgerHash), 1, FieldType.Hash256);
-        public static readonly Field ParentHash = new Field(nameof(ParentHash), 2, FieldType.Hash256);
-        public static readonly Field TransactionHash = new Field(nameof(TransactionHash), 3, FieldType.Hash256);
-        public static readonly Field AccountHash = new Field(nameof(AccountHash), 4, FieldType.Hash256);
+        public static readonly Hash128Field EmailHash = new Hash128Field(nameof(EmailHash), 1);
+
+        public static readonly Hash256Field LedgerHash = new Hash256Field(nameof(LedgerHash), 1);
+        public static readonly Hash256Field ParentHash = new Hash256Field(nameof(ParentHash), 2);
+        public static readonly Hash256Field TransactionHash = new Hash256Field(nameof(TransactionHash), 3);
+        public static readonly Hash256Field AccountHash = new Hash256Field(nameof(AccountHash), 4);
         // ReSharper disable once InconsistentNaming
-        public static readonly Field PreviousTxnID = new Field(nameof(PreviousTxnID), 5, FieldType.Hash256);
-        public static readonly Field LedgerIndex = new Field(nameof(LedgerIndex), 6, FieldType.Hash256);
-        public static readonly Field WalletLocator = new Field(nameof(WalletLocator), 7, FieldType.Hash256);
-        public static readonly Field RootIndex = new Field(nameof(RootIndex), 8, FieldType.Hash256);
+        public static readonly Hash256Field PreviousTxnID = new Hash256Field(nameof(PreviousTxnID), 5);
+        public static readonly Hash256Field LedgerIndex = new Hash256Field(nameof(LedgerIndex), 6);
+        public static readonly Hash256Field WalletLocator = new Hash256Field(nameof(WalletLocator), 7);
+        public static readonly Hash256Field RootIndex = new Hash256Field(nameof(RootIndex), 8);
         // Added in rippled commit: 9486fc416ca7c59b8930b734266eed4d5b714c50
         // ReSharper disable once InconsistentNaming
-        public static readonly Field AccountTxnID = new Field(nameof(AccountTxnID), 9, FieldType.Hash256);
-        public static readonly Field BookDirectory = new Field(nameof(BookDirectory), 16, FieldType.Hash256);
+        public static readonly Hash256Field AccountTxnID = new Hash256Field(nameof(AccountTxnID), 9);
+        public static readonly Hash256Field BookDirectory = new Hash256Field(nameof(BookDirectory), 16);
         // ReSharper disable once InconsistentNaming
-        public static readonly Field InvoiceID = new Field(nameof(InvoiceID), 17, FieldType.Hash256);
-        public static readonly Field Nickname = new Field(nameof(Nickname), 18, FieldType.Hash256);
-        public static readonly Field Amendment = new Field(nameof(Amendment), 19, FieldType.Hash256);
+        public static readonly Hash256Field InvoiceID = new Hash256Field(nameof(InvoiceID), 17);
+        public static readonly Hash256Field Nickname = new Hash256Field(nameof(Nickname), 18);
+        public static readonly Hash256Field Amendment = new Hash256Field(nameof(Amendment), 19);
         // ReSharper disable once InconsistentNaming
-        public static readonly Field TicketID = new Field(nameof(TicketID), 20, FieldType.Hash256);
-        public static readonly Field Digest = new Field(nameof(Digest), 21, FieldType.Hash256);
+        public static readonly Hash256Field TicketID = new Hash256Field(nameof(TicketID), 20);
+        public static readonly Hash256Field Digest = new Hash256Field(nameof(Digest), 21);
         // ReSharper disable once InconsistentNaming
-        public static readonly Field hash = new Field(nameof(hash), 257, FieldType.Hash256);
+        public static readonly Hash256Field hash = new Hash256Field(nameof(hash), 257);
         // ReSharper disable once InconsistentNaming
-        public static readonly Field index = new Field(nameof(index), 258, FieldType.Hash256);
+        public static readonly Hash256Field index = new Hash256Field(nameof(index), 258);
 
-        public static readonly Field Amount = new Field(nameof(Amount), 1, FieldType.Amount);
-        public static readonly Field Balance = new Field(nameof(Balance), 2, FieldType.Amount);
-        public static readonly Field LimitAmount = new Field(nameof(LimitAmount), 3, FieldType.Amount);
-        public static readonly Field TakerPays = new Field(nameof(TakerPays), 4, FieldType.Amount);
-        public static readonly Field TakerGets = new Field(nameof(TakerGets), 5, FieldType.Amount);
-        public static readonly Field LowLimit = new Field(nameof(LowLimit), 6, FieldType.Amount);
-        public static readonly Field HighLimit = new Field(nameof(HighLimit), 7, FieldType.Amount);
-        public static readonly Field Fee = new Field(nameof(Fee), 8, FieldType.Amount);
-        public static readonly Field SendMax = new Field(nameof(SendMax), 9, FieldType.Amount);
-        public static readonly Field DeliverMin = new Field(nameof(DeliverMin), 10, FieldType.Amount);
-        public static readonly Field MinimumOffer = new Field(nameof(MinimumOffer), 16, FieldType.Amount);
-        public static readonly Field RippleEscrow = new Field(nameof(RippleEscrow), 17, FieldType.Amount);
+        public static readonly AmountField Amount = new AmountField(nameof(Amount), 1);
+        public static readonly AmountField Balance = new AmountField(nameof(Balance), 2);
+        public static readonly AmountField LimitAmount = new AmountField(nameof(LimitAmount), 3);
+        public static readonly AmountField TakerPays = new AmountField(nameof(TakerPays), 4);
+        public static readonly AmountField TakerGets = new AmountField(nameof(TakerGets), 5);
+        public static readonly AmountField LowLimit = new AmountField(nameof(LowLimit), 6);
+        public static readonly AmountField HighLimit = new AmountField(nameof(HighLimit), 7);
+        public static readonly AmountField Fee = new AmountField(nameof(Fee), 8);
+        public static readonly AmountField SendMax = new AmountField(nameof(SendMax), 9);
+        public static readonly AmountField DeliverMin = new AmountField(nameof(DeliverMin), 10);
+        public static readonly AmountField MinimumOffer = new AmountField(nameof(MinimumOffer), 16);
+        public static readonly AmountField RippleEscrow = new AmountField(nameof(RippleEscrow), 17);
         // Added in rippled commit: e7f0b8eca69dd47419eee7b82c8716b3aa5a9e39
-        public static readonly Field DeliveredAmount = new Field(nameof(DeliveredAmount), 18, FieldType.Amount);
+        public static readonly AmountField DeliveredAmount = new AmountField(nameof(DeliveredAmount), 18);
         // These are auxiliary fields
-        //    quality(257, FieldType.AMOUNT),
         // ReSharper disable once InconsistentNaming
-        public static readonly Field taker_gets_funded = new Field(nameof(taker_gets_funded), 258, FieldType.Amount);
+        public static readonly AmountField taker_gets_funded = new AmountField(nameof(taker_gets_funded), 258);
         // ReSharper disable once InconsistentNaming
-        public static readonly Field taker_pays_funded = new Field(nameof(taker_pays_funded), 259, FieldType.Amount);
+        public static readonly AmountField taker_pays_funded = new AmountField(nameof(taker_pays_funded), 259);
 
-        public static readonly Field PublicKey = new Field(nameof(PublicKey), 1, FieldType.Blob);
-        public static readonly Field MessageKey = new Field(nameof(MessageKey), 2, FieldType.Blob);
-        public static readonly Field SigningPubKey = new Field(nameof(SigningPubKey), 3, FieldType.Blob);
+        public static readonly BlobField PublicKey = new BlobField(nameof(PublicKey), 1);
+        public static readonly BlobField MessageKey = new BlobField(nameof(MessageKey), 2);
+        public static readonly BlobField SigningPubKey = new BlobField(nameof(SigningPubKey), 3);
 
         // ReSharper disable once RedundantArgumentNameForLiteralExpression
-        public static readonly Field TxnSignature = new Field(nameof(TxnSignature), 4, FieldType.Blob, isSigningField: false);
-        public static readonly Field Generator = new Field(nameof(Generator), 5, FieldType.Blob);
-        public static readonly Field Signature = new Field(nameof(Signature), 6, FieldType.Blob);
-        public static readonly Field Domain = new Field(nameof(Domain), 7, FieldType.Blob);
-        public static readonly Field FundCode = new Field(nameof(FundCode), 8, FieldType.Blob);
-        public static readonly Field RemoveCode = new Field(nameof(RemoveCode), 9, FieldType.Blob);
-        public static readonly Field ExpireCode = new Field(nameof(ExpireCode), 10, FieldType.Blob);
-        public static readonly Field CreateCode = new Field(nameof(CreateCode), 11, FieldType.Blob);
-        public static readonly Field MemoType = new Field(nameof(MemoType), 12, FieldType.Blob);
-        public static readonly Field MemoData = new Field(nameof(MemoData), 13, FieldType.Blob);
-        public static readonly Field MemoFormat = new Field(nameof(MemoFormat), 14, FieldType.Blob);
-        public static readonly Field Proof = new Field(nameof(Proof), 17, FieldType.Blob);
+        public static readonly BlobField TxnSignature = new BlobField(nameof(TxnSignature), 4, isSigningField:false);
+        public static readonly BlobField Generator = new BlobField(nameof(Generator), 5);
+        public static readonly BlobField Signature = new BlobField(nameof(Signature), 6);
+        public static readonly BlobField Domain = new BlobField(nameof(Domain), 7);
+        public static readonly BlobField FundCode = new BlobField(nameof(FundCode), 8);
+        public static readonly BlobField RemoveCode = new BlobField(nameof(RemoveCode), 9);
+        public static readonly BlobField ExpireCode = new BlobField(nameof(ExpireCode), 10);
+        public static readonly BlobField CreateCode = new BlobField(nameof(CreateCode), 11);
+        public static readonly BlobField MemoType = new BlobField(nameof(MemoType), 12);
+        public static readonly BlobField MemoData = new BlobField(nameof(MemoData), 13);
+        public static readonly BlobField MemoFormat = new BlobField(nameof(MemoFormat), 14);
+        public static readonly BlobField Proof = new BlobField(nameof(Proof), 17);
 
-        public static readonly Field Account = new Field(nameof(Account), 1, FieldType.AccountId);
-        public static readonly Field Owner = new Field(nameof(Owner), 2, FieldType.AccountId);
-        public static readonly Field Destination = new Field(nameof(Destination), 3, FieldType.AccountId);
-        public static readonly Field Issuer = new Field(nameof(Issuer), 4, FieldType.AccountId);
-        public static readonly Field Target = new Field(nameof(Target), 7, FieldType.AccountId);
-        public static readonly Field RegularKey = new Field(nameof(RegularKey), 8, FieldType.AccountId);
+        public static readonly AccountIdField Account = new AccountIdField(nameof(Account), 1);
+        public static readonly AccountIdField Owner = new AccountIdField(nameof(Owner), 2);
+        public static readonly AccountIdField Destination = new AccountIdField(nameof(Destination), 3);
+        public static readonly AccountIdField Issuer = new AccountIdField(nameof(Issuer), 4);
+        public static readonly AccountIdField Target = new AccountIdField(nameof(Target), 7);
+        public static readonly AccountIdField RegularKey = new AccountIdField(nameof(RegularKey), 8);
 
-        public static readonly Field ObjectEndMarker = new Field(nameof(ObjectEndMarker), 1, FieldType.StObject);
-        public static readonly Field TransactionMetaData = new Field(nameof(TransactionMetaData), 2, FieldType.StObject);
-        public static readonly Field CreatedNode = new Field(nameof(CreatedNode), 3, FieldType.StObject);
-        public static readonly Field DeletedNode = new Field(nameof(DeletedNode), 4, FieldType.StObject);
-        public static readonly Field ModifiedNode = new Field(nameof(ModifiedNode), 5, FieldType.StObject);
-        public static readonly Field PreviousFields = new Field(nameof(PreviousFields), 6, FieldType.StObject);
-        public static readonly Field FinalFields = new Field(nameof(FinalFields), 7, FieldType.StObject);
-        public static readonly Field NewFields = new Field(nameof(NewFields), 8, FieldType.StObject);
-        public static readonly Field TemplateEntry = new Field(nameof(TemplateEntry), 9, FieldType.StObject);
-        public static readonly Field Memo = new Field(nameof(Memo), 10, FieldType.StObject);
-        public static readonly Field SignerEntry = new Field(nameof(SignerEntry), 11, FieldType.StObject);
-        public static readonly Field Signer = new Field(nameof(Signer), 16, FieldType.StObject);
+        public static readonly StObjectField ObjectEndMarker = new StObjectField(nameof(ObjectEndMarker), 1);
+        public static readonly StObjectField TransactionMetaData = new StObjectField(nameof(TransactionMetaData), 2);
+        public static readonly StObjectField CreatedNode = new StObjectField(nameof(CreatedNode), 3);
+        public static readonly StObjectField DeletedNode = new StObjectField(nameof(DeletedNode), 4);
+        public static readonly StObjectField ModifiedNode = new StObjectField(nameof(ModifiedNode), 5);
+        public static readonly StObjectField PreviousFields = new StObjectField(nameof(PreviousFields), 6);
+        public static readonly StObjectField FinalFields = new StObjectField(nameof(FinalFields), 7);
+        public static readonly StObjectField NewFields = new StObjectField(nameof(NewFields), 8);
+        public static readonly StObjectField TemplateEntry = new StObjectField(nameof(TemplateEntry), 9);
+        public static readonly StObjectField Memo = new StObjectField(nameof(Memo), 10);
+        public static readonly StObjectField SignerEntry = new StObjectField(nameof(SignerEntry), 11);
+        public static readonly StObjectField Signer = new StObjectField(nameof(Signer), 16);
 
-        public static readonly Field ArrayEndMarker = new Field(nameof(ArrayEndMarker), 1, FieldType.StArray);
-        //    SigningAccounts(2, FieldType.StArray),
-
+        public static readonly StArrayField ArrayEndMarker = new StArrayField(nameof(ArrayEndMarker), 1);
         // ReSharper disable once RedundantArgumentNameForLiteralExpression
-        public static readonly Field Signers = new Field(nameof(Signers), 3, FieldType.StArray, isSigningField: false);
-        public static readonly Field SignerEntries = new Field(nameof(SignerEntries), 4, FieldType.StArray);
-        public static readonly Field Template = new Field(nameof(Template), 5, FieldType.StArray);
-        public static readonly Field Necessary = new Field(nameof(Necessary), 6, FieldType.StArray);
-        public static readonly Field Sufficient = new Field(nameof(Sufficient), 7, FieldType.StArray);
-        public static readonly Field AffectedNodes = new Field(nameof(AffectedNodes), 8, FieldType.StArray);
-        public static readonly Field Memos = new Field(nameof(Memos), 9, FieldType.StArray);
+        public static readonly StArrayField Signers = new StArrayField(nameof(Signers), 3, isSigningField:false);
+        public static readonly StArrayField SignerEntries = new StArrayField(nameof(SignerEntries), 4);
+        public static readonly StArrayField Template = new StArrayField(nameof(Template), 5);
+        public static readonly StArrayField Necessary = new StArrayField(nameof(Necessary), 6);
+        public static readonly StArrayField Sufficient = new StArrayField(nameof(Sufficient), 7);
+        public static readonly StArrayField AffectedNodes = new StArrayField(nameof(AffectedNodes), 8);
+        public static readonly StArrayField Memos = new StArrayField(nameof(Memos), 9);
 
-        public static readonly Field CloseResolution = new Field(nameof(CloseResolution), 1, FieldType.Uint8);
-        public static readonly Field Method = new Field(nameof(Method), 2, FieldType.Uint8);
-        public static readonly Field TransactionResult = new Field(nameof(TransactionResult), 3, FieldType.Uint8);
+        public static readonly Uint8Field CloseResolution = new Uint8Field(nameof(CloseResolution), 1);
+        public static readonly Uint8Field Method = new Uint8Field(nameof(Method), 2);
+        public static readonly EngineResultField TransactionResult = new EngineResultField(nameof(TransactionResult), 3);
 
-        public static readonly Field TakerPaysCurrency = new Field(nameof(TakerPaysCurrency), 1, FieldType.Hash160);
-        public static readonly Field TakerPaysIssuer = new Field(nameof(TakerPaysIssuer), 2, FieldType.Hash160);
-        public static readonly Field TakerGetsCurrency = new Field(nameof(TakerGetsCurrency), 3, FieldType.Hash160);
-        public static readonly Field TakerGetsIssuer = new Field(nameof(TakerGetsIssuer), 4, FieldType.Hash160);
+        public static readonly Hash160Field TakerPaysCurrency = new Hash160Field(nameof(TakerPaysCurrency), 1);
+        public static readonly Hash160Field TakerPaysIssuer = new Hash160Field(nameof(TakerPaysIssuer), 2);
+        public static readonly Hash160Field TakerGetsCurrency = new Hash160Field(nameof(TakerGetsCurrency), 3);
+        public static readonly Hash160Field TakerGetsIssuer = new Hash160Field(nameof(TakerGetsIssuer), 4);
 
-        public static readonly Field Paths = new Field(nameof(Paths), 1, FieldType.PathSet);
+        public static readonly PathSetField Paths = new PathSetField(nameof(Paths), 1);
 
-        public static readonly Field Indexes = new Field(nameof(Indexes), 1, FieldType.Vector256);
-        public static readonly Field Hashes = new Field(nameof(Hashes), 2, FieldType.Vector256);
-        public static readonly Field Features = new Field(nameof(Features), 3, FieldType.Vector256);
+        public static readonly Vector256Field Indexes = new Vector256Field(nameof(Indexes), 1);
+        public static readonly Vector256Field Hashes = new Vector256Field(nameof(Hashes), 2);
+        public static readonly Vector256Field Features = new Vector256Field(nameof(Features), 3);
 
         public static readonly Field Transaction = new Field(nameof(Transaction), 1, FieldType.Transaction);
         public static readonly Field LedgerEntry = new Field(nameof(LedgerEntry), 1, FieldType.LedgerEntry);
