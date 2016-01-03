@@ -35,7 +35,7 @@ namespace Ripple.Core.Tests
         public void IllegalAmountTest()
         {
             var thatDamnOffer = "1000000000000000100";
-            var val = IouValue.FromString(thatDamnOffer, native: true);
+            var val = AmountValue.FromString(thatDamnOffer, native: true);
             Assert.AreEqual(thatDamnOffer, val.ToString());
         }
 
@@ -91,8 +91,7 @@ namespace Ripple.Core.Tests
          TestMethod()]
         public void InvalidAmountValueTest()
         {
-            var silly = (IouValue) IouValue.FromString("silly");
-            Debug.WriteLine(silly.Exponent);
+            IouValue.FromString("silly");
         }
 
         private static void AssertExponent(string valueString, int expectedExponent)

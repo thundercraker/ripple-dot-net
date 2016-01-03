@@ -58,7 +58,7 @@ namespace Ripple.Core.Types
         }
     }
 
-    public class IouValue : AmountValue
+    internal class IouValue : AmountValue
     {
         public readonly ulong Mantissa;
         public readonly bool IsNegative;
@@ -250,7 +250,7 @@ namespace Ripple.Core.Types
         }
     }
 
-    public class NativeValue : AmountValue
+    internal class NativeValue : AmountValue
     {
         public bool IsNegative;
         public ulong Mantissa;
