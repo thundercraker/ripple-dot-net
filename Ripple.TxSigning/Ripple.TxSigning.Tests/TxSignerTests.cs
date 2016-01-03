@@ -42,56 +42,12 @@ namespace Ripple.TxSigning.Tests
             'TransactionType' : 'Payment'
         }";
 
-        public class PodoTx
-        {
-            public string Account;
-            public string Amount;
-            public string Destination;
-            public string Fee;
-            public long Flags;
-            public int Sequence;
-            public string TransactionType;
-        }
-
-        public readonly PodoTx UnsignedTxPodo = new PodoTx()
-        {
-            Account = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN",
-            Amount = "1000",
-            Destination = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
-            Fee = "10",
-            //Flags = 2147483648 canonical sig flag will be set automatically
-            Sequence = 1,
-            TransactionType = "Payment"
-        };
-
         public const string Secret = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
 
         [TestMethod()]
         public void SignJObjectTest()
         {
             AssertOk(TxSigner.SignJson(JObject.Parse(UnsignedTxJson), Secret));
-        }
-
-        [TestMethod()]
-        public void SignPodoTest()
-        {
-            AssertOk(TxSigner.SignPodo(UnsignedTxPodo, Secret));
-        }
-
-        [TestMethod()]
-        public void SignAnonymousPodoTest()
-        {
-            var anonymouse = new
-            {
-                Account = "rJZdUusLDtY9NEsGea7ijqhVrXv98rYBYN",
-                Amount = "1000",
-                Destination = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
-                Fee = "10",
-                //Flags = 2147483648 canonical sig flag will be set automatically
-                Sequence = 1,
-                TransactionType = "Payment"
-            };
-            AssertOk(TxSigner.SignPodo(anonymouse, Secret));
         }
 
         private static void AssertOk(SignedTx signed)

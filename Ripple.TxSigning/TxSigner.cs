@@ -23,10 +23,6 @@ namespace Ripple.TxSigning
             this(Seed.FromBase58(secret).KeyPair())
         {
         }
-        public SignedTx SignPodo(object tx)
-        {
-            return SignJson(JObject.FromObject(tx));
-        }
         public SignedTx SignJson(JObject tx)
         {
             var so = StObject.FromJson(tx);
@@ -57,10 +53,6 @@ namespace Ripple.TxSigning
             return new TxSigner(secret);
         }
 
-        public static SignedTx SignPodo(object tx, string secret)
-        {
-            return FromSecret(secret).SignPodo(tx);
-        }
         public static SignedTx SignJson(JObject tx, string secret)
         {
             return FromSecret(secret).SignJson(tx);
