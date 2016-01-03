@@ -115,8 +115,8 @@ namespace Ripple.Core.Enums
         public static readonly Field SetFlag = new Field(nameof(SetFlag), 33, FieldType.Uint32);
         public static readonly Field ClearFlag = new Field(nameof(ClearFlag), 34, FieldType.Uint32);
         public static readonly Field SignerQuorum = new Field(nameof(SignerQuorum), 35, FieldType.Uint32);
-
-
+        public static readonly Field CancelAfter = new Field(nameof(CancelAfter), 36, FieldType.Uint32);
+        public static readonly Field FinishAfter = new Field(nameof(FinishAfter), 37, FieldType.Uint32);
         public static readonly Field IndexNext = new Field(nameof(IndexNext), 1, FieldType.Uint64);
         public static readonly Field IndexPrevious = new Field(nameof(IndexPrevious), 2, FieldType.Uint64);
         public static readonly Field BookNode = new Field(nameof(BookNode), 3, FieldType.Uint64);
@@ -147,6 +147,7 @@ namespace Ripple.Core.Enums
         public static readonly Field Amendment = new Field(nameof(Amendment), 19, FieldType.Hash256);
         // ReSharper disable once InconsistentNaming
         public static readonly Field TicketID = new Field(nameof(TicketID), 20, FieldType.Hash256);
+        public static readonly Field Digest = new Field(nameof(Digest), 21, FieldType.Hash256);
         // ReSharper disable once InconsistentNaming
         public static readonly Field hash = new Field(nameof(hash), 257, FieldType.Hash256);
         // ReSharper disable once InconsistentNaming
@@ -189,6 +190,7 @@ namespace Ripple.Core.Enums
         public static readonly Field MemoType = new Field(nameof(MemoType), 12, FieldType.Blob);
         public static readonly Field MemoData = new Field(nameof(MemoData), 13, FieldType.Blob);
         public static readonly Field MemoFormat = new Field(nameof(MemoFormat), 14, FieldType.Blob);
+        public static readonly Field Proof = new Field(nameof(Proof), 17, FieldType.Blob);
 
         public static readonly Field Account = new Field(nameof(Account), 1, FieldType.AccountId);
         public static readonly Field Owner = new Field(nameof(Owner), 2, FieldType.AccountId);
@@ -223,7 +225,7 @@ namespace Ripple.Core.Enums
         public static readonly Field Memos = new Field(nameof(Memos), 9, FieldType.StArray);
 
         public static readonly Field CloseResolution = new Field(nameof(CloseResolution), 1, FieldType.Uint8);
-        public static readonly Field TemplateEntryType = new Field(nameof(TemplateEntryType), 2, FieldType.Uint8);
+        public static readonly Field Method = new Field(nameof(Method), 2, FieldType.Uint8);
         public static readonly Field TransactionResult = new Field(nameof(TransactionResult), 3, FieldType.Uint8);
 
         public static readonly Field TakerPaysCurrency = new Field(nameof(TakerPaysCurrency), 1, FieldType.Hash160);

@@ -15,15 +15,14 @@ namespace Ripple.Core.Types
 
         public static readonly TransactionType Invalid = Add(nameof(Invalid), -1);
         public static readonly TransactionType Payment = Add(nameof(Payment), 0);
-        public static readonly TransactionType Claim = Add(nameof(Claim), 1);
-        public static readonly TransactionType WalletAdd = Add(nameof(WalletAdd), 2);
+        public static readonly TransactionType SuspendedPaymentCreate = Add(nameof(SuspendedPaymentCreate), 1);
+        public static readonly TransactionType SuspendedPaymentFinish = Add(nameof(SuspendedPaymentFinish), 2);
         public static readonly TransactionType AccountSet = Add(nameof(AccountSet), 3);
-        public static readonly TransactionType PasswordFund = Add(nameof(PasswordFund), 4);
+        public static readonly TransactionType SuspendedPaymentCancel = Add(nameof(SuspendedPaymentCancel), 4);
         public static readonly TransactionType SetRegularKey = Add(nameof(SetRegularKey), 5);
         public static readonly TransactionType NickNameSet = Add(nameof(NickNameSet), 6);
         public static readonly TransactionType OfferCreate = Add(nameof(OfferCreate), 7);
         public static readonly TransactionType OfferCancel = Add(nameof(OfferCancel), 8);
-        public static readonly TransactionType Contract = Add(nameof(Contract), 9);
         public static readonly TransactionType TicketCreate = Add(nameof(TicketCreate), 10);
         public static readonly TransactionType TicketCancel = Add(nameof(TicketCancel), 11);
         public static readonly TransactionType SignerListSet = Add(nameof(SignerListSet), 12);
