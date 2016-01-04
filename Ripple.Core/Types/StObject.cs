@@ -97,6 +97,11 @@ namespace Ripple.Core.Types
 
         public static StObject FromJson(JToken token)
         {
+            return FromJson(token, false);
+        }
+
+        public static StObject FromJson(JToken token, bool strict)
+        {
             if (token.Type != JTokenType.Object)
             {
                 throw new InvalidJson("{token} is not an object");
@@ -107,6 +112,10 @@ namespace Ripple.Core.Types
             {
                 if (!Field.Values.Has(pair.Key))
                 {
+                    if (strict)
+                    {
+                        throw new InvalidJson($"unknown field {pair.Key}");
+                    }
                     continue;
                 }
                 var fieldForType = Field.Values[pair.Key];

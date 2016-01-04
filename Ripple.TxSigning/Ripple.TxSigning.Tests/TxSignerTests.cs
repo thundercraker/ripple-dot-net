@@ -44,7 +44,7 @@ namespace Ripple.TxSigning.Tests
 
         public const string Secret = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
 
-        [TestMethod()]
+        [TestMethod]
         public void SignJObjectTest()
         {
             AssertOk(TxSigner.SignJson(JObject.Parse(UnsignedTxJson), Secret));

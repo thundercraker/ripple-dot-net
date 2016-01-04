@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Schema;
 using Ripple.Core.Enums;
 using Ripple.Core.Types;
@@ -37,19 +38,31 @@ namespace Ripple.Core.Transactions
 
         public static void Validate(StObject obj)
         {
-            Validate(obj, err => { throw new Exception(err); });
+            var errors = new List<string>();
+            Validate(obj, errors.Add);
+            if (errors.Count > 0)
+            {
+                throw new Exception(string.Join("\n", errors));
+            }
         }
 
         internal static void Validate(StObject obj, Action<string> onError)
         {
             if (!obj.Has(Field.TransactionType))
             {
-                onError("Missing TransactionType field");
+                onError("Missing `TransactionType` field");
+                return;
             }
 
             var tt = obj[Field.TransactionType];
+            if (tt == null)
+            {
+                onError("`TransactionType` is set to null");
+                return;
+            }
+
             var format = Formats[tt];
-            var allFields = new HashSet<Field>(obj.Fields.Keys);
+            var allFields = new SortedSet<Field>(obj.Fields.Keys);
             allFields.UnionWith(format.Keys);
 
             foreach (var field in allFields)
@@ -59,14 +72,22 @@ namespace Ripple.Core.Transactions
                 var inObject = obj.Fields.TryGetValue(field, out fieldValue);
                 if (!inFormat)
                 {
-                    onError($"{tt} has no {field} field");
+                    onError($"`{tt}` has no `{field}` field");
                 }
                 if (format[field] == Requirement.Required)
                 {
                     if (!inObject)
                     {
-                        onError($"{tt} has required field {field}");
+                        onError($"`{tt}` has required field `{field}`");
                     }
+                    if (fieldValue == null)
+                    {
+                        onError($"Required field `{field}` is set to null");
+                    }
+                    // TODO: associated type for field is wrong
+                    // It should be nearly impossible anyway because FromJson
+                    // throws when the json is invalid for the field type and
+                    // the StObject[] indexers all use typed fields externally
                 }
             }
         }

@@ -7,6 +7,7 @@ using Ripple.Core.Transactions;
 using Ripple.Core.Types;
 using Ripple.Signing;
 using static Ripple.Core.Util.B16;
+// ReSharper disable RedundantArgumentNameForLiteralExpression
 
 namespace Ripple.TxSigning
 {
@@ -26,7 +27,7 @@ namespace Ripple.TxSigning
         }
         public SignedTx SignJson(JObject tx)
         {
-            var so = StObject.FromJson(tx);
+            var so = StObject.FromJson(tx, strict: true);
             SetCanonicalSigFlag(so);
             so[Field.SigningPubKey] = _keyPair.CanonicalPubBytes();
             so[Field.TxnSignature] = _keyPair.Sign(so.SigningData());

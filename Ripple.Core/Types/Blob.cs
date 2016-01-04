@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
@@ -24,6 +25,7 @@ namespace Ripple.Core.Types
         {
             return FromJson(token);
         }
+
         public static Blob FromJson(JToken token)
         {
             return FromHex(token.ToString());
