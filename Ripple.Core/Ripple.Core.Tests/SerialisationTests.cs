@@ -55,7 +55,7 @@ namespace Ripple.Core.Tests
             // The ed25519 Signature
             var sig = seed.KeyPair().Sign(B16.Decode(MessageBytes));
             var expectedSig = ExpectedSig;
-            Assert.AreEqual(expectedSig, B16.ToHex(sig));
+            Assert.AreEqual(expectedSig, B16.Encode(sig));
         }
 
         private static JObject GetTestsJson()

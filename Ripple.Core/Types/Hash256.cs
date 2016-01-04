@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
 using Ripple.Core.Util;
+using System;
 
 namespace Ripple.Core.Types
 {
@@ -10,6 +11,10 @@ namespace Ripple.Core.Types
 
         public Hash256(byte[] buffer) : base(buffer)
         {
+            if (buffer.Length != 32)
+            {
+                throw new Exception("buffer should be 32 bytes");
+            }
         }
         public static Hash256 FromJson(JToken token)
         {

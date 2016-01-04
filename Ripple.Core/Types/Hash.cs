@@ -13,6 +13,7 @@ namespace Ripple.Core.Types
         {
             Buffer = buffer;
         }
+
         public void ToBytes(IBytesSink sink)
         {
             sink.Put(Buffer);
@@ -30,7 +31,7 @@ namespace Ripple.Core.Types
 
         public override string ToString()
         {
-            return B16.ToHex(Buffer);
+            return B16.Encode(Buffer);
         }
     }
 }

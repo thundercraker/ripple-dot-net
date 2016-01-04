@@ -7,45 +7,33 @@ namespace Ripple.Core.Util
 {
     public class B16
     {
-        public static string[] HexTbl = Enumerable.Range(0, 256).Select(v => v.ToString("X2")).ToArray();
-        public static string ToHex(IEnumerable<byte> array)
+        public static string Encode(byte[] data)
         {
-            StringBuilder s = new StringBuilder();
-            foreach (var v in array)
-                s.Append(HexTbl[v]);
-            return s.ToString();
-        }
-        public static string ToHex(byte[] array)
-        {
-            StringBuilder s = new StringBuilder(array.Length * 2);
-            foreach (var v in array)
-                s.Append(HexTbl[v]);
-            return s.ToString();
-        }
-        public static byte[] Decode(string hex)
-        {
-            if (hex.Length % 2 == 1)
-                throw new Exception("The binary key cannot have an odd number of digits");
-
-            byte[] arr = new byte[hex.Length >> 1];
-
-            for (int i = 0; i < hex.Length >> 1; ++i)
+            if (data == null)
+                return null;
+            char[] c = new char[data.Length * 2];
+            int b;
+            for (int i = 0; i < data.Length; i++)
             {
-                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
+                b = data[i] >> 4;
+                c[i * 2] = (char)(55 + b + (((b - 10) >> 31) & -7));
+                b = data[i] & 0xF;
+                c[i * 2 + 1] = (char)(55 + b + (((b - 10) >> 31) & -7));
             }
-
-            return arr;
+            return new string(c);
         }
 
-        public static int GetHexVal(char hex)
+
+        public static byte[] Decode(string hexString)
         {
-            int val = hex;
-            //For uppercase A-F letters:
-            return val - (val < 58 ? 48 : 55);
-            //For lowercase a-f letters:
-            //return val - (val < 58 ? 48 : 87);
-            //Or the two combined, but a bit slower:
-            //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            if (hexString == null)
+                return null;
+            if (hexString.Length % 2 != 0)
+                throw new FormatException("The hex string is invalid because it has an odd length");
+            var result = new byte[hexString.Length / 2];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            return result;
         }
     }
 }

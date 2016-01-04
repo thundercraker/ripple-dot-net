@@ -73,7 +73,10 @@ namespace Ripple.Core.Types
                 case 3:
                     return new Currency(EncodeCurrency(str));
             }
-            throw new InvalidOperationException();
+            throw new InvalidOperationException(
+                "Currency must either be a 3 letter iso code " +
+                "or a 20 byte hash encoded in hexadecimal"
+            );
         }
 
         /*

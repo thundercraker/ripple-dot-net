@@ -8,7 +8,7 @@ namespace Ripple.TxSigning
         internal static string TransactionId(byte[] txBlob)
         {
             var hash = TransactionIdBytes(txBlob);
-            return B16.ToHex(hash);
+            return B16.Encode(hash);
         }
 
         public static byte[] TransactionIdBytes(byte[] txBlob)

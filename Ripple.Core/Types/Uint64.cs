@@ -16,7 +16,7 @@ namespace Ripple.Core.Types
 
         public override string ToString()
         {
-            return B16.ToHex(ToBytes());
+            return B16.Encode(ToBytes());
         }
 
         public static Uint64 FromJson(JToken token)

@@ -43,13 +43,23 @@ namespace Ripple.Core.Types
 
         public override string ToString()
         {
-            return B16.ToHex(Buffer);
+            return B16.Encode(Buffer);
         }
 
         public static Blob FromParser(BinaryParser parser, int? hint=null)
         {
             Debug.Assert(hint != null, "hint != null");
             return parser.Read((int) hint);
+        }
+
+        public static Blob FromString(string blob, System.Text.Encoding encoding)
+        {
+            return new Blob(encoding.GetBytes(blob));
+        }
+
+        public static Blob FromAscii(string blob)
+        {
+            return FromString(blob, System.Text.Encoding.ASCII);
         }
     }
 }

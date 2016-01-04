@@ -6,7 +6,7 @@ using Ripple.Core.Enums;
 using Ripple.Core.Transactions;
 using Ripple.Core.Types;
 using Ripple.Signing;
-using static Ripple.Core.Util.B16;
+using Ripple.Core.Util;
 // ReSharper disable RedundantArgumentNameForLiteralExpression
 
 namespace Ripple.TxSigning
@@ -35,7 +35,7 @@ namespace Ripple.TxSigning
 
             var blob = so.ToBytes();
             var hash = Utils.TransactionId(blob);
-            return new SignedTx(hash, ToHex(blob), so.ToJsonObject());
+            return new SignedTx(hash, B16.Encode(blob), so.ToJsonObject());
         }
 
         private static void SetCanonicalSigFlag(StObject so)

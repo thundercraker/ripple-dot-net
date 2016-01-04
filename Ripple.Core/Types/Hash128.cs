@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
 using Ripple.Core.Util;
@@ -8,6 +9,10 @@ namespace Ripple.Core.Types
     {
         public Hash128(byte[] buffer) : base(buffer)
         {
+            if (buffer.Length != 16)
+            {
+                throw new Exception("buffer should be 16 bytes");
+            }
         }
 
         public static Hash128 FromJson(JToken token)
