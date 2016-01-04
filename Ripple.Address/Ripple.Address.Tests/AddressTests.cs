@@ -67,7 +67,6 @@ namespace Ripple.Address.Tests
             Assert.AreEqual(hex, Helpers.EncodeHex(decoded));
             Assert.IsTrue(valid);
             Assert.IsFalse(hexIsValidB58);
-
         }
 
     }
