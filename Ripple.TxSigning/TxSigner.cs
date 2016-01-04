@@ -43,9 +43,9 @@ namespace Ripple.TxSigning
             var flags = CanonicalSigFlag;
             if (so.Has(Field.Flags))
             {
-                flags |= ((Uint32) so[Field.Flags]).Value;
+                flags |= so[Field.Flags];
             }
-            so[Field.Flags] = (Uint32) flags;
+            so[Field.Flags] = flags;
         }
 
         public static TxSigner FromKeyPair(IKeyPair keyPair)
