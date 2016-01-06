@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
 
@@ -61,13 +63,34 @@ namespace Ripple.Core.Types
                 case JTokenType.String:
                     return new Amount(token.ToString());
                 case JTokenType.Object:
-                    return new Amount(
-                        token["value"].ToString(),
-                        token["currency"],
-                        token["issuer"]);
+                    var valueToken = token["value"];
+                    var currencyToken = token["currency"];
+                    var issuerToken = token["issuer"];
+
+                    if (valueToken == null)
+                        throw new InvalidJsonException("Amount object must contain property `value`.");
+
+                    if (currencyToken == null)
+                        throw new InvalidJsonException("Amount object must contain property `currency`.");
+
+                    if (issuerToken == null)
+                        throw new InvalidJsonException("Amount object must contain property `issuer`.");
+
+                    if (token.Children().Count() > 3)
+                        throw new InvalidJsonException("Amount object has too many properties.");
+
+                    if(valueToken.Type != JTokenType.String)
+                        throw new InvalidJsonException("Property `value` must be string.");
+
+                    if (currencyToken.Type != JTokenType.String)
+                        throw new InvalidJsonException("Property `currency` must be string.");
+
+                    if (issuerToken.Type != JTokenType.String)
+                        throw new InvalidJsonException("Property `issuer` must be string.");
+
+                    return new Amount((string)valueToken, (string)currencyToken, (string)issuerToken);
                 default:
-                    throw new InvalidJson("Can not create " +
-                                          $"amount from `{token}`");
+                    throw new InvalidJsonException("Can not create Amount from `{token}`");
             }
         }
 
