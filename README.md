@@ -1,4 +1,4 @@
-# Ripple.NET [![Build status](https://ci.appveyor.com/api/projects/status/w1jnx38oreo35a6b?svg=true)](https://ci.appveyor.com/project/sublimator/ripple-dot-net)
+# Ripple.NET [![Build status](https://ci.appveyor.com/api/projects/status/w1jnx38oreo35a6b/branch/master?svg=true)](https://ci.appveyor.com/project/sublimator/ripple-dot-net)
 
 The purpose of this code is primarily for signing transactions, and while the
 code can do a bit more than what is shown here, at this stage, it may change
