@@ -6,27 +6,24 @@ namespace Ripple.Address
     {
         public const string Alphabet = "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz";
 
-        public static B58.Version AccountId = MakeVersion(0, 20);
-        public static B58.Version K256Seed = MakeVersion(33, 16);
-        public static B58.Version NodePublic = MakeVersion(28, 33);
-        public static B58.Version NodePrivate = MakeVersion(32, 32);
-        public static B58.Version AccountPublic = MakeVersion(35, 33);
-        public static B58.Version AccountPrivate = MakeVersion(34, 32);
-        public static B58.Version FamilyGenerator = MakeVersion(41, 33);
-        public static B58.Version Ed25519Seed = MakeVersion(new byte[]{ 0x1, 0xe1, 0x4b }, 16);
+        // ReSharper disable RedundantArgumentNameForLiteralExpression, RedundantArgumentName
+        public static B58.Version AccountId = B58.Version.With(versionByte: 0, expectedLength: 20);
+
+        public static B58.Version NodePublic = B58.Version.With(versionByte: 28, expectedLength: 33);
+        public static B58.Version NodePrivate = B58.Version.With(versionByte: 32, expectedLength: 32);
+
+        public static B58.Version AccountPublic = B58.Version.With(versionByte: 35, expectedLength: 33);
+        public static B58.Version AccountPrivate = B58.Version.With(versionByte: 34, expectedLength: 32);
+
+        public static B58.Version FamilyGenerator = B58.Version.With(versionByte: 41, expectedLength: 33);
+
+        public static B58.Version K256Seed = B58.Version.With(versionByte: 33, expectedLength: 16);
+        public static B58.Version Ed25519Seed = B58.Version.With(versionBytes: new byte[]{ 0x1, 0xe1, 0x4b }, expectedLength: 16);
+
         public static B58.Versions AnySeed = B58.Versions
                                                 .With("secp256k1", K256Seed)
                                                 .And("ed25519", Ed25519Seed);
-
-        public static B58.Version MakeVersion(byte versionByte, int expectedLength)
-        {
-            return MakeVersion(new []{ versionByte}, expectedLength);
-        }
-        public static B58.Version MakeVersion(byte[] versionBytes, int expectedLength)
-        {
-            return new B58.Version(versionBytes, expectedLength);
-        }
-
+        // ReSharper restore RedundantArgumentNameForLiteralExpression, RedundantArgumentName
         private static readonly B58 B58;
         static AddressCodec()
         {

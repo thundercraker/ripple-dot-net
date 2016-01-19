@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Ripple.Address
 {
@@ -202,7 +203,7 @@ namespace Ripple.Address
         public string EncodeToString(byte[] input)
         {
             byte[] output = EncodeToBytes(input);
-            return System.Text.Encoding.ASCII.GetString(output);
+            return Encoding.ASCII.GetString(output);
         }
 
         public string EncodeToStringChecked(byte[] input, int version)
@@ -212,7 +213,7 @@ namespace Ripple.Address
 
         public string EncodeToStringChecked(byte[] input, byte[] version)
         {
-            return System.Text.Encoding.ASCII.GetString(EncodeToBytesChecked(input, version));
+            return Encoding.ASCII.GetString(EncodeToBytesChecked(input, version));
         }
 
         public byte[] FindPrefix(int payLoadLength, string desiredPrefix)
@@ -271,11 +272,10 @@ namespace Ripple.Address
             }
         }
 
-        private static byte[] CopyOfRange(byte[] source, int from, int to)
+        private static byte[] CopyOfRange(byte[] source, int from_, int to)
         {
-            byte[] range = new byte[to - from];
-            Array.Copy(source, from, range, 0, range.Length);
-
+            var range = new byte[to - from_];
+            Array.Copy(source, from_, range, 0, range.Length);
             return range;
         }
 
@@ -387,6 +387,16 @@ namespace Ripple.Address
             {
                 VersionBytes = versionBytes;
                 ExpectedLength = expectedLength;
+            }
+
+            public static B58.Version With(byte versionByte, int expectedLength)
+            {
+                return With(new []{ versionByte}, expectedLength);
+            }
+
+            public static B58.Version With(byte[] versionBytes, int expectedLength)
+            {
+                return new B58.Version(versionBytes, expectedLength);
             }
         }
 

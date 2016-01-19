@@ -1,89 +1,55 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace Ripple.Address.Tests
 {
-    class Helpers
+    internal class B16
+    {
+        public static string Encode(byte[] data)
+        {
+            if (data == null)
+                return null;
+            char[] c = new char[data.Length * 2];
+            int b;
+            for (int i = 0; i < data.Length; i++)
+            {
+                b = data[i] >> 4;
+                c[i * 2] = (char)(55 + b + (((b - 10) >> 31) & -7));
+                b = data[i] & 0xF;
+                c[i * 2 + 1] = (char)(55 + b + (((b - 10) >> 31) & -7));
+            }
+            return new string(c);
+        }
+
+
+        public static byte[] Decode(string hexString)
+        {
+            if (hexString == null)
+                return null;
+            if (hexString.Length % 2 != 0)
+                throw new FormatException("The hex string is invalid because it has an odd length");
+            var result = new byte[hexString.Length / 2];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            return result;
+        }
+    }
+
+    internal class Helpers
     {
         public static T Invoke<T>(MethodInfo info, params object[] objects)
         {
             return (T)info.Invoke(null, objects);
         }
 
-        private static readonly byte[,] ByteLookup = new byte[,]
+        public static byte[] DecodeHex(string hex)
         {
-            // low nibble
-            {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f},
-            // high nibble
-            {0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xa0, 0xb0, 0xc0, 0xd0, 0xe0, 0xf0}
-        };
-
-        public static byte[] DecodeHex(string input)
-        {
-            var result = new byte[(input.Length + 1) >> 1];
-            int lastcell = result.Length - 1;
-            int lastchar = input.Length - 1;
-            // count up in characters, but inside the loop will
-            // reference from the end of the input/output.
-            for (int i = 0; i < input.Length; i++)
-            {
-                // i >> 1    -  (i / 2) gives the result byte offset from the end
-                // i & 1     -  1 if it is high-nibble, 0 for low-nibble.
-                result[lastcell - (i >> 1)] |= ByteLookup[i & 1, HexToInt(input[lastchar - i])];
-            }
-            return result;
+            return B16.Decode(hex);
         }
 
-        public static string EncodeHex(byte[] decoded)
+        public static string EncodeHex(byte[] buffer)
         {
-            return BitConverter.ToString(decoded).Replace("-", "");
-        }
-
-        private static int HexToInt(char c)
-        {
-            switch (c)
-            {
-                case '0':
-                    return 0;
-                case '1':
-                    return 1;
-                case '2':
-                    return 2;
-                case '3':
-                    return 3;
-                case '4':
-                    return 4;
-                case '5':
-                    return 5;
-                case '6':
-                    return 6;
-                case '7':
-                    return 7;
-                case '8':
-                    return 8;
-                case '9':
-                    return 9;
-                case 'a':
-                case 'A':
-                    return 10;
-                case 'b':
-                case 'B':
-                    return 11;
-                case 'c':
-                case 'C':
-                    return 12;
-                case 'd':
-                case 'D':
-                    return 13;
-                case 'e':
-                case 'E':
-                    return 14;
-                case 'f':
-                case 'F':
-                    return 15;
-                default:
-                    throw new FormatException("Unrecognized hex char " + c);
-            }
+            return B16.Encode(buffer);
         }
     }
 }
