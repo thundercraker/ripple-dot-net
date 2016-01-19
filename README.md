@@ -4,7 +4,7 @@ The purpose of this code is primarily for signing transactions, and while the
 code can do a bit more than what is shown here, at this stage, it may change
 without warning. Only the Transaction signing api shown below has any
 guarantees. While this is currently a low priority project, feel free to register
-you interest at support@ripple.com
+your interest at support@ripple.com
 
 ## Requirements
 
