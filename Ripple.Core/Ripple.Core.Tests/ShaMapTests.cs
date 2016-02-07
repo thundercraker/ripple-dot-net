@@ -7,7 +7,6 @@ using Ripple.Core.ShaMapTree;
 using Ripple.Core.Tests.Properties;
 using Ripple.Core.Types;
 
-
 namespace Ripple.Core.Tests
 {
     [TestClass]
@@ -32,7 +31,7 @@ namespace Ripple.Core.Tests
             TestLedgerTreeHashing(Utils.ParseJObject(Resources.LedgerFull40000));
         }
 
-        // [TestMethod]
+        [TestMethod, Ignore]
         public void LedgerFromFileTest()
         {
             const string ledgerJson = @"Z:\windowsshare\ledger-full-1000000.json";
@@ -42,7 +41,7 @@ namespace Ripple.Core.Tests
             TestLedgerTreeHashing(ledger);
         }
 
-        // [TestMethod]
+        [TestMethod, Ignore]
         public void HistoryLoaderTest()
         {
             const string history = @"Z:\windowsshare\history.bin";
@@ -51,14 +50,14 @@ namespace Ripple.Core.Tests
             loader.ParseFast((header, state, txns) => true);
         }
 
-        // [TestMethod]
+        [TestMethod, Ignore]
         public void AccountStateTest()
         {
             const string path = @"Z:\windowsshare\as-ledger-4320278.json";
             JArray state;
             if (!ParseJsonArray(path, out state)) return;
             var stateMap = ParseAccountState(state);
-            Assert.AreEqual("CF37E77AE0C3BE12369133B0CA212CE7B0FCB282F5B3F1079739B69944FB0D2E", 
+            Assert.AreEqual("CF37E77AE0C3BE12369133B0CA212CE7B0FCB282F5B3F1079739B69944FB0D2E",
                 stateMap.Hash().ToString());
         }
 
@@ -70,7 +69,7 @@ namespace Ripple.Core.Tests
                 return false;
             }
             var ledger1E6 = Utils.FileToByteArray(path);
-            state = (JArray) Utils.ParseJson(ledger1E6);
+            state = (JArray)Utils.ParseJson(ledger1E6);
             return true;
         }
 
@@ -90,7 +89,6 @@ namespace Ripple.Core.Tests
             return stateMap;
         }
 
-
         private static void TestLedgerTreeHashing(JObject ledger)
         {
             var txMap = new ShaMap();
@@ -100,7 +98,7 @@ namespace Ripple.Core.Tests
             var expectedStateHash = ledger["account_hash"].ToString();
 
             var transactions = ledger["transactions"].Select(TransactionResult.FromJson);
-            var state = ledger["accountState"].Select((t) => new LedgerEntry(t));
+            var state = ledger["accountState"].Select(t => new LedgerEntry(t));
 
             foreach (var tr in transactions)
             {

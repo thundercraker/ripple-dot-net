@@ -11,10 +11,10 @@ using Ripple.Core.Util;
 
 namespace Ripple.Core.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class AmountValueTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void TestScribble()
         {
             AssertValue("0000", "0", 0, false);
@@ -31,7 +31,7 @@ namespace Ripple.Core.Tests
             //FF FFC0 6FF2 8623
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void IllegalAmountTest()
         {
             var thatDamnOffer = "1000000000000000100";
@@ -39,7 +39,7 @@ namespace Ripple.Core.Tests
             Assert.AreEqual(thatDamnOffer, val.ToString());
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void ExponentTest()
         {
             AssertExponent(".9999999999999999", -16);
@@ -80,15 +80,13 @@ namespace Ripple.Core.Tests
 
         }
 
-        [ExpectedException(typeof(PrecisionException)),
-         TestMethod()]
+        [TestMethod, ExpectedException(typeof(PrecisionException))]
         public void PrecisionTest()
         {
             IouValue.FromString("1234" + "1234" + "1234" + "1234" + 1);
         }
 
-        [ExpectedException(typeof(InvalidAmountValueException)),
-         TestMethod()]
+        [TestMethod, ExpectedException(typeof(InvalidAmountValueException))]
         public void InvalidAmountValueTest()
         {
             IouValue.FromString("silly");

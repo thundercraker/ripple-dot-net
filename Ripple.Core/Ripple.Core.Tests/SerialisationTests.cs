@@ -11,7 +11,7 @@ using static System.Text.Encoding;
 namespace Ripple.Core.Tests
 {
 
-    [TestClass()]
+    [TestClass]
     public class SerialisationTests
     {
         public static readonly string MessageBytes = (
@@ -41,7 +41,7 @@ namespace Ripple.Core.Tests
                 'TransactionType' : 'Payment'
             }";
 
-        [TestMethod()]
+        [TestMethod]
         public void TransactionSigningTest()
         {
             var json = JObject.Parse(TxJson);
@@ -62,12 +62,13 @@ namespace Ripple.Core.Tests
         {
             return (JObject) Utils.ParseJson(Resources.DataDrivenTests);
         }
+
         private static JArray GetTransactionsWithMetaJson()
         {
             return (JArray) Utils.ParseJson(Resources.TransactionsWithMeta);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void DataDrivenTransactionWithMetaSerialisationTest()
         {
             var obj = GetTransactionsWithMetaJson();
@@ -95,7 +96,7 @@ namespace Ripple.Core.Tests
             Assert.AreEqual(expectedHex, actualHex, $"{test}");
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void DataDrivenTransactionSerialisationTest()
         {
             var obj = GetTestsJson();
@@ -110,7 +111,7 @@ namespace Ripple.Core.Tests
             }
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void DataDrivenAmountSerialisationTest()
         {
             var obj = GetTestsJson();

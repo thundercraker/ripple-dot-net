@@ -55,7 +55,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ExpectedInvalidTxException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TxSignerAccountSetTransactionTests.cs" />
+    <Compile Include="TxSignerPaymentTransactionTests.cs" />
     <Compile Include="TxSignerTests.cs" />
   </ItemGroup>
   <ItemGroup>

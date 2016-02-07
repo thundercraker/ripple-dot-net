@@ -3,11 +3,11 @@ using Ripple.Core.Types;
 
 namespace Ripple.Core.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class AccountIdTests
     {
-      
-        [TestMethod()]
+
+        [TestMethod]
         public void ConstantsTest()
         {
             Assert.AreEqual("rrrrrrrrrrrrrrrrrrrrBZbvji", AccountId.Neutral.ToString());

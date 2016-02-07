@@ -4,10 +4,10 @@ namespace Ripple.Signing.Tests
 {
     using Seed = Seed;
 
-    [TestClass()]
+    [TestClass]
     public class DerivationTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void GenerateRootAccountTest()
         {
             var passphrase = "masterpassphrase";
@@ -19,7 +19,7 @@ namespace Ripple.Signing.Tests
             Assert.AreEqual(rootAccount, pair.Id());
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GenerateNiqEd25519Test()
         {
             var passphrase = "niq";
@@ -35,7 +35,7 @@ namespace Ripple.Signing.Tests
             Assert.AreEqual(accountID, idFromSeed);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GenerateNodeKeyTest()
         {
             var zeroBytes = new byte[16];

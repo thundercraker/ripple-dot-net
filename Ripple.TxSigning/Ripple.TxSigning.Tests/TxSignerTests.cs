@@ -5,7 +5,7 @@ using Ripple.Core;
 
 namespace Ripple.TxSigning.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class TxSignerTests
     {
         public const string ExpectedTxBlob =
@@ -45,7 +45,7 @@ namespace Ripple.TxSigning.Tests
         public const string Secret = "sEd7rBGm5kxzauRTAV2hbsNz7N45X91";
 
         [TestMethod]
-        public void SignJObjectTest()
+        public void StaticSignJson_ValidTransactionAndEd25559Secret_ValidSignature()
         {
             AssertOk(TxSigner.SignJson(JObject.Parse(UnsignedTxJson), Secret));
         }
@@ -135,207 +135,6 @@ namespace Ripple.TxSigning.Tests
 
 
     */
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonMissingAccountPropertyTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-
-            signer.SignJson(JObject.FromObject(new { TransactionType = "AccountSet", Fee = "100", Sequence = 10 }));
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonMissingFeePropertyTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-
-            signer.SignJson(JObject.FromObject(new { TransactionType = "AccountSet", Account = account, Sequence = 10 }));
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonMissingSequencePropertyTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-
-            signer.SignJson(JObject.FromObject(new { TransactionType = "AccountSet", Account = account, Fee = "100" }));
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonInvalidPropertyTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-
-            signer.SignJson(JObject.FromObject(new { TransactionType = "AccountSet", Account = account, Fee = "100", Sequence = 10, InvalidProperty = 100 }));
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonInvalidAccountFormatTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "rINVALID";
-
-            signer.SignJson(JObject.FromObject(new { TransactionType = "AccountSet", Account = account, Fee = "100", Sequence = 10 }));
-        }
-
-        [TestMethod]
-        public void SignJsonValidMinimalAccountSetTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-
-            var r = signer.SignJson(JObject.FromObject(new { TransactionType = "AccountSet", Account = account, Fee = "100", Sequence = 10 }));
-
-            Assert.IsNotNull(r);
-        }
-
-        [TestMethod]
-        public void SignJsonMinimalPaymentTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = "100000",
-            });
-
-            var r = signer.SignJson(json);
-
-            Assert.IsNotNull(r);
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonXrpAmountTooLargePaymentTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = "10000000000000000000000000000000000000000",
-            });
-
-            var r = signer.SignJson(json);
-
-            Assert.IsNotNull(r);
-        }
-
-        [TestMethod]
-        public void SignJsonValidIouAmountInPaymentTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = new { value = "100000", currency = "USD", issuer = account },
-            });
-
-            var r = signer.SignJson(json);
-
-            Assert.IsNotNull(r);
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonAmountHasPascalCasePropertiesTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = new { Value = "100000", Currency = "USD", Issuer = account },
-            });
-
-            var r = signer.SignJson(json);
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonAmountObjectHasCounterpartyInsteadOfIssuerInPaymentTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = new { value = "100000", currency = "USD", counterparty = account },
-            });
-
-            var r = signer.SignJson(json);
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonAmountObjectHasExtraPropertyInPaymentTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = new { value = "100000", currency = "USD", issuer = account, extra = 1234 },
-            });
-
-            var r = signer.SignJson(json);
-        }
-
-        [TestMethod, ExpectedException(typeof(InvalidTxException))]
-        public void SignJsonValuePrecisionTooHighInPaymentTransactionTest()
-        {
-            var signer = TxSigner.FromSecret("snR7czZRBW5tRPTNsnhS1UpY3vx5X");
-            var account = "r99V1djgizxfcscPUpUbbR2C2akai7UXDe";
-            var destinationAccount = "rQ3rK7n7wy9GrDnT221wDVXxVGoGi95jyz";
-
-            var json = JObject.FromObject(new
-            {
-                TransactionType = "Payment",
-                Account = account,
-                Destination = destinationAccount,
-                Fee = "100",
-                Sequence = 10,
-                Amount = new { value = "123456789012345678", currency = "USD", issuer = account },
-            });
-
-            var r = signer.SignJson(json);
-        }
     }
 }
 

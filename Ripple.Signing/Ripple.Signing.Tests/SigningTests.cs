@@ -5,19 +5,20 @@ namespace Ripple.Signing.Tests
 {
     using Seed = Seed;
 
-    [TestClass()]
+    [TestClass]
     public class SigningTests
     {
         readonly byte[] _message = { 0xb, 0xe, 0xe, 0xf };
 
-        [TestMethod()]
+        [TestMethod]
         public void K256SanityTest()
         {
             var keypair = Seed.FromPassPhrase("niq").KeyPair();
             var sig = keypair.Sign(_message);
             Assert.IsTrue(keypair.Verify(_message, sig));
         }
-        [TestMethod()]
+
+        [TestMethod]
         public void Ed25519SanityTest()
         {
             var keypair = Seed.FromPassPhrase("niq").SetEd25519().KeyPair();
@@ -30,7 +31,7 @@ namespace Ripple.Signing.Tests
             return Hex.ToHexString(val).ToUpper();
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void Rfc6979DeterminismTest()
         {
             var keypair = Seed.FromPassPhrase("niq").KeyPair();
@@ -57,7 +58,8 @@ namespace Ripple.Signing.Tests
                 Assert.AreEqual(fixtures[i], ToHex(keypair.Sign(messageBytes)));
             }
         }
-        [TestMethod()]
+
+        [TestMethod]
         public void Ed25519DeterminismTest()
         {
             var keypair = Seed.FromPassPhrase("niq")

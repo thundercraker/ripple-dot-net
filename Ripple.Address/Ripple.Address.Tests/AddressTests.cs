@@ -12,7 +12,7 @@ namespace Ripple.Address.Tests
         public void NodePublicTest()
         {
             AssertEncodes("NodePublic",
-              ("0388E5BA87A000CB807240DF8C848EB0B"+
+              ("0388E5BA87A000CB807240DF8C848EB0B" +
                "5FFA5C8E5A521BC8E105C0F0A44217828"),
               "n9MXXueo837zYH36DvMc13BwHcqtfAWNJY5czWVbp7uYTj7x17TH");
         }
@@ -33,7 +33,7 @@ namespace Ripple.Address.Tests
             Assert.AreEqual(decoded.Type, "ed25519");
 
             AssertEncodes(
-                "EdSeed", 
+                "EdSeed",
                 "4C3A1D213FBDFB14C7C28D609469B341",
                  "sEdTM1uX8pu2do5XvTnutH6HsouMaM2");
         }
@@ -68,6 +68,5 @@ namespace Ripple.Address.Tests
             Assert.IsTrue(valid);
             Assert.IsFalse(hexIsValidB58);
         }
-
     }
 }
