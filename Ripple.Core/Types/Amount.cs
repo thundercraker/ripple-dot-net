@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Ripple.Core.Binary;
@@ -27,6 +28,11 @@ namespace Ripple.Core.Types
 
         public Amount(string v="0", Currency c=null, AccountId i=null) :
                       this(AmountValue.FromString(v, c == null || c.IsNative), c, i)
+        {
+        }
+
+        public Amount(decimal value, Currency currency, AccountId issuer=null) :
+            this(value.ToString(CultureInfo.InvariantCulture), currency, issuer)
         {
         }
 
@@ -111,6 +117,33 @@ namespace Ripple.Core.Types
             var curr = Currency.FromParser(parser);
             var issuer = AccountId.FromParser(parser);
             return new Amount(value, curr, issuer);
+        }
+
+        public decimal DecimalValue()
+        {
+            return decimal.Parse(Value.ToString());
+        }
+
+        public static Amount operator * (Amount a, decimal b)
+        {
+            return new Amount(
+                (a.DecimalValue() * b).ToString(CultureInfo.InvariantCulture), 
+                              a.Currency, a.Issuer);
+        }
+
+        public static bool operator < (decimal a, Amount b)
+        {
+            return a < b.DecimalValue();
+        }
+
+        public static bool operator >(decimal a, Amount b)
+        {
+            return a > b.DecimalValue();
+        }
+
+        public Amount NewValue(decimal @decimal)
+        {
+            return new Amount(@decimal, Currency, Issuer);
         }
     }
 }

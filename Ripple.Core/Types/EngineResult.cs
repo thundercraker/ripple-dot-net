@@ -114,6 +114,12 @@ namespace Ripple.Core.Types
         public static readonly EngineResult tecDST_TAG_NEEDED = Add(nameof(tecDST_TAG_NEEDED), 143, "A destination tag is required.");
         public static readonly EngineResult tecINTERNAL = Add(nameof(tecINTERNAL), 144, "An internal error has occurred during processing.");
         public static readonly EngineResult tecOVERSIZE = Add(nameof(tecOVERSIZE), 145, "Object exceeded serialization limits.");
+        
         // ReSharper restore InconsistentNaming
+        public bool ShouldClaimFee()
+        {
+            // tesSUCCESS and tecCLAIMED are >= 0, rest are < 0
+            return Ordinal >= 0;
+        }
     }
 }

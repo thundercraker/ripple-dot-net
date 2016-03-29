@@ -60,12 +60,13 @@ namespace Ripple.Core.Types
             return token == null ? null : FromString(token.ToString());
         }
 
-        private static Currency FromString(string str)
+        public static Currency FromString(string str)
         {
             if (str == "XRP")
             {
                 return Xrp;
             }
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (str.Length)
             {
                 case 40:
@@ -118,5 +119,23 @@ namespace Ripple.Core.Types
         {
             return new Currency(parser.Read(20));
         }
+
+        public static UnissuedAmount operator /(decimal v, Currency c)
+        {
+            if (c == Xrp)
+            {
+                v *= 1e6m;
+            }
+            return new UnissuedAmount(v, c);
+        }
+
+        public static Issue operator /(Currency c, AccountId ac)
+        {
+            return new Issue();
+        }
+    }
+
+    public class Issue
+    {
     }
 }

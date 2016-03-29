@@ -33,5 +33,7 @@ namespace Ripple.Core.Types
         {
             return B16.Encode(Buffer);
         }
+
+        public static explicit operator string(Hash h) => h.ToHex();
     }
 }

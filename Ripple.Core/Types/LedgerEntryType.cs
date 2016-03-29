@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Ripple.Core.Enums;
 
 namespace Ripple.Core.Types
@@ -23,5 +24,10 @@ namespace Ripple.Core.Types
         public static readonly LedgerEntryType FeeSettings = Add(nameof(FeeSettings), 's');
         public static readonly LedgerEntryType Ticket = Add(nameof(Ticket), 'T');
         public static readonly LedgerEntryType SignerList = Add(nameof(SignerList), 'S');
+
+        public static LedgerEntryType FromJson(JToken jToken)
+        {
+            return Values.FromJson(jToken);
+        }
     }
 }

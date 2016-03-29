@@ -109,13 +109,13 @@ namespace Ripple.Core.Types
         public static byte PathSeparatorByte = 0xFF;
         public static byte PathsetEndByte = 0x00;
 
-        private PathSet(IEnumerable<Path> enumerable) : base(enumerable)
-        {
-        }
-
         private PathSet()
         {
             
+        }
+
+        public PathSet(IEnumerable<Path> collection) : base(collection)
+        {
         }
 
         public void ToBytes(IBytesSink buffer)

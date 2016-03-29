@@ -19,8 +19,7 @@ namespace Ripple.Core.ShaMapTree
         {
         }
 
-        public ShaMapInner(bool isCopy, int depth, int version)
-        {
+        public ShaMapInner(bool isCopy, int depth, int version) {
             DoCoW = isCopy;
             Depth = depth;
             Version = version;

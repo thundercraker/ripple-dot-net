@@ -74,13 +74,13 @@ namespace Ripple.Core.Transactions
                 {
                     onError($"`{tt}` has no `{field}` field");
                 }
-                if (format[field] == Requirement.Required)
+                else if (format[field] == Requirement.Required)
                 {
                     if (!inObject)
                     {
                         onError($"`{tt}` has required field `{field}`");
                     }
-                    if (fieldValue == null)
+                    else if (fieldValue == null)
                     {
                         onError($"Required field `{field}` is set to null");
                     }

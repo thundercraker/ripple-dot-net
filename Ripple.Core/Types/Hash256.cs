@@ -15,7 +15,12 @@ namespace Ripple.Core.Types
         }
         public static Hash256 FromJson(JToken token)
         {
-            return new Hash256(B16.Decode(token.ToString()));
+            return FromHex((string) token);
+        }
+
+        public static Hash256 FromHex(string token)
+        {
+            return new Hash256(B16.Decode(token));
         }
 
         public static Hash256 FromParser(BinaryParser parser, int? hint = null)

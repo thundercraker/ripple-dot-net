@@ -283,6 +283,15 @@ namespace Ripple.Core.Types
             set { Fields[f] = value; }
         }
 
+        public StObject SetFlag(uint flags)
+        {
+            if (Has(Field.Flags))
+            {
+                flags |= this[Field.Flags];
+            }
+            this[Field.Flags] = flags;
+            return this;
+        }
     }
 
     internal static class Extensions

@@ -43,38 +43,14 @@ namespace Ripple.TxSigning
             {
                 throw new InvalidTxException("Transaction is not valid.", nameof(tx), ex);
             }
-
-            SetCanonicalSigFlag(so);
-            so[Field.SigningPubKey] = _keyPair.CanonicalPubBytes();
-            so[Field.TxnSignature] = _keyPair.Sign(so.SigningData());
-
-            try
-            { 
-                TxFormat.Validate(so);
-            } catch(TxFormatValidationException ex)
-            {
-                throw new InvalidTxException("Transaction is not valid.", nameof(tx), ex);
-            }
-
-            var blob = so.ToBytes();
-            var hash = Utils.TransactionId(blob);
-            return new SignedTx(hash, B16.Encode(blob), so.ToJsonObject());
-        }
-
-        private static void SetCanonicalSigFlag(StObject so)
-        {
-            var flags = CanonicalSigFlag;
-            if (so.Has(Field.Flags))
-            {
-                flags |= so[Field.Flags];
-            }
-            so[Field.Flags] = flags;
+            return SignStObject(so);
         }
 
         public static TxSigner FromKeyPair(IKeyPair keyPair)
         {
             return new TxSigner(keyPair);
         }
+
         public static TxSigner FromSecret(string secret)
         {
             return new TxSigner(secret);
@@ -83,6 +59,30 @@ namespace Ripple.TxSigning
         public static SignedTx SignJson(JObject tx, string secret)
         {
             return FromSecret(secret).SignJson(tx);
+        }
+
+        public SignedTx SignStObject(StObject tx)
+        {
+            tx.SetFlag(CanonicalSigFlag);
+            tx[Field.SigningPubKey] = _keyPair.CanonicalPubBytes();
+            tx[Field.TxnSignature] = _keyPair.Sign(tx.SigningData());
+            return ValidateAndEncode(tx);
+        }
+
+        public static SignedTx ValidateAndEncode(StObject tx)
+        {
+            try
+            {
+                TxFormat.Validate(tx);
+            }
+            catch (TxFormatValidationException ex)
+            {
+                throw new InvalidTxException("Transaction is not valid.", nameof(tx), ex);
+            }
+
+            var blob = tx.ToBytes();
+            var hash = Utils.TransactionId(blob);
+            return new SignedTx(hash, B16.Encode(blob), tx.ToJsonObject());
         }
     }
 }

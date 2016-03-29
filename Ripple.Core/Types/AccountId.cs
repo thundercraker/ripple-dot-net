@@ -28,7 +28,7 @@ namespace Ripple.Core.Types
         public AccountId(string v) :
             this(AddressCodec.DecodeAddress(v), v) {}
         public AccountId(byte[] hash) :
-            this(hash, null) {}
+            this(hash, AddressCodec.EncodeAddress(hash)) {}
 
         public static implicit operator AccountId(string value)
         {
