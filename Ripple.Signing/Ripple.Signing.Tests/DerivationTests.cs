@@ -2,6 +2,8 @@
 
 namespace Ripple.Signing.Tests
 {
+    using System;
+    using System.IO;
     using Seed = Seed;
 
     [TestClass]
@@ -42,6 +44,68 @@ namespace Ripple.Signing.Tests
             var pair = new Seed(zeroBytes).SetNodeKey().KeyPair();
             Assert.AreEqual("n9LPxYzbDpWBZ1bC3J3Fdkgqoa3FEhVKCnS8yKp7RFQFwuvd8Q2c", 
                             pair.Id());
+        }
+
+        [TestMethod]
+        public void Generate100EcdsaAccountIdsFromSecretTest()
+        {
+            using (var sr = new StringReader(Fixtures.ecdsa_100))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    var s = line.Split(' ');
+                    var accountId = s[0];
+                    var secret = s[1];
+
+                    var calculatedAccountId = Seed.FromBase58(secret).KeyPair().Id();
+
+                    Assert.AreEqual(accountId, calculatedAccountId);
+                }
+            }
+        }
+
+        [TestMethod]
+        [Ignore] // long running test (1-2 hours)        
+        public void Generate1MillionEcdsaAccountIdsFromSecretTest()
+        {
+            using (var sr = new StringReader(Fixtures.ecdsa_1000000))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    var s = line.Split(' ');
+                    var accountId = s[0];
+                    var secret = s[1];
+
+                    var calculatedAccountId = Seed.FromBase58(secret).KeyPair().Id();
+
+                    Assert.AreEqual(accountId, calculatedAccountId);
+                }
+            }
+        }
+
+        [TestMethod]
+        [Ignore] // long running test (<1 hour)
+        public void Generate1MillionEd25519AccountIdsFromSecretTest()
+        {
+            using (var sr = new StringReader(Fixtures.ed25519_1000000))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    var s = line.Split(' ');
+                    var accountId = s[0];
+                    var secret = s[1];
+
+                    var calculatedAccountId = Seed.FromBase58(secret).KeyPair().Id();
+
+                    Assert.AreEqual(accountId, calculatedAccountId);
+                }
+            }
         }
     }
 }
