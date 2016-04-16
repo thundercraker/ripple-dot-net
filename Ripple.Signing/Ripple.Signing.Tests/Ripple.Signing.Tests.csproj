@@ -60,6 +60,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Fixtures.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Fixtures.resx</DependentUpon>
+    </Compile>
     <Compile Include="SigningTests.cs" />
     <Compile Include="DerivationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +87,21 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Fixtures.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Fixtures.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ecdsa_100.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ecdsa_1000000.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ed25519_1000000.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
