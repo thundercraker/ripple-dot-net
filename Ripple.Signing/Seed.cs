@@ -88,10 +88,12 @@ namespace Ripple.Signing
 
         public static Seed FromRandom()
         {
-            var rng = RandomNumberGenerator.Create();
-            var seed = new byte[16];
-            rng.GetBytes(seed);
-            return new Seed(seed);
+            using (var rng = RandomNumberGenerator.Create())
+            { 
+                var seed = new byte[16];
+                rng.GetBytes(seed);
+                return new Seed(seed);
+            }
         }
 
         private static byte[] PassPhraseToSeedBytes(string phrase)
