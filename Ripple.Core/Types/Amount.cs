@@ -96,7 +96,7 @@ namespace Ripple.Core.Types
 
                     return new Amount((string)valueToken, (string)currencyToken, (string)issuerToken);
                 default:
-                    throw new InvalidJsonException("Can not create Amount from `{token}`");
+                    throw new InvalidJsonException($"Can not create Amount from `{token}`");
             }
         }
 
